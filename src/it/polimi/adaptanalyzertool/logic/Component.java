@@ -7,7 +7,6 @@ import java.util.Set;
 /**
  * This class contains all the information about a component for an architecture.
  * <p>
- * <p>
  * The components are the fundamental parts of an architecture since they define the architecture.
  * A component cannot be more than once in an architecture but can be part of multiple architectures at once.
  * </p>
@@ -24,8 +23,8 @@ public class Component {
     private float availability;
     private float executrionTime;
     private Color color;
-    private Set<Service> servicesProvided;
-    private Set<Service> servicesRequired;
+    private Set<ProvidedService> servicesProvided;
+    private Set<RequiredService> servicesRequired;
 
     /**
      * Basic constructor for the component. Only the mandatory attributes are required; all non mandatory attributes are
@@ -40,7 +39,8 @@ public class Component {
      * @param availability  availability expressed in 0-1 range.
      * @param executionTime execution time expressed in seconds.
      *
-     * @see Service
+     * @see RequiredService
+     * @see ProvidedService
      */
     public Component(float cost, float availability, float executionTime) {
         this(cost, availability, executionTime, Color.WHITE, new HashSet<>(), new HashSet<>());
@@ -59,7 +59,8 @@ public class Component {
      * @param executionTime execution time expressed in seconds.
      * @param color         color for the component in the UI.
      *
-     * @see Service
+     * @see RequiredService
+     * @see ProvidedService
      */
     public Component(float cost, float availability, float executionTime, Color color) {
         this(cost, availability, executionTime, color, new HashSet<>(), new HashSet<>());
@@ -78,9 +79,10 @@ public class Component {
      * @param color            color for the component in the UI.
      * @param servicesProvided the services provided by this component.
      *
-     * @see Service
+     * @see RequiredService
+     * @see ProvidedService
      */
-    public Component(float cost, float availability, float executionTime, Color color, HashSet<Service> servicesProvided) {
+    public Component(float cost, float availability, float executionTime, Color color, HashSet<ProvidedService> servicesProvided) {
         this(cost, availability, executionTime, color, servicesProvided, new HashSet<>());
     }
 
@@ -94,9 +96,10 @@ public class Component {
      * @param servicesProvided the services provided by this component.
      * @param servicesRequired the services required by this component.
      *
-     * @see Service
+     * @see RequiredService
+     * @see ProvidedService
      */
-    public Component(float cost, float availability, float executionTime, Color color, HashSet<Service> servicesProvided, HashSet<Service> servicesRequired) throws IllegalArgumentException {
+    public Component(float cost, float availability, float executionTime, Color color, HashSet<ProvidedService> servicesProvided, HashSet<RequiredService> servicesRequired) throws IllegalArgumentException {
         this.cost = cost;
         this.availability = availability;
         this.executrionTime = executionTime;
@@ -185,7 +188,7 @@ public class Component {
      *
      * @return a <code>Set</code> containing the services provided by the current component.
      */
-    public Set<Service> getServicesProvided() {
+    public Set<ProvidedService> getServicesProvided() {
         return servicesProvided;
     }
 
@@ -198,7 +201,7 @@ public class Component {
      * @return <code>true</code> if the service is successfully added to the component;
      * <code>false</code> if the service cannot be added because it is already in.
      */
-    public boolean addServiceProvided(Service serviceProvided) {
+    public boolean addServiceProvided(ProvidedService serviceProvided) {
         return this.servicesProvided.add(serviceProvided);
     }
 
@@ -210,7 +213,7 @@ public class Component {
      *
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
-    public boolean removeServiceProvided(Service serviceProvided) {
+    public boolean removeServiceProvided(ProvidedService serviceProvided) {
         return servicesProvided.remove(serviceProvided);
     }
 
@@ -233,7 +236,7 @@ public class Component {
      *
      * @return a <code>Set</code> containing the services required by the current component.
      */
-    public Set<Service> getServicesRequired() {
+    public Set<RequiredService> getServicesRequired() {
         return servicesRequired;
     }
 
@@ -246,7 +249,7 @@ public class Component {
      * @return <code>true</code> if the service is successfully added to the component;
      * <code>false</code> if the service cannot be added because it is already in.
      */
-    public boolean addServiceRequired(Service serviceRequired) {
+    public boolean addServiceRequired(RequiredService serviceRequired) {
         return this.servicesRequired.add(serviceRequired);
     }
 
@@ -258,7 +261,7 @@ public class Component {
      *
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
-    public boolean removeServiceRequired(Service serviceRequired) {
+    public boolean removeServiceRequired(RequiredService serviceRequired) {
         return servicesRequired.remove(serviceRequired);
     }
 
