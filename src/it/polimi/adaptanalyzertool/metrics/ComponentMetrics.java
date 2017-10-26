@@ -10,7 +10,7 @@ package it.polimi.adaptanalyzertool.metrics;
  * @see it.polimi.adaptanalyzertool.logic.Component Component
  *
  * @author Paolo Paterna
- * @version %I%, %G%
+ * @version 0.1
  */
 public final class ComponentMetrics {
 
@@ -53,7 +53,7 @@ public final class ComponentMetrics {
      * Defines the ratio between a component cost and the system target cost.
      * <p>
      *     With the same component cost, if the system target cost grows higher the Fitness Ratio w.r.t. Cost becomes
-     *     bigger. This implies that bigger the component cost and the system target cost gap is, more can be
+     *     bigger. This implies that the bigger the component cost and the system target cost gap is, the more can be
      *     saved from buying this component w.r.t. the maximum budget invested in buying the components.
      * </p>
      * <p>

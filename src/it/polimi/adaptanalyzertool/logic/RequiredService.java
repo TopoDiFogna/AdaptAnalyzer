@@ -8,7 +8,7 @@ package it.polimi.adaptanalyzertool.logic;
  * </p>
  *
  * @author Paolo Paterna
- * @version %I%, %G%
+ * @version 0.1
  */
 public class RequiredService extends AbstractService {
 

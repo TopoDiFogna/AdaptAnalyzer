@@ -6,7 +6,7 @@ package it.polimi.adaptanalyzertool.logic;
  * @see Component
  *
  * @author Paolo Paterna
- * @version %I%, %G%
+ * @version 0.1
  */
 public class ProvidedService extends AbstractService {
 

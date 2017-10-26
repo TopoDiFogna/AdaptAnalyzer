@@ -11,7 +11,7 @@ import java.util.Set;
  * </p>
  *
  * @author Paolo Paterna
- * @version %I%, %G%
+ * @version 0.1
  */
 public class Architecture {
 
