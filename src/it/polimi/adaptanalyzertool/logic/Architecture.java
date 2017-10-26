@@ -16,11 +16,10 @@ import java.util.Set;
 public class Architecture {
 
     private String name;
-    private Set<Component> components;
+    private HashSet<Component> components;
 
     /**
      * Creates a new architecture with no components.
-     * <p>
      * <p>
      * Components can be added later with {@link Architecture#addComponent addComponent}.
      * </p>
@@ -70,15 +69,14 @@ public class Architecture {
     /**
      * Gets all the components associated with the current architecture.
      *
-     * @return an <code>ArrayList</code> containing all the components related to this architecture.
+     * @return an <code>HashSet</code> containing all the components related to this architecture.
      */
-    public Set<Component> getComponents() {
+    public HashSet<Component> getComponents() {
         return components;
     }
 
     /**
      * Adds a component to the architecture.
-     * <p>
      * <p>
      * No duplicates component can be added.
      * </p>

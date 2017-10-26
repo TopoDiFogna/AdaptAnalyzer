@@ -23,8 +23,8 @@ public class Component {
     private float availability;
     private float executrionTime;
     private Color color;
-    private Set<ProvidedService> servicesProvided;
-    private Set<RequiredService> servicesRequired;
+    private HashSet<ProvidedService> servicesProvided;
+    private HashSet<RequiredService> servicesRequired;
 
     /**
      * Basic constructor for the component. Only the mandatory attributes are required; all non mandatory attributes are
@@ -82,7 +82,8 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(float cost, float availability, float executionTime, Color color, HashSet<ProvidedService> servicesProvided) {
+    public Component(float cost, float availability, float executionTime, Color color,
+                     HashSet<ProvidedService> servicesProvided) {
         this(cost, availability, executionTime, color, servicesProvided, new HashSet<>());
     }
 
@@ -99,7 +100,8 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(float cost, float availability, float executionTime, Color color, HashSet<ProvidedService> servicesProvided, HashSet<RequiredService> servicesRequired) throws IllegalArgumentException {
+    public Component(float cost, float availability, float executionTime, Color color,
+                     HashSet<ProvidedService> servicesProvided, HashSet<RequiredService> servicesRequired) {
         this.cost = cost;
         this.availability = availability;
         this.executrionTime = executionTime;
@@ -186,9 +188,9 @@ public class Component {
     /**
      * Gets the services provided by the current Component.
      *
-     * @return a <code>Set</code> containing the services provided by the current component.
+     * @return a <code>HashSet</code> containing the services provided by the current component.
      */
-    public Set<ProvidedService> getServicesProvided() {
+    public HashSet<ProvidedService> getServicesProvided() {
         return servicesProvided;
     }
 
@@ -234,9 +236,9 @@ public class Component {
     /**
      * Gets the services required by the current Component.
      *
-     * @return a <code>Set</code> containing the services required by the current component.
+     * @return a <code>HashSet</code> containing the services required by the current component.
      */
-    public Set<RequiredService> getServicesRequired() {
+    public HashSet<RequiredService> getServicesRequired() {
         return servicesRequired;
     }
 
