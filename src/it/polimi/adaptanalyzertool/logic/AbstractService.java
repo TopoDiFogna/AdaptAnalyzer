@@ -11,7 +11,7 @@ package it.polimi.adaptanalyzertool.logic;
  * @version 0.1
  */
 public abstract class AbstractService {
-    private String name;
+    private final String name;
 
     /**
      * Base constructor, the only required parameter is the service name.
@@ -24,6 +24,9 @@ public abstract class AbstractService {
 
     /**
      * Gets the service name.
+     * <p>
+     *     The name identifies the component and acts as a key in the <code>HashMap</code> used in the implementation.
+     * </p>
      *
      * @return the service name.
      */
@@ -31,15 +34,6 @@ public abstract class AbstractService {
         return name;
     }
 
-    /**
-     * Changes the service name. Since every service is identified by its name changing the name of a service affects
-     * the {@link #equals(Object) AbstractService.equals(Object)}.
-     *
-     * @param name the new name for the service.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
 
     /**
      * Since every service is identified by its name equals has to be overridden to honour this.

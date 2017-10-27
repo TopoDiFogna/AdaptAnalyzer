@@ -1,7 +1,6 @@
 package it.polimi.adaptanalyzertool.logic;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 /**
  * Base class for the architecture object which defines the components used by the architecture.
@@ -16,7 +15,7 @@ import java.util.Set;
 public class Architecture {
 
     private String name;
-    private HashSet<Component> components;
+    private HashMap<String, Component> components;
 
     /**
      * Creates a new architecture with no components.
@@ -28,7 +27,7 @@ public class Architecture {
      */
     public Architecture(String name) {
         this.name = name;
-        components = new HashSet<>();
+        components = new HashMap<>();
     }
 
     /**
@@ -38,9 +37,9 @@ public class Architecture {
      * </p>
      *
      * @param name       The name for this architecture.
-     * @param components The HashSet containing the components.
+     * @param components The HashMap containing the components.
      */
-    public Architecture(String name, HashSet<Component> components) {
+    public Architecture(String name, HashMap<String, Component> components) {
         this.name = name;
         this.components = components;
     }
@@ -69,9 +68,9 @@ public class Architecture {
     /**
      * Gets all the components associated with the current architecture.
      *
-     * @return an <code>HashSet</code> containing all the components related to this architecture.
+     * @return an <code>HashMap</code> containing all the components related to this architecture.
      */
-    public HashSet<Component> getComponents() {
+    public HashMap<String, Component> getComponents() {
         return components;
     }
 
@@ -83,11 +82,9 @@ public class Architecture {
      *
      * @param component The <code>Component</code> to be added
      *
-     * @return <code>true</code> if the component is successfully added to the architecture;
-     * <code>false</code> otherwise.
      */
-    public boolean addComponent(Component component) {
-        return components.add(component);
+    public void addComponent(Component component) {
+        components.put(component.getName(), component);
     }
 
     /**
@@ -98,7 +95,7 @@ public class Architecture {
      * @return <code>true</code> if this set contained the specified element
      */
     public boolean removeComponent(Component component) {
-        return components.remove(component);
+        return components.remove(component.getName(), component);
     }
 
     /**

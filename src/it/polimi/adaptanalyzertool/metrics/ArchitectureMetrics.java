@@ -4,6 +4,7 @@ import it.polimi.adaptanalyzertool.logic.Architecture;
 import it.polimi.adaptanalyzertool.logic.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -40,9 +41,9 @@ public final class ArchitectureMetrics {
      * @param systemTargetAvailability the system target availability required.
      * @return the Global Availability of the System.
      */
-    public static float GlobalAvailabilitySystem(HashSet<Component> components, float systemTargetAvailability){
+    public static float GlobalAvailabilitySystem(HashMap<String, Component> components, float systemTargetAvailability){
         float gas = 1;
-        for (Component component : components) {
+        for (Component component : components.values()) {
             gas *= ComponentMetrics.FitnessRatioAvailability(component.getAvailability(), systemTargetAvailability);
         }
         return gas;
@@ -60,9 +61,9 @@ public final class ArchitectureMetrics {
      * @param systemTargetCost the system target cost.
      * @return the global Cost of the system.
      */
-    public static float GlobalCostSystem(HashSet<Component> components, float systemTargetCost){
+    public static float GlobalCostSystem(HashMap<String, Component> components, float systemTargetCost){
         float gcs = 0;
-        for (Component component : components){
+        for (Component component : components.values()){
             gcs += ComponentMetrics.FitnessRatioCost(component.getCost(), systemTargetCost);
         }
         return gcs;

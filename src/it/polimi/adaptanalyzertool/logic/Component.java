@@ -1,8 +1,7 @@
 package it.polimi.adaptanalyzertool.logic;
 
 import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 /**
  * This class contains all the information about a component for an architecture.
@@ -19,12 +18,13 @@ import java.util.Set;
  */
 public class Component {
 
+    private final String name;
     private float cost;
     private float availability;
     private float executrionTime;
     private Color color;
-    private HashSet<ProvidedService> servicesProvided;
-    private HashSet<RequiredService> servicesRequired;
+    private HashMap<String, ProvidedService> servicesProvided;
+    private HashMap<String, RequiredService> servicesRequired;
 
     /**
      * Basic constructor for the component. Only the mandatory attributes are required; all non mandatory attributes are
@@ -42,8 +42,8 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(float cost, float availability, float executionTime) {
-        this(cost, availability, executionTime, Color.WHITE, new HashSet<>(), new HashSet<>());
+    public Component(String name, float cost, float availability, float executionTime) {
+        this(name, cost, availability, executionTime, Color.WHITE, new HashMap<>(), new HashMap<>());
     }
 
     /**
@@ -62,8 +62,8 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(float cost, float availability, float executionTime, Color color) {
-        this(cost, availability, executionTime, color, new HashSet<>(), new HashSet<>());
+    public Component(String name, float cost, float availability, float executionTime, Color color) {
+        this(name, cost, availability, executionTime, color, new HashMap<>(), new HashMap<>());
     }
 
     /**
@@ -82,9 +82,9 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(float cost, float availability, float executionTime, Color color,
-                     HashSet<ProvidedService> servicesProvided) {
-        this(cost, availability, executionTime, color, servicesProvided, new HashSet<>());
+    public Component(String name, float cost, float availability, float executionTime, Color color,
+                     HashMap<String, ProvidedService> servicesProvided) {
+        this(name, cost, availability, executionTime, color, servicesProvided, new HashMap<>());
     }
 
     /**
@@ -100,14 +100,28 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(float cost, float availability, float executionTime, Color color,
-                     HashSet<ProvidedService> servicesProvided, HashSet<RequiredService> servicesRequired) {
+    public Component(String name, float cost, float availability, float executionTime, Color color,
+                     HashMap<String, ProvidedService> servicesProvided,
+                     HashMap<String, RequiredService> servicesRequired) {
+        this.name = name;
         this.cost = cost;
         this.availability = availability;
         this.executrionTime = executionTime;
         this.color = color;
         this.servicesProvided = servicesProvided;
         this.servicesRequired = servicesRequired;
+    }
+
+    /**
+     * Gets the name of the current component.
+     * <p>
+     *     The name identifies the component and acts as a key in the <code>HashMap</code> used in the implementation.
+     * </p>
+     *
+     * @return the name of the component.
+     */
+    public String getName() {
+        return name;
     }
 
     /**
@@ -188,9 +202,9 @@ public class Component {
     /**
      * Gets the services provided by the current Component.
      *
-     * @return a <code>HashSet</code> containing the services provided by the current component.
+     * @return a <code>HashMap</code> containing the services provided by the current component.
      */
-    public HashSet<ProvidedService> getServicesProvided() {
+    public HashMap<String, ProvidedService> getServicesProvided() {
         return servicesProvided;
     }
 
@@ -199,12 +213,9 @@ public class Component {
      * duplicated.
      *
      * @param serviceProvided the provided service that has to be added to the current component.
-     *
-     * @return <code>true</code> if the service is successfully added to the component;
-     * <code>false</code> if the service cannot be added because it is already in.
      */
-    public boolean addServiceProvided(ProvidedService serviceProvided) {
-        return this.servicesProvided.add(serviceProvided);
+    public void addServiceProvided(ProvidedService serviceProvided) {
+        this.servicesProvided.put(serviceProvided.getName(), serviceProvided);
     }
 
     /**
@@ -216,7 +227,7 @@ public class Component {
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
     public boolean removeServiceProvided(ProvidedService serviceProvided) {
-        return servicesProvided.remove(serviceProvided);
+        return servicesProvided.remove(serviceProvided.getName(), serviceProvided);
     }
 
     /**
@@ -236,9 +247,9 @@ public class Component {
     /**
      * Gets the services required by the current Component.
      *
-     * @return a <code>HashSet</code> containing the services required by the current component.
+     * @return a <code>HashMap</code> containing the services required by the current component.
      */
-    public HashSet<RequiredService> getServicesRequired() {
+    public HashMap<String, RequiredService> getServicesRequired() {
         return servicesRequired;
     }
 
@@ -247,12 +258,9 @@ public class Component {
      * duplicated.
      *
      * @param serviceRequired the required service that has to be added to the current component.
-     *
-     * @return <code>true</code> if the service is successfully added to the component;
-     * <code>false</code> if the service cannot be added because it is already in.
      */
-    public boolean addServiceRequired(RequiredService serviceRequired) {
-        return this.servicesRequired.add(serviceRequired);
+    public void addServiceRequired(RequiredService serviceRequired) {
+        this.servicesRequired.put(serviceRequired.getName(), serviceRequired);
     }
 
     /**
@@ -264,7 +272,7 @@ public class Component {
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
     public boolean removeServiceRequired(RequiredService serviceRequired) {
-        return servicesRequired.remove(serviceRequired);
+        return servicesRequired.remove(serviceRequired.getName(), serviceRequired);
     }
 
     /**
