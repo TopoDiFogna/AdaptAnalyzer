@@ -1,7 +1,7 @@
 package it.polimi.adaptanalyzertool.logic;
 
 /**
- * A serivce provided by a component, identified by its name.
+ * A service provided by a component, identified by its name.
  * <p>
  *      A Required Service is more complicated than a Provided Service since it has also a used probability and a
  *      number of executions based on the {@link Architecture}.

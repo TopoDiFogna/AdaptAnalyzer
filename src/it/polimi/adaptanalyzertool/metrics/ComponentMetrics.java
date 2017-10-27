@@ -3,7 +3,7 @@ package it.polimi.adaptanalyzertool.metrics;
 /**
  * This class contains all the metrics for the components.
  * <p>
- * It has to be used as a static class since no object must be instatianted before calling the methods that are
+ * It has to be used as a static class since no object must be instantiated before calling the methods that are
  * all public and static.
  * </p>
  *

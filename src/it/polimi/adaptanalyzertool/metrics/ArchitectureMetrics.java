@@ -5,12 +5,11 @@ import it.polimi.adaptanalyzertool.logic.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * This class contains all the metrics for the architectures.
  * <p>
- * It has to be used as a static class since no object must be instatianted before calling the methods that are
+ * It has to be used as a static class since no object must be instantiated before calling the methods that are
  * all public and static.
  * </p>
  *

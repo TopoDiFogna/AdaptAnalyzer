@@ -1,7 +1,7 @@
 package it.polimi.adaptanalyzertool.logic;
 
 /**
- * A serivce provided by a component, identified by its name.
+ * A service provided by a component, identified by its name.
  *
  * @see Component
  *

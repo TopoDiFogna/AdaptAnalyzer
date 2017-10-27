@@ -21,7 +21,7 @@ public class Component {
     private final String name;
     private float cost;
     private float availability;
-    private float executrionTime;
+    private float executionTime;
     private Color color;
     private HashMap<String, ProvidedService> servicesProvided;
     private HashMap<String, RequiredService> servicesRequired;
@@ -106,7 +106,7 @@ public class Component {
         this.name = name;
         this.cost = cost;
         this.availability = availability;
-        this.executrionTime = executionTime;
+        this.executionTime = executionTime;
         this.color = color;
         this.servicesProvided = servicesProvided;
         this.servicesRequired = servicesRequired;
@@ -165,17 +165,17 @@ public class Component {
      *
      * @return the execution time as a float for the current Component.
      */
-    public float getExecutrionTime() {
-        return executrionTime;
+    public float getExecutionTime() {
+        return executionTime;
     }
 
     /**
      * Changes the execution time for the current Component.
      *
-     * @param executrionTime the new execution time for the Component.
+     * @param executionTime the new execution time for the Component.
      */
-    public void setExecutrionTime(float executrionTime) {
-        this.executrionTime = executrionTime;
+    public void setExecutionTime(float executionTime) {
+        this.executionTime = executionTime;
     }
 
     /**
@@ -214,7 +214,7 @@ public class Component {
      *
      * @param serviceProvided the provided service that has to be added to the current component.
      */
-    public void addServiceProvided(ProvidedService serviceProvided) {
+    public void addProvidedService(ProvidedService serviceProvided) {
         this.servicesProvided.put(serviceProvided.getName(), serviceProvided);
     }
 
@@ -226,7 +226,7 @@ public class Component {
      *
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
-    public boolean removeServiceProvided(ProvidedService serviceProvided) {
+    public boolean removeProvidedService(ProvidedService serviceProvided) {
         return servicesProvided.remove(serviceProvided.getName(), serviceProvided);
     }
 
@@ -235,7 +235,7 @@ public class Component {
      *
      * @return <code>true</code> if the provided services' set is successfully emptied; <code>false</code> otherwise.
      */
-    public boolean removeAllServicesProvided() {
+    public boolean removeAllProvidedServices() {
         try {
             servicesProvided.clear();
             return true;
@@ -249,7 +249,7 @@ public class Component {
      *
      * @return a <code>HashMap</code> containing the services required by the current component.
      */
-    public HashMap<String, RequiredService> getServicesRequired() {
+    public HashMap<String, RequiredService> getRequiredServices() {
         return servicesRequired;
     }
 
@@ -259,7 +259,7 @@ public class Component {
      *
      * @param serviceRequired the required service that has to be added to the current component.
      */
-    public void addServiceRequired(RequiredService serviceRequired) {
+    public void addRequiredService(RequiredService serviceRequired) {
         this.servicesRequired.put(serviceRequired.getName(), serviceRequired);
     }
 
@@ -271,7 +271,7 @@ public class Component {
      *
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
-    public boolean removeServiceRequired(RequiredService serviceRequired) {
+    public boolean removeRequiredService(RequiredService serviceRequired) {
         return servicesRequired.remove(serviceRequired.getName(), serviceRequired);
     }
 
@@ -280,7 +280,7 @@ public class Component {
      *
      * @return <code>true</code> if the provided services' set is successfully emptied; <code>false</code> otherwise.
      */
-    public boolean removeAllServicesRequired() {
+    public boolean removeAllRequiredServices() {
         try {
             servicesRequired.clear();
             return true;
@@ -295,6 +295,6 @@ public class Component {
      * @return <code>true</code> if the services' sets are successfully emptied; <code>false</code> otherwise.
      */
     public boolean removeAllServices() {
-        return removeAllServicesProvided() && removeAllServicesRequired();
+        return removeAllProvidedServices() && removeAllRequiredServices();
     }
 }
