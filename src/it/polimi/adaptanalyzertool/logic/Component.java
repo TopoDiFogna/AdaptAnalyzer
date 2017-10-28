@@ -23,8 +23,8 @@ public class Component {
     private float availability;
     private float executionTime;
     private Color color;
-    private HashMap<String, ProvidedService> servicesProvided;
-    private HashMap<String, RequiredService> servicesRequired;
+    private HashMap<String, ProvidedService> providedServices;
+    private HashMap<String, RequiredService> requiredServices;
 
     /**
      * Basic constructor for the component. Only the mandatory attributes are required; all non mandatory attributes are
@@ -77,14 +77,14 @@ public class Component {
      * @param availability     availability expressed in 0-1 range.
      * @param executionTime    execution time expressed in seconds.
      * @param color            color for the component in the UI.
-     * @param servicesProvided the services provided by this component.
+     * @param providedServices the services provided by this component.
      *
      * @see RequiredService
      * @see ProvidedService
      */
     public Component(String name, float cost, float availability, float executionTime, Color color,
-                     HashMap<String, ProvidedService> servicesProvided) {
-        this(name, cost, availability, executionTime, color, servicesProvided, new HashMap<>());
+                     HashMap<String, ProvidedService> providedServices) {
+        this(name, cost, availability, executionTime, color, providedServices, new HashMap<>());
     }
 
     /**
@@ -94,22 +94,22 @@ public class Component {
      * @param availability     availability expressed in 0-1 range.
      * @param executionTime    execution time expressed in seconds.
      * @param color            color for the component in the UI.
-     * @param servicesProvided the services provided by this component.
-     * @param servicesRequired the services required by this component.
+     * @param providedServices the services provided by this component.
+     * @param requiredServices the services required by this component.
      *
      * @see RequiredService
      * @see ProvidedService
      */
     public Component(String name, float cost, float availability, float executionTime, Color color,
-                     HashMap<String, ProvidedService> servicesProvided,
-                     HashMap<String, RequiredService> servicesRequired) {
+                     HashMap<String, ProvidedService> providedServices,
+                     HashMap<String, RequiredService> requiredServices) {
         this.name = name;
         this.cost = cost;
         this.availability = availability;
         this.executionTime = executionTime;
         this.color = color;
-        this.servicesProvided = servicesProvided;
-        this.servicesRequired = servicesRequired;
+        this.providedServices = providedServices;
+        this.requiredServices = requiredServices;
     }
 
     /**
@@ -204,8 +204,8 @@ public class Component {
      *
      * @return a <code>HashMap</code> containing the services provided by the current component.
      */
-    public HashMap<String, ProvidedService> getServicesProvided() {
-        return servicesProvided;
+    public HashMap<String, ProvidedService> getProvidedServices() {
+        return providedServices;
     }
 
     /**
@@ -215,7 +215,7 @@ public class Component {
      * @param serviceProvided the provided service that has to be added to the current component.
      */
     public void addProvidedService(ProvidedService serviceProvided) {
-        this.servicesProvided.put(serviceProvided.getName(), serviceProvided);
+        this.providedServices.put(serviceProvided.getName(), serviceProvided);
     }
 
     /**
@@ -227,7 +227,7 @@ public class Component {
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
     public boolean removeProvidedService(ProvidedService serviceProvided) {
-        return servicesProvided.remove(serviceProvided.getName(), serviceProvided);
+        return providedServices.remove(serviceProvided.getName(), serviceProvided);
     }
 
     /**
@@ -237,7 +237,7 @@ public class Component {
      */
     public boolean removeAllProvidedServices() {
         try {
-            servicesProvided.clear();
+            providedServices.clear();
             return true;
         } catch (UnsupportedOperationException e) {
             return false;
@@ -250,7 +250,7 @@ public class Component {
      * @return a <code>HashMap</code> containing the services required by the current component.
      */
     public HashMap<String, RequiredService> getRequiredServices() {
-        return servicesRequired;
+        return requiredServices;
     }
 
     /**
@@ -260,7 +260,7 @@ public class Component {
      * @param serviceRequired the required service that has to be added to the current component.
      */
     public void addRequiredService(RequiredService serviceRequired) {
-        this.servicesRequired.put(serviceRequired.getName(), serviceRequired);
+        this.requiredServices.put(serviceRequired.getName(), serviceRequired);
     }
 
     /**
@@ -272,7 +272,7 @@ public class Component {
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
     public boolean removeRequiredService(RequiredService serviceRequired) {
-        return servicesRequired.remove(serviceRequired.getName(), serviceRequired);
+        return requiredServices.remove(serviceRequired.getName(), serviceRequired);
     }
 
     /**
@@ -282,7 +282,7 @@ public class Component {
      */
     public boolean removeAllRequiredServices() {
         try {
-            servicesRequired.clear();
+            requiredServices.clear();
             return true;
         } catch (UnsupportedOperationException e) {
             return false;
