@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="it.polimi.adaptanalyzertool.gui.newarchitecturewindow.NewArchitectureWindowController">
+    <center>
+        <HBox alignment="BASELINE_CENTER" spacing="5">
+            <Label text="Architecture Name:"/>
+            <TextField fx:id="architectureName"/>
+        </HBox>
+    </center>
+    <bottom>
+        <Button text="Submit" onAction="#newArchitectureSubmitted"/>
+    </bottom>
+</BorderPane>
