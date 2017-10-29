@@ -3,8 +3,8 @@ package it.polimi.adaptanalyzertool.logic;
 /**
  * A service provided by a component, identified by its name.
  * <p>
- *      A Required Service is more complicated than a Provided Service since it has also a used probability and a
- *      number of executions based on the {@link Architecture}.
+ * A Required Service is more complicated than a Provided Service since it has also a used probability and a
+ * number of executions based on the {@link Architecture}.
  * </p>
  *
  * @author Paolo Paterna
@@ -18,11 +18,11 @@ public class RequiredService extends AbstractService {
     /**
      * Constructor for the Required Service.
      *
-     * @param name the name for the service.
-     * @param usedProbability probability for this service to be used.
+     * @param name               the name for the service.
+     * @param usedProbability    probability for this service to be used.
      * @param numberOfExecutions how many times this service will run.
      */
-    public RequiredService(String name, double usedProbability, int numberOfExecutions){
+    public RequiredService(String name, double usedProbability, int numberOfExecutions) {
         super(name);
         this.usedProbability = usedProbability;
         this.numberOfExecutions = numberOfExecutions;

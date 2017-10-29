@@ -3,10 +3,9 @@ package it.polimi.adaptanalyzertool.logic;
 /**
  * A service provided by a component, identified by its name.
  *
- * @see Component
- *
  * @author Paolo Paterna
  * @version 0.1
+ * @see Component
  */
 public class ProvidedService extends AbstractService {
 
@@ -15,7 +14,7 @@ public class ProvidedService extends AbstractService {
      *
      * @param name the name of the service.
      */
-    public ProvidedService(String name){
+    public ProvidedService(String name) {
         super(name);
     }
 }

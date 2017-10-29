@@ -81,7 +81,6 @@ public class Architecture {
      * </p>
      *
      * @param component The <code>Component</code> to be added
-     *
      */
     public void addComponent(Component component) {
         components.put(component.getName(), component);

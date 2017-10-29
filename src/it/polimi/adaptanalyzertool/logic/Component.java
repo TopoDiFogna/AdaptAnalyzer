@@ -1,6 +1,6 @@
 package it.polimi.adaptanalyzertool.logic;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.HashMap;
 
 /**
