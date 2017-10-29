@@ -19,9 +19,9 @@ import java.util.HashMap;
 public class Component {
 
     private final String name;
-    private float cost;
-    private float availability;
-    private float executionTime;
+    private double cost;
+    private double availability;
+    private double executionTime;
     private Color color;
     private HashMap<String, ProvidedService> providedServices;
     private HashMap<String, RequiredService> requiredServices;
@@ -42,7 +42,7 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, float cost, float availability, float executionTime) {
+    public Component(String name, double cost, double availability, double executionTime) {
         this(name, cost, availability, executionTime, Color.WHITE, new HashMap<>(), new HashMap<>());
     }
 
@@ -62,7 +62,7 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, float cost, float availability, float executionTime, Color color) {
+    public Component(String name, double cost, double availability, double executionTime, Color color) {
         this(name, cost, availability, executionTime, color, new HashMap<>(), new HashMap<>());
     }
 
@@ -82,7 +82,7 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, float cost, float availability, float executionTime, Color color,
+    public Component(String name, double cost, double availability, double executionTime, Color color,
                      HashMap<String, ProvidedService> providedServices) {
         this(name, cost, availability, executionTime, color, providedServices, new HashMap<>());
     }
@@ -100,7 +100,7 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, float cost, float availability, float executionTime, Color color,
+    public Component(String name, double cost, double availability, double executionTime, Color color,
                      HashMap<String, ProvidedService> providedServices,
                      HashMap<String, RequiredService> requiredServices) {
         this.name = name;
@@ -127,9 +127,9 @@ public class Component {
     /**
      * Gets the cost for the current Component.
      *
-     * @return the cost as a float for the current Component.
+     * @return the cost as a double for the current Component.
      */
-    public float getCost() {
+    public double getCost() {
         return cost;
     }
 
@@ -138,7 +138,7 @@ public class Component {
      *
      * @param cost the new cost for the Component.
      */
-    public void setCost(float cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 
@@ -147,7 +147,7 @@ public class Component {
      *
      * @return the availability for the current component in the range 0-1.
      */
-    public float getAvailability() {
+    public double getAvailability() {
         return availability;
     }
 
@@ -156,16 +156,16 @@ public class Component {
      *
      * @param availability availability expressed in a range 0-1
      */
-    public void setAvailability(float availability) {
+    public void setAvailability(double availability) {
         this.availability = availability;
     }
 
     /**
      * Gets the execution time for the current Component.
      *
-     * @return the execution time as a float for the current Component.
+     * @return the execution time as a double for the current Component.
      */
-    public float getExecutionTime() {
+    public double getExecutionTime() {
         return executionTime;
     }
 
@@ -174,7 +174,7 @@ public class Component {
      *
      * @param executionTime the new execution time for the Component.
      */
-    public void setExecutionTime(float executionTime) {
+    public void setExecutionTime(double executionTime) {
         this.executionTime = executionTime;
     }
 

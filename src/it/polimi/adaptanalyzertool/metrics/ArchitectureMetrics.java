@@ -34,14 +34,14 @@ public final class ArchitectureMetrics {
      * Calculates the Global Availability of System as specified in the thesis by Zanotti of 2016-12 at page 31.
      * </p>
      *
-     * @see ComponentMetrics#FitnessRatioAvailability(float, float) FitnessRatioAvailability(float, float)
+     * @see ComponentMetrics#FitnessRatioAvailability(double, double) FitnessRatioAvailability(double, double)
      *
      * @param components the components present in an architecture.
      * @param systemTargetAvailability the system target availability required.
      * @return the Global Availability of the System.
      */
-    public static float GlobalAvailabilitySystem(HashMap<String, Component> components, float systemTargetAvailability){
-        float gas = 1;
+    public static double GlobalAvailabilitySystem(HashMap<String, Component> components, double systemTargetAvailability){
+        double gas = 1;
         for (Component component : components.values()) {
             gas *= ComponentMetrics.FitnessRatioAvailability(component.getAvailability(), systemTargetAvailability);
         }
@@ -49,19 +49,19 @@ public final class ArchitectureMetrics {
     }
 
     /**
-     * Defines the total cost of the components in an architecture w.r.t. the cost of each individual component. //TODO better define this metric
+     * Defines the total cost of the components in an architecture w.r.t. the cost of each individual component.
      * <p>
      * Calculates the Global Cost of System as specified in the thesis by Zanotti of 2016-12 at page 32.
      * </p>
      *
-     * @see ComponentMetrics#FitnessRatioCost(float, float) FitnessRatioCost(float, float)
+     * @see ComponentMetrics#FitnessRatioCost(double, double) FitnessRatioCost(double, double)
      *
      * @param components the components present in the architecture.
      * @param systemTargetCost the system target cost.
      * @return the global Cost of the system.
      */
-    public static float GlobalCostSystem(HashMap<String, Component> components, float systemTargetCost){
-        float gcs = 0;
+    public static double GlobalCostSystem(HashMap<String, Component> components, double systemTargetCost){
+        double gcs = 0;
         for (Component component : components.values()){
             gcs += ComponentMetrics.FitnessRatioCost(component.getCost(), systemTargetCost);
         }
@@ -77,7 +77,7 @@ public final class ArchitectureMetrics {
      *         with the target availability.
      */
     public static ArrayList<Architecture> SpacePossibilitySystemAvailability(ArrayList<Architecture> architectures,
-                                                                             float systemTargetAvailability){
+                                                                             double systemTargetAvailability){
         ArrayList <Architecture> eligibleArchitectures = new ArrayList<>();
         for (Architecture architecture : architectures){
             if (GlobalAvailabilitySystem(architecture.getComponents(), systemTargetAvailability) >= 1) {
@@ -96,7 +96,7 @@ public final class ArchitectureMetrics {
      *         with the target cost.
      */
     public static ArrayList<Architecture> SpacePossibilitySystemCost(ArrayList<Architecture> architectures,
-                                                                     float systemTargetCost){
+                                                                     double systemTargetCost){
         ArrayList <Architecture> eligibleArchitectures = new ArrayList<>();
         for (Architecture architecture : architectures){
             if (GlobalCostSystem(architecture.getComponents(), systemTargetCost) >= 1){

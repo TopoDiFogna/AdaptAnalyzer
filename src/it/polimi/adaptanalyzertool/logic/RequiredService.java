@@ -12,7 +12,7 @@ package it.polimi.adaptanalyzertool.logic;
  */
 public class RequiredService extends AbstractService {
 
-    private float usedProbability;
+    private double usedProbability;
     private int numberOfExecutions;
 
     /**
@@ -22,7 +22,7 @@ public class RequiredService extends AbstractService {
      * @param usedProbability probability for this service to be used.
      * @param numberOfExecutions how many times this service will run.
      */
-    public RequiredService(String name, float usedProbability, int numberOfExecutions){
+    public RequiredService(String name, double usedProbability, int numberOfExecutions){
         super(name);
         this.usedProbability = usedProbability;
         this.numberOfExecutions = numberOfExecutions;
@@ -33,7 +33,7 @@ public class RequiredService extends AbstractService {
      *
      * @return the probability to be used.
      */
-    public float getUsedProbability() {
+    public double getUsedProbability() {
         return usedProbability;
     }
 
@@ -42,7 +42,7 @@ public class RequiredService extends AbstractService {
      *
      * @param usedProbability the new probability to be used.
      */
-    public void setUsedProbability(float usedProbability) {
+    public void setUsedProbability(double usedProbability) {
         this.usedProbability = usedProbability;
     }
 

@@ -29,7 +29,7 @@ public final class ComponentMetrics {
      *
      * @return the Fitness Ratio w.r.t. Availability of a component.
      */
-    public static float FitnessRatioAvailability(float targetSystemAvailability, float componentAvailability){
+    public static double FitnessRatioAvailability(double targetSystemAvailability, double componentAvailability){
         return (1-targetSystemAvailability)/(1-componentAvailability);
     }
 
@@ -40,12 +40,12 @@ public final class ComponentMetrics {
      *     at page 27.
      * </p>
      *
-     * @see #FitnessRatioAvailability(float, float)
+     * @see #FitnessRatioAvailability(double, double)
      *
      * @param fra the Fitness Ratio w.r.t. Availability.
      * @return the Boolean suitability w.r.t. Availability.
      */
-    public static boolean BooleanSuitabilityAvailability(float fra){
+    public static boolean BooleanSuitabilityAvailability(double fra){
         return fra >= 1;
     }
 
@@ -65,7 +65,7 @@ public final class ComponentMetrics {
      * @param componentCost the component cost.
      * @return the Fitness ratio w.r.t. Cost of a component
      */
-    public static float FitnessRatioCost(float systemTargetCost, float componentCost){
+    public static double FitnessRatioCost(double systemTargetCost, double componentCost){
         return systemTargetCost/componentCost;
     }
 
@@ -76,12 +76,12 @@ public final class ComponentMetrics {
      *     at page 29.
      * </p>
      *
-     * @see #FitnessRatioCost(float, float)
+     * @see #FitnessRatioCost(double, double)
      *
      * @param frc the Fitness Ratio w.r.t. Cost.
      * @return the Boolean suitability w.r.t. Cost.
      */
-    public static boolean BooleanSuitabilityCost(float frc){
+    public static boolean BooleanSuitabilityCost(double frc){
         return frc >= 1;
     }
 }

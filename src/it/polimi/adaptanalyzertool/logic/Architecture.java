@@ -85,7 +85,7 @@ public class Architecture {
      */
     public void addComponent(Component component) {
         components.put(component.getName(), component);
-    } // TODO Overload to accept a hashmap or something
+    }
 
     /**
      * Removes a component from the current architecture.
