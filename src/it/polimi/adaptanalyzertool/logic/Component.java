@@ -35,6 +35,7 @@ public class Component {
      * <li>Services Required: EMPTY</li>
      * </ul>
      *
+     * @param name          the name of the component.
      * @param cost          the cost of the component.
      * @param availability  availability expressed in 0-1 range.
      * @param executionTime execution time expressed in seconds.
@@ -54,6 +55,7 @@ public class Component {
      * <li>Services Required: EMPTY</li>
      * </ul>
      *
+     * @param name          the name of the component.
      * @param cost          the cost of the component.
      * @param availability  availability expressed in 0-1 range.
      * @param executionTime execution time expressed in seconds.
@@ -73,6 +75,7 @@ public class Component {
      * <li>Services Required: EMPTY</li>
      * </ul>
      *
+     * @param name             the name of the component.
      * @param cost             the cost of the component.
      * @param availability     availability expressed in 0-1 range.
      * @param executionTime    execution time expressed in seconds.
@@ -90,6 +93,7 @@ public class Component {
     /**
      * Constructor for the component with all the attributes required.
      *
+     * @param name             the name of the component.
      * @param cost             the cost of the component.
      * @param availability     availability expressed in 0-1 range.
      * @param executionTime    execution time expressed in seconds.
@@ -115,7 +119,7 @@ public class Component {
     /**
      * Gets the name of the current component.
      * <p>
-     *     The name identifies the component and acts as a key in the <code>HashMap</code> used in the implementation.
+     * The name identifies the component and acts as a key in the <code>HashMap</code> used in the implementation.
      * </p>
      *
      * @return the name of the component.
