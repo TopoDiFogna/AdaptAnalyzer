@@ -1,15 +1,16 @@
 package it.polimi.adaptanalyzertool.gui;
 
+import it.polimi.adaptanalyzertool.gui.utility.ScreenName;
+import it.polimi.adaptanalyzertool.gui.utility.ScreensController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 
-public class Main extends Application{
-
-    private static Stage primaryStage;
+public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -17,21 +18,29 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Adaptability Analyzer Tool");
-        setPrimaryStage(primaryStage);
 
-        BorderPane root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("main.fxml"));
+        BorderPane root = loader.load();
+        MainController mainController = loader.getController();
+
+        ScreensController mainContainer = new ScreensController();
+        mainContainer.loadScreen(ScreenName.WELCOME.getName(), ScreenName.WELCOME.getFile());
+        mainContainer.loadScreen(ScreenName.ARCHITECTURESCREEN.getName(), ScreenName.ARCHITECTURESCREEN.getFile());
+
+        mainContainer.setScreen(ScreenName.WELCOME.getName());
+
+        primaryStage.setTitle("Adaptability Analyzer Tool");
+
+        Group screenGroup = new Group();
+        screenGroup.getChildren().add(mainContainer);
+
+        mainController.setMyController(mainContainer);
+
+        root.setCenter(screenGroup);
+
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("Main.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    static Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-    private static void setPrimaryStage(Stage primaryStage) {
-        Main.primaryStage = primaryStage;
     }
 }

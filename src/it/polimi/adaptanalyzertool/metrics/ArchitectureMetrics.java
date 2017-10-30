@@ -13,10 +13,9 @@ import java.util.HashMap;
  * all public and static.
  * </p>
  *
- * @see it.polimi.adaptanalyzertool.logic.Architecture Architecture
- *
  * @author Paolo Paterna
  * @version 0.1
+ * @see it.polimi.adaptanalyzertool.logic.Architecture Architecture
  */
 public final class ArchitectureMetrics {
 
@@ -24,23 +23,23 @@ public final class ArchitectureMetrics {
      * Defines the availability of the components that are in the architecture as probability that are all active in
      * a given instant.
      * <p>
-     *     A better availability of a component in the architecture implies a better Fitness Ratio w.r.t. Availability
-     *     that is reflected in a better global availability.
+     * A better availability of a component in the architecture implies a better Fitness Ratio w.r.t. Availability
+     * that is reflected in a better global availability.
      * </p>
      * <p>
-     *     Higher numbers mean better availability.
+     * Higher numbers mean better availability.
      * </p>
      * <p>
      * Calculates the Global Availability of System as specified in the thesis by Zanotti of 2016-12 at page 31.
      * </p>
      *
-     * @see ComponentMetrics#FitnessRatioAvailability(double, double) FitnessRatioAvailability(double, double)
-     *
-     * @param components the components present in an architecture.
+     * @param components               the components present in an architecture.
      * @param systemTargetAvailability the system target availability required.
+     *
      * @return the Global Availability of the System.
+     * @see ComponentMetrics#FitnessRatioAvailability(double, double) FitnessRatioAvailability(double, double)
      */
-    public static double GlobalAvailabilitySystem(HashMap<String, Component> components, double systemTargetAvailability){
+    public static double GlobalAvailabilitySystem(HashMap<String, Component> components, double systemTargetAvailability) {
         double gas = 1;
         for (Component component : components.values()) {
             gas *= ComponentMetrics.FitnessRatioAvailability(component.getAvailability(), systemTargetAvailability);
@@ -54,15 +53,15 @@ public final class ArchitectureMetrics {
      * Calculates the Global Cost of System as specified in the thesis by Zanotti of 2016-12 at page 32.
      * </p>
      *
-     * @see ComponentMetrics#FitnessRatioCost(double, double) FitnessRatioCost(double, double)
-     *
-     * @param components the components present in the architecture.
+     * @param components       the components present in the architecture.
      * @param systemTargetCost the system target cost.
+     *
      * @return the global Cost of the system.
+     * @see ComponentMetrics#FitnessRatioCost(double, double) FitnessRatioCost(double, double)
      */
-    public static double GlobalCostSystem(HashMap<String, Component> components, double systemTargetCost){
+    public static double GlobalCostSystem(HashMap<String, Component> components, double systemTargetCost) {
         double gcs = 0;
-        for (Component component : components.values()){
+        for (Component component : components.values()) {
             gcs += ComponentMetrics.FitnessRatioCost(component.getCost(), systemTargetCost);
         }
         return gcs;
@@ -71,15 +70,16 @@ public final class ArchitectureMetrics {
     /**
      * Defines which architectures are suitable for the specified availability.
      *
-     * @param architectures the architectures that need to be tested.
+     * @param architectures            the architectures that need to be tested.
      * @param systemTargetAvailability the target availability.
+     *
      * @return an <code>ArrayList</code> containing a possible subset, even empty, of architectures that are suitable
-     *         with the target availability.
+     * with the target availability.
      */
     public static ArrayList<Architecture> SpacePossibilitySystemAvailability(ArrayList<Architecture> architectures,
-                                                                             double systemTargetAvailability){
-        ArrayList <Architecture> eligibleArchitectures = new ArrayList<>();
-        for (Architecture architecture : architectures){
+                                                                             double systemTargetAvailability) {
+        ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
+        for (Architecture architecture : architectures) {
             if (GlobalAvailabilitySystem(architecture.getComponents(), systemTargetAvailability) >= 1) {
                 eligibleArchitectures.add(architecture);
             }
@@ -90,16 +90,17 @@ public final class ArchitectureMetrics {
     /**
      * Defines which architectures are suitable for the specified cost.
      *
-     * @param architectures the architectures that need to be tested.
+     * @param architectures    the architectures that need to be tested.
      * @param systemTargetCost the target cost.
+     *
      * @return an <code>ArrayList</code> containing a possible subset, even empty, of architectures that are suitable
-     *         with the target cost.
+     * with the target cost.
      */
     public static ArrayList<Architecture> SpacePossibilitySystemCost(ArrayList<Architecture> architectures,
-                                                                     double systemTargetCost){
-        ArrayList <Architecture> eligibleArchitectures = new ArrayList<>();
-        for (Architecture architecture : architectures){
-            if (GlobalCostSystem(architecture.getComponents(), systemTargetCost) >= 1){
+                                                                     double systemTargetCost) {
+        ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
+        for (Architecture architecture : architectures) {
+            if (GlobalCostSystem(architecture.getComponents(), systemTargetCost) >= 1) {
                 eligibleArchitectures.add(architecture);
             }
         }
