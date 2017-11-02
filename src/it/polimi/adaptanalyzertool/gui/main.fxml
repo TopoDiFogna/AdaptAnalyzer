@@ -2,18 +2,15 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="it.polimi.adaptanalyzertool.gui.MainController"
-            stylesheets="@main.css"
-            prefHeight="600.0" prefWidth="800.0">
+<BorderPane prefHeight="600.0" prefWidth="800.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.adaptanalyzertool.gui.MainController">
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem text="New" accelerator="Ctrl+N" onAction="#createNewArchitecture"/>
+                <MenuItem accelerator="Ctrl+N" onAction="#createNewArchitecture" text="New"/>
                 <MenuItem text="Import"/>
                 <MenuItem text="Export"/>
-                <MenuItem text="Exit" accelerator="Ctrl+X" onAction="#exit"/>
+                <MenuItem accelerator="Ctrl+X" onAction="#exit" text="Exit"/>
             </Menu>
         </MenuBar>
     </top>

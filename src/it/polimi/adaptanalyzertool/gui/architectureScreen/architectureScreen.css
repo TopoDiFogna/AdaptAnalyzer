@@ -1,0 +1,7 @@
+#componentHBox:focused {
+    -fx-background-color: aquamarine;
+}
+
+#serviceHBox:focused {
+    -fx-background-color: aquamarine;
+}

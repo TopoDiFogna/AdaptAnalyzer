@@ -1,19 +1,15 @@
 package it.polimi.adaptanalyzertool.gui.newarchitecturewindow;
 
-import it.polimi.adaptanalyzertool.gui.utility.ControlledScreen;
-import it.polimi.adaptanalyzertool.gui.utility.ScreensController;
 import it.polimi.adaptanalyzertool.logic.Architecture;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class NewArchitectureWindowController implements Initializable, ControlledScreen {
+public class NewArchitectureWindowController {
 
     @FXML
     private Label errorLabel;
@@ -24,14 +20,7 @@ public class NewArchitectureWindowController implements Initializable, Controlle
     @FXML
     private Button submitButton;
 
-    private ScreensController myController;
     private Architecture architecture;
-
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 
     @FXML
     public void newArchitectureSubmitted() {
@@ -49,8 +38,10 @@ public class NewArchitectureWindowController implements Initializable, Controlle
         return architecture;
     }
 
-    @Override
-    public void setScreenParent(ScreensController screenParent) {
-        this.myController = screenParent;
+    @FXML
+    public void enterPressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            newArchitectureSubmitted();
+        }
     }
 }

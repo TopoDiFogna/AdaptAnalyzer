@@ -1,5 +1,5 @@
 package it.polimi.adaptanalyzertool.gui.utility;
 
 public interface ControlledScreen {
-    void setScreenParent(ScreensController screenParent);
+    void setScreenController(ScreensController screensController);
 }

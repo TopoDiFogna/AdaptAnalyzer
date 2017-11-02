@@ -1,35 +1,23 @@
 package it.polimi.adaptanalyzertool.gui;
 
+import it.polimi.adaptanalyzertool.gui.architectureScreen.ArchitectureScreenController;
 import it.polimi.adaptanalyzertool.gui.newarchitecturewindow.NewArchitectureWindowController;
+import it.polimi.adaptanalyzertool.gui.utility.ControlledScreen;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenName;
 import it.polimi.adaptanalyzertool.gui.utility.ScreensController;
 import it.polimi.adaptanalyzertool.logic.Architecture;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class MainController implements Initializable {
+public class MainController implements ControlledScreen {
 
     private Window parent;
-
-    private Architecture architecture;
-    private ScreensController myController;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    }
-
-    public void setMyController(ScreensController screenParent) {
-        this.myController = screenParent;
-    }
+    private ScreensController screensController;
 
     @FXML
     public void exit() {
@@ -48,14 +36,26 @@ public class MainController implements Initializable {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.initOwner(myController.getScene().getWindow());
+        stage.initOwner(parent);
         stage.setResizable(false);
         stage.initModality(Modality.WINDOW_MODAL);
         stage.showAndWait();
 
-        architecture = controller.getArchitecture();
+        Architecture architecture = controller.getArchitecture();
         if (architecture != null) {
-            myController.setScreen(ScreenName.ARCHITECTURESCREEN.getName());
+            ArchitectureScreenController architectureScreenController = (ArchitectureScreenController) screensController.getScreen(ScreenName.ARCHITECTURE_SCREEN.getName()).getUserData();
+            architectureScreenController.setArchitecture(architecture);
+            architectureScreenController.setUpScreen();
+            screensController.setScreen(ScreenName.ARCHITECTURE_SCREEN.getName());
         }
+    }
+
+    void setParent(Window parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public void setScreenController(ScreensController screensController) {
+        this.screensController = screensController;
     }
 }

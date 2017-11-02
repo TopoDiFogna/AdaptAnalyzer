@@ -2,7 +2,7 @@ package it.polimi.adaptanalyzertool.gui.utility;
 
 public enum ScreenName {
     WELCOME("welcome", "/it/polimi/adaptanalyzertool/gui/welcomescreen/welcomeScreen.fxml"),
-    ARCHITECTURESCREEN("architectureScreen", "/it/polimi/adaptanalyzertool/gui/architectureScreen/architectureScreen.fxml");
+    ARCHITECTURE_SCREEN("architectureScreen", "/it/polimi/adaptanalyzertool/gui/architectureScreen/architectureScreen.fxml");
 
 
     String name;
