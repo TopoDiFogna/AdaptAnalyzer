@@ -107,6 +107,7 @@ public class ArchitectureScreenController implements ControlledScreen {
     private ScreensController myController;
     private Architecture architecture;
     private Component component;
+    private AbstractService service;
 
     public void setArchitecture(Architecture architecture) {
         this.architecture = architecture;
@@ -135,6 +136,9 @@ public class ArchitectureScreenController implements ControlledScreen {
                 architecture.addComponent(newComponent);
                 componentErrorLabel.setText("Component Added!");
                 updateComponentList();
+                if (component != null && newComponentName.equals(component.getName())){
+                    showComponentDetail(newComponent);
+                }
                 componentTextField.clear();
                 costTextField.clear();
                 availabilityTextField.clear();
@@ -207,27 +211,33 @@ public class ArchitectureScreenController implements ControlledScreen {
 
     @FXML
     private void createNewService() {
-        if (!"".equals(serviceTextField.getText().trim())) {
+        AbstractService newService = null;
+        String newServiceName = serviceTextField.getText().trim();
+        if (!"".equals(newServiceName)) {
             switch (serviceComboBox.getValue().toString()) {
                 case "Provided":
-                    ProvidedService providedService = new ProvidedService(serviceTextField.getText().trim());
-                    this.component.addProvidedService(providedService);
+                    newService = new ProvidedService(newServiceName);
+                    this.component.addProvidedService((ProvidedService) newService);
                     serviceErrorLabel.setText("Provided service added to " + component.getName());
+                    serviceTextField.clear();
                     break;
                 case "Required":
                     if (validateServiceInput()) {
-                        RequiredService requiredService = new RequiredService(serviceTextField.getText().trim(),
+                        newService = new RequiredService(newServiceName,
                                 Double.parseDouble(usedProbabilityTextField.getText().trim()),
                                 Integer.parseInt(numberofExecutionTextField.getText().trim()));
-                        this.component.addRequiredService(requiredService);
+                        this.component.addRequiredService((RequiredService) newService);
                         serviceErrorLabel.setText("Required service added to " + component.getName());
+                        serviceTextField.clear();
                         usedProbabilityTextField.clear();
                         numberofExecutionTextField.clear();
                     }
                     break;
             }
-            serviceTextField.clear();
             updateServicesList();
+            if (service != null && newServiceName.equals(service.getName())){
+                showServiceDetail(newService);
+            }
         } else {
             serviceErrorLabel.setText("Empty name");
         }
@@ -249,8 +259,8 @@ public class ArchitectureScreenController implements ControlledScreen {
         componentServices.putAll(component.getProvidedServices());
         componentServices.putAll(component.getRequiredServices());
         servicesVBox.getChildren().clear();
-        HBox servicesHBox = new HBox(3);
         for (AbstractService service : componentServices.values()) {
+            HBox servicesHBox = new HBox(3);
             Label serviceLabel = new Label();
             if (service instanceof ProvidedService) {
                 serviceLabel.setText("(Provided) " + service.getName());
@@ -269,12 +279,15 @@ public class ArchitectureScreenController implements ControlledScreen {
     }
 
     private void showServiceDetail(AbstractService service) {
+        this.service = service;
         serviceNameLabel.setText(service.getName());
         if (service instanceof ProvidedService) {
             serviceTypeLabel.setText("Provided");
             numberOfExecutionsDetailLabel.setDisable(true);
             serviceNumberOfExecutionsLabel.setDisable(true);
             usedProbabilityDetailLabel.setDisable(true);
+            serviceUsedProbabilityLabel.setText("");
+            serviceNumberOfExecutionsLabel.setText("");
             serviceUsedProbabilityLabel.setDisable(true);
         } else if (service instanceof RequiredService) {
             serviceTypeLabel.setText("Required");
