@@ -176,6 +176,7 @@ public class ArchitectureScreenController implements ControlledScreen {
                 showComponentDetail(component);
                 this.component = component;
                 this.serviceAddButton.setDisable(false);
+                updateServicesList();
             });
             componentsVBox.getChildren().add(componentHBox);
         }
