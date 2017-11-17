@@ -5,7 +5,7 @@ import it.polimi.adaptanalyzertool.gui.newarchitecturewindow.NewArchitectureWind
 import it.polimi.adaptanalyzertool.gui.utility.ControlledScreen;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenName;
 import it.polimi.adaptanalyzertool.gui.utility.ScreensController;
-import it.polimi.adaptanalyzertool.logic.Architecture;
+import it.polimi.adaptanalyzertool.model.Architecture;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

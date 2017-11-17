@@ -1,6 +1,6 @@
 package it.polimi.adaptanalyzertool.gui.newarchitecturewindow;
 
-import it.polimi.adaptanalyzertool.logic.Architecture;
+import it.polimi.adaptanalyzertool.model.Architecture;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

@@ -1,4 +1,4 @@
-package it.polimi.adaptanalyzertool.logic;
+package it.polimi.adaptanalyzertool.model;
 
 /**
  * A service provided by a component, identified by its name.

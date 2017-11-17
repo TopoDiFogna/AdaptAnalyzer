@@ -1,4 +1,4 @@
-package it.polimi.adaptanalyzertool.logic;
+package it.polimi.adaptanalyzertool.model;
 
 import java.util.HashMap;
 

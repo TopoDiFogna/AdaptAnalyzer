@@ -1,4 +1,4 @@
-package it.polimi.adaptanalyzertool.logic;
+package it.polimi.adaptanalyzertool.model;
 
 /**
  * Base class for the service which defines the details about a component's service. It provide base functionalities

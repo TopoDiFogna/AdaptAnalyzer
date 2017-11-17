@@ -2,7 +2,7 @@ package it.polimi.adaptanalyzertool.gui.architectureScreen;
 
 import it.polimi.adaptanalyzertool.gui.utility.ControlledScreen;
 import it.polimi.adaptanalyzertool.gui.utility.ScreensController;
-import it.polimi.adaptanalyzertool.logic.*;
+import it.polimi.adaptanalyzertool.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
