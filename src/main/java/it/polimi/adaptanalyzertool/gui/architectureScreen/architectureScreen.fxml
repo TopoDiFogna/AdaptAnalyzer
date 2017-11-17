@@ -28,7 +28,6 @@
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
             </rowConstraints>
             <padding>
                 <Insets left="5.0" right="5.0"/>
@@ -36,17 +35,14 @@
             <Label minWidth="100.0" prefWidth="100.0" text="Name:"/>
             <TextField fx:id="componentTextField" prefWidth="100.0" promptText="Name" GridPane.columnIndex="1"/>
             <Label minWidth="100.0" prefWidth="150.0" text="Cost:" GridPane.rowIndex="1"/>
-            <TextField fx:id="costTextField" prefWidth="50.0" promptText="Cost" GridPane.columnIndex="1"
+            <TextField fx:id="componentCostTextField" prefWidth="50.0" promptText="Cost" GridPane.columnIndex="1"
                        GridPane.rowIndex="1"/>
             <Label minWidth="100.0" prefWidth="150.0" text="Availability:" GridPane.rowIndex="2"/>
-            <TextField fx:id="availabilityTextField" prefWidth="50.0" promptText="Availability" GridPane.columnIndex="1"
-                       GridPane.rowIndex="2"/>
-            <Label minWidth="100.0" prefWidth="150.0" text="Execution Time:" GridPane.rowIndex="3"/>
-            <TextField fx:id="executionsTextField" prefWidth="50.0" promptText="Execution time" GridPane.columnIndex="1"
-                       GridPane.rowIndex="3"/>
-            <Label minWidth="100.0" text="Color:" GridPane.rowIndex="4"/>
+            <TextField fx:id="componentAvailabilityTextField" prefWidth="50.0" promptText="Availability"
+                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <Label minWidth="100.0" text="Color:" GridPane.rowIndex="3"/>
             <ColorPicker fx:id="componentColorPicker" minHeight="25.0" prefWidth="100.0" GridPane.columnIndex="1"
-                         GridPane.rowIndex="4"/>
+                         GridPane.rowIndex="3"/>
         </GridPane>
         <Button minWidth="50.0" mnemonicParsing="false" onMouseClicked="#createNewComponet" prefWidth="100.0"
                 text="Add">
@@ -67,9 +63,6 @@
                 <Insets bottom="5.0" left="5.0" right="5.0"/>
             </VBox.margin>
         </ScrollPane>
-        <HBox.margin>
-            <Insets/>
-        </HBox.margin>
     </VBox>
 
     <HBox prefWidth="267.0">
@@ -95,22 +88,18 @@
                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                    <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                 </rowConstraints>
                 <Label minWidth="100.0" prefWidth="100.0" text="Name:"/>
                 <Label minWidth="100.0" prefWidth="150.0" text="Cost:" GridPane.rowIndex="1"/>
                 <Label minWidth="100.0" prefWidth="150.0" text="Availability:" GridPane.rowIndex="2"/>
-                <Label minWidth="100.0" prefWidth="150.0" text="Execution Time:" GridPane.rowIndex="3"/>
-                <Label minWidth="100.0" text="Color:" GridPane.rowIndex="4"/>
+                <Label minWidth="100.0" text="Color:" GridPane.rowIndex="3"/>
                 <Label fx:id="componentNameLabel" layoutX="10.0" layoutY="17.0" minWidth="100.0" prefWidth="100.0"
                        GridPane.columnIndex="1"/>
                 <Label fx:id="componentCostLabel" layoutX="10.0" layoutY="47.0" minWidth="100.0" prefWidth="150.0"
                        GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                 <Label fx:id="componentAvailabilityLabel" layoutX="10.0" layoutY="77.0" minWidth="100.0"
                        prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                <Label fx:id="componentExecutionTimeLabel" layoutX="10.0" layoutY="107.0" minWidth="100.0"
-                       prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-                <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                     <Rectangle fx:id="componentColorRectangle" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00"
                                height="17.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="17.0">
                         <HBox.margin>
@@ -139,6 +128,7 @@
                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
+                    <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                 </rowConstraints>
                 <VBox.margin>
                     <Insets left="5.0" right="5.0"/>
@@ -158,13 +148,16 @@
                         <String fx:value="Provided"/>
                     </value>
                 </ComboBox>
-                <Label fx:id="usedProbabilityLabel" disable="true" text="Used probability:" GridPane.rowIndex="2"/>
+                <Label fx:id="executionTimeLabel" text="Execution time:" GridPane.rowIndex="2"/>
+                <TextField fx:id="executionTimeTextField" promptText="Execution time" GridPane.columnIndex="1"
+                           GridPane.rowIndex="2"/>
+                <Label fx:id="usedProbabilityLabel" disable="true" text="Used probability:" GridPane.rowIndex="3"/>
                 <TextField fx:id="usedProbabilityTextField" disable="true" layoutX="136.0" layoutY="13.0"
-                           promptText="Used probability" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                           promptText="Used probability" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                 <Label fx:id="numberOfExecutionLabel" disable="true" text="Number of executions:"
-                       GridPane.rowIndex="3"/>
-                <TextField fx:id="numberofExecutionTextField" disable="true" layoutX="10.0" layoutY="13.0"
-                           promptText="Number of executions" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                       GridPane.rowIndex="4"/>
+                <TextField fx:id="numberOfExecutionTextField" disable="true" layoutX="10.0" layoutY="13.0"
+                           promptText="Number of executions" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
             </GridPane>
             <Button fx:id="serviceAddButton" disable="true" minWidth="50.0" mnemonicParsing="false"
                     onMousePressed="#createNewService" prefWidth="100.0" text="Add"/>
@@ -202,18 +195,21 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <VBox.margin>
                 <Insets left="5.0" right="5.0"/>
             </VBox.margin>
             <Label text="Name:"/>
             <Label text="Type:" GridPane.rowIndex="1"/>
-            <Label fx:id="usedProbabilityDetailLabel" text="Used Probability:" GridPane.rowIndex="2"/>
-            <Label fx:id="numberOfExecutionsDetailLabel" text="Number of Executions:" GridPane.rowIndex="3"/>
+            <Label fx:id="executionTimeDetailLabel" text="Execution Time:" GridPane.rowIndex="2"/>
+            <Label fx:id="usedProbabilityDetailLabel" text="Used Probability:" GridPane.rowIndex="3"/>
+            <Label fx:id="numberOfExecutionsDetailLabel" text="Number of Executions:" GridPane.rowIndex="4"/>
             <Label fx:id="serviceNameLabel" GridPane.columnIndex="1"/>
             <Label fx:id="serviceTypeLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-            <Label fx:id="serviceUsedProbabilityLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-            <Label fx:id="serviceNumberOfExecutionsLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <Label fx:id="serviceExecutionTimeLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <Label fx:id="serviceUsedProbabilityLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <Label fx:id="serviceNumberOfExecutionsLabel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
         </GridPane>
         <Separator prefWidth="200.0"/>
         <Label text="Metrics"/>

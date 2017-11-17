@@ -16,90 +16,93 @@ import java.util.HashMap;
 
 public class ArchitectureScreenController implements ControlledScreen {
 
+    /*
+            First column
+         */
     @FXML
     private Label architectureName;
-
+    /*
+        New Component
+     */
     @FXML
     private TextField componentTextField;
-
     @FXML
-    private TextField costTextField;
-
+    private TextField componentCostTextField;
     @FXML
-    private TextField availabilityTextField;
-
-    @FXML
-    private TextField executionsTextField;
-
+    private TextField componentAvailabilityTextField;
     @FXML
     private ColorPicker componentColorPicker;
-
     @FXML
     private Label componentErrorLabel;
-
+    /*
+        Component List
+     */
     @FXML
     private VBox componentsVBox;
-
+    /*
+        Second column
+     */
+    /*
+        Selected Component details
+     */
     @FXML
     private Label componentNameLabel;
-
     @FXML
     private Label componentCostLabel;
-
     @FXML
     private Label componentAvailabilityLabel;
-
-    @FXML
-    private Label componentExecutionTimeLabel;
-
     @FXML
     private Rectangle componentColorRectangle;
-
     @FXML
     private Label componentColorLabel;
-
-    @FXML
-    private ComboBox serviceComboBox;
-
-    @FXML
-    private Label usedProbabilityLabel;
-
-    @FXML
-    private TextField usedProbabilityTextField;
-
-    @FXML
-    private Label numberOfExecutionLabel;
-
-    @FXML
-    private TextField numberofExecutionTextField;
-
+    /*
+        New service
+     */
     @FXML
     private TextField serviceTextField;
-
+    @FXML
+    private ComboBox serviceComboBox;
+    @FXML
+    private Label executionTimeLabel;
+    @FXML
+    private TextField executionTimeTextField;
+    @FXML
+    private Label usedProbabilityLabel;
+    @FXML
+    private TextField usedProbabilityTextField;
+    @FXML
+    private Label numberOfExecutionLabel;
+    @FXML
+    private TextField numberOfExecutionTextField;
     @FXML
     private Label serviceErrorLabel;
-
     @FXML
     private Button serviceAddButton;
-
+    /*
+        Services list
+     */
     @FXML
     public VBox servicesVBox;
-
+    /*
+        Third column
+     */
+    /*
+        Selected service details
+     */
     @FXML
     private Label serviceNameLabel;
-
     @FXML
     private Label serviceTypeLabel;
-
+    @FXML
+    private Label executionTimeDetailLabel;
     @FXML
     private Label serviceUsedProbabilityLabel;
-
     @FXML
     private Label serviceNumberOfExecutionsLabel;
-
+    @FXML
+    private Label serviceExecutionTimeLabel;
     @FXML
     private Label usedProbabilityDetailLabel;
-
     @FXML
     private Label numberOfExecutionsDetailLabel;
 
@@ -108,6 +111,8 @@ public class ArchitectureScreenController implements ControlledScreen {
     private Architecture architecture;
     private Component component;
     private AbstractService service;
+
+    private final String doubleRegex = "(?:\\d*\\.)?\\d+";
 
     public void setArchitecture(Architecture architecture) {
         this.architecture = architecture;
@@ -129,20 +134,18 @@ public class ArchitectureScreenController implements ControlledScreen {
         if (!"".equals(newComponentName)) {
             if (validateComponentInput()) {
                 Component newComponent = new Component(newComponentName,
-                        Double.parseDouble(costTextField.getText().trim()),
-                        Double.parseDouble(availabilityTextField.getText().trim()),
-                        Double.parseDouble(executionsTextField.getText().trim()),
+                        Double.parseDouble(componentCostTextField.getText().trim()),
+                        Double.parseDouble(componentAvailabilityTextField.getText().trim()),
                         componentColorPicker.getValue());
                 architecture.addComponent(newComponent);
                 componentErrorLabel.setText("Component Added!");
                 updateComponentList();
-                if (component != null && newComponentName.equals(component.getName())){
+                if (component != null && newComponentName.equals(component.getName())) {
                     showComponentDetail(newComponent);
                 }
                 componentTextField.clear();
-                costTextField.clear();
-                availabilityTextField.clear();
-                executionsTextField.clear();
+                componentCostTextField.clear();
+                componentAvailabilityTextField.clear();
             }
         } else {
             componentErrorLabel.setText("Empty name");
@@ -150,9 +153,8 @@ public class ArchitectureScreenController implements ControlledScreen {
     }
 
     private boolean validateComponentInput() {
-        if (!costTextField.getText().trim().matches("(?:\\d*\\.)?\\d+") ||
-                !availabilityTextField.getText().trim().matches("(?:\\d*\\.)?\\d+") ||
-                !executionsTextField.getText().trim().matches("(?:\\d*\\.)?\\d+")) {
+        if (!componentCostTextField.getText().trim().matches(doubleRegex) ||
+                !componentAvailabilityTextField.getText().trim().matches(doubleRegex)) {
             componentErrorLabel.setText("Check the inputs for mistakes");
             return false;
         } else {
@@ -186,7 +188,6 @@ public class ArchitectureScreenController implements ControlledScreen {
         componentNameLabel.setText(component.getName());
         componentCostLabel.setText(String.valueOf(component.getCost()));
         componentAvailabilityLabel.setText(String.valueOf(component.getAvailability()));
-        componentExecutionTimeLabel.setText(String.valueOf(component.getExecutionTime()));
         componentColorRectangle.setFill(component.getColor());
         componentColorRectangle.setVisible(true);
         componentColorLabel.setText(component.getColor().toString());
@@ -196,16 +197,20 @@ public class ArchitectureScreenController implements ControlledScreen {
     private void serviceComboBoxChanged() {
         switch (serviceComboBox.getValue().toString()) {
             case "Provided":
+                executionTimeLabel.setDisable(false);
+                executionTimeTextField.setDisable(false);
                 usedProbabilityLabel.setDisable(true);
                 usedProbabilityTextField.setDisable(true);
                 numberOfExecutionLabel.setDisable(true);
-                numberofExecutionTextField.setDisable(true);
+                numberOfExecutionTextField.setDisable(true);
                 break;
             case "Required":
+                executionTimeLabel.setDisable(true);
+                executionTimeTextField.setDisable(true);
                 usedProbabilityLabel.setDisable(false);
                 usedProbabilityTextField.setDisable(false);
                 numberOfExecutionLabel.setDisable(false);
-                numberofExecutionTextField.setDisable(false);
+                numberOfExecutionTextField.setDisable(false);
                 break;
         }
     }
@@ -217,26 +222,30 @@ public class ArchitectureScreenController implements ControlledScreen {
         if (!"".equals(newServiceName)) {
             switch (serviceComboBox.getValue().toString()) {
                 case "Provided":
-                    newService = new ProvidedService(newServiceName);
-                    this.component.addProvidedService((ProvidedService) newService);
-                    serviceErrorLabel.setText("Provided service added to " + component.getName());
-                    serviceTextField.clear();
+                    if (validateProvidedServiceInput()) {
+                        newService = new ProvidedService(newServiceName,
+                                Double.parseDouble(executionTimeTextField.getText().trim()));
+                        this.component.addProvidedService((ProvidedService) newService);
+                        serviceErrorLabel.setText("Provided service added to " + component.getName());
+                        executionTimeTextField.clear();
+                        serviceTextField.clear();
+                    }
                     break;
                 case "Required":
-                    if (validateServiceInput()) {
+                    if (validateRequiredServiceInput()) {
                         newService = new RequiredService(newServiceName,
                                 Double.parseDouble(usedProbabilityTextField.getText().trim()),
-                                Integer.parseInt(numberofExecutionTextField.getText().trim()));
+                                Integer.parseInt(numberOfExecutionTextField.getText().trim()));
                         this.component.addRequiredService((RequiredService) newService);
                         serviceErrorLabel.setText("Required service added to " + component.getName());
                         serviceTextField.clear();
                         usedProbabilityTextField.clear();
-                        numberofExecutionTextField.clear();
+                        numberOfExecutionTextField.clear();
                     }
                     break;
             }
             updateServicesList();
-            if (service != null && newServiceName.equals(service.getName())){
+            if (service != null && newServiceName.equals(service.getName())) {
                 showServiceDetail(newService);
             }
         } else {
@@ -244,9 +253,19 @@ public class ArchitectureScreenController implements ControlledScreen {
         }
     }
 
-    private boolean validateServiceInput() {
+    private boolean validateProvidedServiceInput() {
+        if (!executionTimeTextField.getText().trim().matches("(?:\\d*\\.)?\\d+")) {
+            serviceErrorLabel.setText("Check the inputs for mistakes");
+            return false;
+        } else {
+            serviceErrorLabel.setText("");
+            return true;
+        }
+    }
+
+    private boolean validateRequiredServiceInput() {
         if (!usedProbabilityTextField.getText().trim().matches("(?:\\d*\\.)?\\d+")
-                || !numberofExecutionTextField.getText().trim().matches("(?:\\d*\\.)?\\d+")) {
+                || !numberOfExecutionTextField.getText().trim().matches("(?:\\d*\\.)?\\d+")) {
             serviceErrorLabel.setText("Check the inputs for mistakes");
             return false;
         } else {
@@ -284,16 +303,22 @@ public class ArchitectureScreenController implements ControlledScreen {
         serviceNameLabel.setText(service.getName());
         if (service instanceof ProvidedService) {
             serviceTypeLabel.setText("Provided");
+            serviceExecutionTimeLabel.setText(String.valueOf(((ProvidedService) service).getExecutionTime()));
+            serviceUsedProbabilityLabel.setText("");
+            serviceNumberOfExecutionsLabel.setText("");
+            serviceExecutionTimeLabel.setDisable(false);
+            executionTimeDetailLabel.setDisable(false);
             numberOfExecutionsDetailLabel.setDisable(true);
             serviceNumberOfExecutionsLabel.setDisable(true);
             usedProbabilityDetailLabel.setDisable(true);
-            serviceUsedProbabilityLabel.setText("");
-            serviceNumberOfExecutionsLabel.setText("");
             serviceUsedProbabilityLabel.setDisable(true);
         } else if (service instanceof RequiredService) {
             serviceTypeLabel.setText("Required");
             serviceUsedProbabilityLabel.setText(String.valueOf(((RequiredService) service).getUsedProbability()));
             serviceNumberOfExecutionsLabel.setText(String.valueOf(((RequiredService) service).getNumberOfExecutions()));
+            serviceExecutionTimeLabel.setText("");
+            executionTimeDetailLabel.setDisable(true);
+            serviceExecutionTimeLabel.setDisable(true);
             numberOfExecutionsDetailLabel.setDisable(false);
             serviceNumberOfExecutionsLabel.setDisable(false);
             usedProbabilityDetailLabel.setDisable(false);

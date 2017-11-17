@@ -22,7 +22,6 @@ public class Component {
     private final String name;
     private double cost;
     private double availability;
-    private double executionTime;
     private Color color;
     private HashMap<String, ProvidedService> providedServices;
     private HashMap<String, RequiredService> requiredServices;
@@ -36,16 +35,15 @@ public class Component {
      * <li>Services Required: EMPTY</li>
      * </ul>
      *
-     * @param name          the name of the component.
-     * @param cost          the cost of the component.
-     * @param availability  availability expressed in 0-1 range.
-     * @param executionTime execution time expressed in seconds.
+     * @param name         the name of the component.
+     * @param cost         the cost of the component.
+     * @param availability availability expressed in 0-1 range.
      *
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, double executionTime) {
-        this(name, cost, availability, executionTime, Color.WHITE, new HashMap<>(), new HashMap<>());
+    public Component(String name, double cost, double availability) {
+        this(name, cost, availability, Color.WHITE, new HashMap<>(), new HashMap<>());
     }
 
     /**
@@ -56,17 +54,16 @@ public class Component {
      * <li>Services Required: EMPTY</li>
      * </ul>
      *
-     * @param name          the name of the component.
-     * @param cost          the cost of the component.
-     * @param availability  availability expressed in 0-1 range.
-     * @param executionTime execution time expressed in seconds.
-     * @param color         color for the component in the UI.
+     * @param name         the name of the component.
+     * @param cost         the cost of the component.
+     * @param availability availability expressed in 0-1 range.
+     * @param color        color for the component in the UI.
      *
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, double executionTime, Color color) {
-        this(name, cost, availability, executionTime, color, new HashMap<>(), new HashMap<>());
+    public Component(String name, double cost, double availability, Color color) {
+        this(name, cost, availability, color, new HashMap<>(), new HashMap<>());
     }
 
     /**
@@ -79,16 +76,15 @@ public class Component {
      * @param name             the name of the component.
      * @param cost             the cost of the component.
      * @param availability     availability expressed in 0-1 range.
-     * @param executionTime    execution time expressed in seconds.
      * @param color            color for the component in the UI.
      * @param providedServices the services provided by this component.
      *
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, double executionTime, Color color,
+    public Component(String name, double cost, double availability, Color color,
                      HashMap<String, ProvidedService> providedServices) {
-        this(name, cost, availability, executionTime, color, providedServices, new HashMap<>());
+        this(name, cost, availability, color, providedServices, new HashMap<>());
     }
 
     /**
@@ -97,7 +93,6 @@ public class Component {
      * @param name             the name of the component.
      * @param cost             the cost of the component.
      * @param availability     availability expressed in 0-1 range.
-     * @param executionTime    execution time expressed in seconds.
      * @param color            color for the component in the UI.
      * @param providedServices the services provided by this component.
      * @param requiredServices the services required by this component.
@@ -105,13 +100,12 @@ public class Component {
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, double executionTime, Color color,
+    public Component(String name, double cost, double availability, Color color,
                      HashMap<String, ProvidedService> providedServices,
                      HashMap<String, RequiredService> requiredServices) {
         this.name = name;
         this.cost = cost;
         this.availability = availability;
-        this.executionTime = executionTime;
         this.color = color;
         this.providedServices = providedServices;
         this.requiredServices = requiredServices;
@@ -163,24 +157,6 @@ public class Component {
      */
     public void setAvailability(double availability) {
         this.availability = availability;
-    }
-
-    /**
-     * Gets the execution time for the current Component.
-     *
-     * @return the execution time as a double for the current Component.
-     */
-    public double getExecutionTime() {
-        return executionTime;
-    }
-
-    /**
-     * Changes the execution time for the current Component.
-     *
-     * @param executionTime the new execution time for the Component.
-     */
-    public void setExecutionTime(double executionTime) {
-        this.executionTime = executionTime;
     }
 
     /**
