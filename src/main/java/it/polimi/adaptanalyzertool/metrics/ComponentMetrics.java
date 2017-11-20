@@ -9,7 +9,7 @@ package it.polimi.adaptanalyzertool.metrics;
  *
  * @author Paolo Paterna
  * @version 0.1
- * @see it.polimi.adaptanalyzertool.logic.Component Component
+ * @see it.polimi.adaptanalyzertool.model.Component Component
  */
 public final class ComponentMetrics {
 

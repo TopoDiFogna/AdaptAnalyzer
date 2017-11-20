@@ -11,7 +11,7 @@
       alignment="BASELINE_CENTER">
     <Label text="Adaptability Analyzer Tool" id="mainTitle"/>
     <ImageView>
-        <Image url="@/it/polimi/adaptanalyzertool/gui/images/logo.png"/>
+        <Image url="@/images/logo.png"/>
     </ImageView>
 
 </VBox>

@@ -1,7 +1,7 @@
 package it.polimi.adaptanalyzertool.metrics;
 
-import it.polimi.adaptanalyzertool.logic.Architecture;
-import it.polimi.adaptanalyzertool.logic.Component;
+import it.polimi.adaptanalyzertool.model.Architecture;
+import it.polimi.adaptanalyzertool.model.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import java.util.HashMap;
  *
  * @author Paolo Paterna
  * @version 0.1
- * @see it.polimi.adaptanalyzertool.logic.Architecture Architecture
+ * @see it.polimi.adaptanalyzertool.model.Architecture Architecture
  */
 public final class ArchitectureMetrics {
 
