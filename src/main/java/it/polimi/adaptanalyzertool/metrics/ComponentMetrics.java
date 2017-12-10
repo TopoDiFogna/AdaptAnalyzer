@@ -1,5 +1,11 @@
 package it.polimi.adaptanalyzertool.metrics;
 
+import it.polimi.adaptanalyzertool.model.Architecture;
+import it.polimi.adaptanalyzertool.model.Component;
+import it.polimi.adaptanalyzertool.model.ProvidedService;
+
+import static it.polimi.adaptanalyzertool.metrics.ServicesMetrics.NumberOfExecutions;
+
 /**
  * This class contains all the metrics for the components.
  * <p>
@@ -83,5 +89,31 @@ public final class ComponentMetrics {
      */
     public static boolean BooleanSuitabilityCost(double frc) {
         return frc >= 1;
+    }
+
+    /**
+     * Calculates which fraction of time a component is running w.r.t total running time of the architecture.
+     * <p>
+     * Higher results means that the component runs more than others.
+     * </p>
+     *
+     * @param architecture the architecture where the service is.
+     * @param component    the service that has to be used to calculate its weight residence time, can be a
+     *                     ProvidedService or a RequiredService.
+     *
+     * @return the weight residence time of a given service.
+     */
+    public static double WeightResidenceTime(Architecture architecture, Component component) {
+        double totalTime = 0;
+        double componentTime = 0;
+        for (Component architectureComponent : architecture.getComponents().values()) {
+            for (ProvidedService providedService : architectureComponent.getProvidedServices().values()) {
+                totalTime += NumberOfExecutions(architecture, providedService) * providedService.getExecutionTime();
+            }
+        }
+        for (ProvidedService providedService : component.getProvidedServices().values()) {
+            componentTime += NumberOfExecutions(architecture, providedService) * providedService.getExecutionTime();
+        }
+        return componentTime / totalTime;
     }
 }

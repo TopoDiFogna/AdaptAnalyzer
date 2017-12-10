@@ -207,22 +207,15 @@ public class Component {
      *
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
-    public boolean removeProvidedService(ProvidedService serviceProvided) {
-        return providedServices.remove(serviceProvided.getName(), serviceProvided);
+    public void removeProvidedService(ProvidedService serviceProvided) {
+        providedServices.remove(serviceProvided.getName(), serviceProvided);
     }
 
     /**
      * Removes all the provided services from the current component.
-     *
-     * @return <code>true</code> if the provided services' set is successfully emptied; <code>false</code> otherwise.
      */
-    public boolean removeAllProvidedServices() {
-        try {
-            providedServices.clear();
-            return true;
-        } catch (UnsupportedOperationException e) {
-            return false;
-        }
+    public void removeAllProvidedServices() {
+        providedServices.clear();
     }
 
     /**
@@ -252,30 +245,22 @@ public class Component {
      *
      * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
-    public boolean removeRequiredService(RequiredService serviceRequired) {
-        return requiredServices.remove(serviceRequired.getName(), serviceRequired);
+    public void removeRequiredService(RequiredService serviceRequired) {
+        requiredServices.remove(serviceRequired.getName(), serviceRequired);
     }
 
     /**
      * Removes all the required services from the current component.
-     *
-     * @return <code>true</code> if the provided services' set is successfully emptied; <code>false</code> otherwise.
      */
-    public boolean removeAllRequiredServices() {
-        try {
-            requiredServices.clear();
-            return true;
-        } catch (UnsupportedOperationException e) {
-            return false;
-        }
+    public void removeAllRequiredServices() {
+        requiredServices.clear();
     }
 
     /**
      * Removes all the services, required and provided, from the current component.
-     *
-     * @return <code>true</code> if the services' sets are successfully emptied; <code>false</code> otherwise.
      */
-    public boolean removeAllServices() {
-        return removeAllProvidedServices() && removeAllRequiredServices();
+    public void removeAllServices() {
+        removeAllProvidedServices();
+        removeAllRequiredServices();
     }
 }

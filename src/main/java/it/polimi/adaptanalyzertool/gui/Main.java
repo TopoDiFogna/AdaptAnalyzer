@@ -30,7 +30,7 @@ public class Main extends Application {
         screensController.loadScreen(ScreenName.WELCOME.getName(), ScreenName.WELCOME.getFile());
         screensController.loadScreen(ScreenName.ARCHITECTURE_SCREEN.getName(), ScreenName.ARCHITECTURE_SCREEN.getFile());
 
-        screensController.setScreen(ScreenName.WELCOME.getName());
+        screensController.setScreen(ScreenName.ARCHITECTURE_SCREEN.getName());
 
         root.setCenter(screensController);
 
