@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="768.0" minWidth="1024.0" stylesheets="@architectureScreen.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.adaptanalyzertool.gui.ArchitectureScreenControllerBeta">
+    <top>
+        <Label fx:id="architectureName" text="Architecture name:" BorderPane.alignment="CENTER">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+    </top>
+    <center>
+        <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <Tab fx:id="componentsTab" text="Components">
+                <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                    <padding>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                    </padding>
+                    <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" spacing="10.0" HBox.hgrow="SOMETIMES">
+                        <HBox.margin>
+                            <Insets top="5.0" />
+                        </HBox.margin>
+                        <Label text="Components List" />
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0" prefWidth="200.0">
+                            <VBox fx:id="componentsVBox" />
+                        </ScrollPane>
+                        <Button mnemonicParsing="false" onMouseClicked="#createNewComponent" text="Add Component" />
+                    </VBox>
+                    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                        <Label text="Component Details" />
+                        <GridPane alignment="TOP_CENTER" VBox.vgrow="NEVER">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="150.0" prefWidth="150.0" />
+                                <ColumnConstraints hgrow="NEVER" minWidth="150.0" prefWidth="150.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                            </rowConstraints>
+                            <Label text="Name:" GridPane.halignment="CENTER" />
+                            <Label fx:id="componentNameLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                            <Label text="Cost:" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                            <Label fx:id="componentCostLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                            <Label layoutX="143.0" layoutY="17.0" text="Availability:" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                            <Label fx:id="componentAvailabilityLabel" layoutX="107.0" layoutY="17.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                            <Label layoutX="127.0" layoutY="77.0" text="Color:" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <Rectangle fx:id="componentColorRectangle" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="17.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="17.0">
+                                    <HBox.margin>
+                                        <Insets top="6.0" />
+                                    </HBox.margin>
+                                </Rectangle>
+                                <Label fx:id="componentColorLabel">
+                                    <HBox.margin>
+                                        <Insets left="3.0" top="6.0" />
+                                    </HBox.margin>
+                                </Label>
+                            </HBox>
+                        </GridPane>
+                        <Button fx:id="showComponentServicesButton" disable="true" mnemonicParsing="false" onMouseClicked="#showComponentServices" text="Show component services" />
+                        <HBox.margin>
+                            <Insets top="5.0" />
+                        </HBox.margin>
+                    </VBox>
+                </HBox>
+            </Tab>
+            <Tab fx:id="servicesTab" onSelectionChanged="#onChangedTab" text="Services">
+                <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                    <padding>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                    </padding>
+                    <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" spacing="10.0" HBox.hgrow="SOMETIMES">
+                        <HBox.margin>
+                            <Insets top="5.0" />
+                        </HBox.margin>
+                  <Label text="Component:" />
+                  <ChoiceBox fx:id="componentChoiceBox" prefWidth="150.0" />
+                        <Label text="Servicers List" />
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0" prefWidth="200.0">
+                            <VBox fx:id="servicesVBox" />
+                        </ScrollPane>
+                        <Button fx:id="serviceAddButton" disable="true" mnemonicParsing="false" onMouseClicked="#createNewService" text="Add Service" />
+                    </VBox>
+                    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                        <HBox.margin>
+                            <Insets top="5.0" />
+                        </HBox.margin>
+                        <Label text="Service Details" />
+                        <GridPane alignment="TOP_CENTER">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="150.0" prefWidth="150.0" />
+                                <ColumnConstraints hgrow="NEVER" minWidth="150.0" prefWidth="150.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                            </rowConstraints>
+                            <Label text="Name:" GridPane.halignment="CENTER" />
+                            <Label fx:id="serviceNameLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                            <Label text="Type:" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                            <Label fx:id="serviceTypeLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                            <Label fx:id="executionTimeDetailLabel" layoutX="143.0" layoutY="17.0" text="Execution Time:" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                            <Label fx:id="serviceExecutionTimeLabel" layoutX="107.0" layoutY="17.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                            <Label fx:id="usedProbabilityDetailLabel" layoutX="127.0" layoutY="77.0" text="Used Probability:" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                            <Label fx:id="serviceUsedProbabilityLabel" layoutX="307.0" layoutY="137.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                            <Label fx:id="numberOfExecutionsDetailLabel" layoutX="212.0" layoutY="107.0" text="Number of Executions:" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                            <Label fx:id="serviceNumberOfExecutionsLabel" layoutX="357.0" layoutY="77.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                        </GridPane>
+                    </VBox>
+                </HBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

@@ -16,6 +16,7 @@ public class Architecture {
 
     private String name;
     private HashMap<String, Component> components;
+    private HashMap<String, Workflow> workflows;
 
     /**
      * Creates a new architecture with no components.
@@ -26,8 +27,7 @@ public class Architecture {
      * @param name The name for this architecture.
      */
     public Architecture(String name) {
-        this.name = name;
-        components = new HashMap<>();
+        this(name, new HashMap<>());
     }
 
     /**
@@ -102,15 +102,25 @@ public class Architecture {
      * <p>
      * The architecture is not destroyed by this operation.
      * </p>
-     *
-     * @return <code>true</code> if the components are successfully removed; <code>false</code> otherwise.
      */
-    public boolean removeAllComponents() {
-        try {
-            components.clear();
-            return true;
-        } catch (UnsupportedOperationException e) {
-            return false;
-        }
+    public void removeAllComponents() {
+        components.clear();
     }
+
+    public HashMap<String, Workflow> getWorkflows() {
+        return workflows;
+    }
+
+    public void addWorkflow(Workflow workflow) {
+        workflows.put(workflow.getName(), workflow);
+    }
+
+    public void removeWorkflow(Workflow workflow) {
+        workflows.remove(workflow.getName(), workflow);
+    }
+
+    public void removeAllWorkflows() {
+        workflows.clear();
+    }
+
 }

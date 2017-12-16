@@ -68,32 +68,17 @@ public final class ServicesMetrics {
         return NumberOfExecutions(architecture, service) / totalExecutionTimes;
     }
 
-    /**
-     * Calculates which fraction of time a component is running w.r.t total running time of the architecture.
-     * <p>
-     * Higher results means that the component runs more than others.
-     * </p>
-     *
-     * @param architecture the architecture where the service is.
-     * @param component    the service that has to be used to calculate its weight residence time, can be a
-     *                     ProvidedService or a RequiredService.
-     *
-     * @return the weight residence time of a given service.
-     */
-    public static double WeightResidenceTime(Architecture architecture, Component component) {
-        double totalTime = 0;
-        double componentTime = 0;
-        for (Component architectureComponent : architecture.getComponents().values()) {
-            for (ProvidedService providedService : architectureComponent.getProvidedServices().values()) {
-                totalTime += NumberOfExecutions(architecture, providedService) * providedService.getExecutionTime();
-            }
-        }
-        for (ProvidedService providedService : component.getProvidedServices().values()) {
-            componentTime += NumberOfExecutions(architecture, providedService) * providedService.getExecutionTime();
-        }
-        return componentTime / totalTime;
-    }
+    public static double InAction() { //TODO
+        return 0;
+    }// TODO
 
+    /**
+     * Collects all the services in a given architecture and returns them.
+     *
+     * @param architecture the architecture where to collect services.
+     *
+     * @return HashMap containing all the services found in the given architecture.
+     */
     private static HashMap<String, AbstractService> collectServicesFromArchitecture(Architecture architecture) {
         HashMap<String, AbstractService> servicesHashMap = new HashMap<>();
         for (Component component : architecture.getComponents().values()) {
