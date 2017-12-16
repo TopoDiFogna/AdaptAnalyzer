@@ -8,7 +8,7 @@
 <?import java.lang.String?>
 <HBox prefHeight="600.0" prefWidth="800.0" stylesheets="@architectureScreen.css"
       xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.polimi.adaptanalyzertool.gui.architectureScreen.ArchitectureScreenController">
+      fx:controller="it.polimi.adaptanalyzertool.gui.architecturescreen.ArchitectureScreenController">
 
     <VBox alignment="TOP_CENTER" prefWidth="267.0" spacing="8">
         <Label fx:id="architectureName" text="Architecture:"/>

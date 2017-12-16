@@ -70,7 +70,7 @@ public final class ServicesMetrics {
 
     public static double InAction() { //TODO
         return 0;
-    }
+    }// TODO
 
     /**
      * Collects all the services in a given architecture and returns them.
