@@ -9,13 +9,6 @@
             stylesheets="@architectureScreen.css" xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.polimi.adaptanalyzertool.gui.ArchitectureScreenControllerBeta">
-    <top>
-        <Label fx:id="architectureName" text="Architecture name:" BorderPane.alignment="CENTER">
-            <font>
-                <Font size="18.0"/>
-            </font>
-        </Label>
-    </top>
     <center>
         <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                  tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
@@ -115,15 +108,6 @@
                                            GridPane.columnSpan="2147483647" GridPane.halignment="CENTER"
                                            GridPane.rowIndex="2"/>
                                 </GridPane>
-                                <HBox spacing="5.0">
-                                    <Label text="System Target Cost:"/>
-                                    <TextField fx:id="systemTargetCostTextField" minWidth="10.0" prefWidth="50.0"/>
-                                </HBox>
-                                <HBox spacing="5.0">
-                                    <Label text="System Target Availability:"/>
-                                    <TextField fx:id="systemTargetAvailabilityTextField" minWidth="10.0"
-                                               prefWidth="50.0"/>
-                                </HBox>
                                 <Button mnemonicParsing="false" onMouseClicked="#calculateComponentMetrics"
                                         text="Calculate!"/>
                                 <Label fx:id="componentMetricsErrorLabel"/>
@@ -215,14 +199,14 @@
                                                         vgrow="SOMETIMES"/>
                                     </rowConstraints>
                                     <Label text="Number of Executions:" GridPane.halignment="CENTER"/>
-                                    <Label fx:id="numberOfExecutionsLabel" text="N/A" GridPane.columnIndex="1"
+                                    <Label fx:id="numberOfExecutionsLabel" text="NaN" GridPane.columnIndex="1"
                                            GridPane.halignment="CENTER"/>
                                     <Label layoutX="25.0" layoutY="17.0" text="Probability to be Running:"
                                            GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                                    <Label fx:id="probabilityToBeRunningLabel" layoutX="205.0" layoutY="17.0" text="N/A"
+                                    <Label fx:id="probabilityToBeRunningLabel" layoutX="205.0" layoutY="17.0" text="NaN"
                                            GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                                     <Label text="In Action:" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
-                                    <Label fx:id="inActionLabel" text="N/A" GridPane.columnIndex="1"
+                                    <Label fx:id="inActionLabel" text="NaN" GridPane.columnIndex="1"
                                            GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
                                 </GridPane>
                                 <Button mnemonicParsing="false" onMouseClicked="#calculateServiceMetrics"
@@ -236,7 +220,51 @@
         </TabPane>
     </center>
     <bottom>
-        <TitledPane alignment="TOP_CENTER" collapsible="false" prefHeight="200.0" prefWidth="200.0"
-                    text="Architecture Metrics" BorderPane.alignment="CENTER"/>
+        <TitledPane alignment="TOP_CENTER" collapsible="false" text="Architecture Metrics"
+                    BorderPane.alignment="CENTER">
+            <VBox alignment="TOP_CENTER" fillWidth="false" spacing="5.0">
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="90.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <Label text="Global Availability:" GridPane.halignment="CENTER"/>
+                    <Label fx:id="globalAvailabilityLabel" text="NaN" GridPane.columnIndex="1"
+                           GridPane.halignment="CENTER"/>
+                    <Label text="Global Cost:" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                    <Label fx:id="globalCostLabel" text="NaN" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                           GridPane.rowIndex="1"/>
+                </GridPane>
+                <Button mnemonicParsing="false" onMouseClicked="#calculateArchitectureMetrics" text="Calculate!"/>
+                <Label fx:id="architectureMetricsErrorLabel"/>
+            </VBox>
+        </TitledPane>
     </bottom>
+    <top>
+        <VBox alignment="TOP_CENTER" spacing="5.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="architectureName" text="Architecture name:">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <HBox alignment="TOP_CENTER" spacing="10.0">
+                    <children>
+                        <Label text="System Target Cost:"/>
+                        <TextField fx:id="systemTargetCostTextField" minWidth="10.0" prefWidth="50.0"/>
+                        <Separator orientation="VERTICAL"/>
+                        <Label text="System Target Availability:"/>
+                        <TextField fx:id="systemTargetAvailabilityTextField" minWidth="10.0" prefWidth="50.0"/>
+                    </children>
+                </HBox>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="5.0"/>
+            </BorderPane.margin>
+        </VBox>
+    </top>
 </BorderPane>

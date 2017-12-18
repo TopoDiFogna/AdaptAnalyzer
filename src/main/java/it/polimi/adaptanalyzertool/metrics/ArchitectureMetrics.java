@@ -4,7 +4,6 @@ import it.polimi.adaptanalyzertool.model.Architecture;
 import it.polimi.adaptanalyzertool.model.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * This class contains all the metrics for the architectures.
@@ -33,15 +32,15 @@ public final class ArchitectureMetrics {
      * Calculates the Global Availability of System as specified in the thesis by Zanotti of 2016-12 at page 31.
      * </p>
      *
-     * @param components               the components present in an architecture.
+     * @param architecture             the architecture to be analyzed.
      * @param systemTargetAvailability the system target availability required.
      *
      * @return the Global Availability of the System.
      * @see ComponentMetrics#FitnessRatioAvailability(double, double) FitnessRatioAvailability(double, double)
      */
-    public static double GlobalAvailabilitySystem(HashMap<String, Component> components, double systemTargetAvailability) {
+    public static double GlobalAvailabilitySystem(Architecture architecture, double systemTargetAvailability) {
         double gas = 1;
-        for (Component component : components.values()) {
+        for (Component component : architecture.getComponents().values()) {
             gas *= ComponentMetrics.FitnessRatioAvailability(component.getAvailability(), systemTargetAvailability);
         }
         return gas;
@@ -53,15 +52,15 @@ public final class ArchitectureMetrics {
      * Calculates the Global Cost of System as specified in the thesis by Zanotti of 2016-12 at page 32.
      * </p>
      *
-     * @param components       the components present in the architecture.
+     * @param architecture     the architecture to be analyzed.
      * @param systemTargetCost the system target cost.
      *
      * @return the global Cost of the system.
      * @see ComponentMetrics#FitnessRatioCost(double, double) FitnessRatioCost(double, double)
      */
-    public static double GlobalCostSystem(HashMap<String, Component> components, double systemTargetCost) {
+    public static double GlobalCostSystem(Architecture architecture, double systemTargetCost) {
         double gcs = 0;
-        for (Component component : components.values()) {
+        for (Component component : architecture.getComponents().values()) {
             gcs += ComponentMetrics.FitnessRatioCost(component.getCost(), systemTargetCost);
         }
         return gcs;
@@ -80,7 +79,7 @@ public final class ArchitectureMetrics {
                                                                              double systemTargetAvailability) {
         ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
         for (Architecture architecture : architectures) {
-            if (GlobalAvailabilitySystem(architecture.getComponents(), systemTargetAvailability) >= 1) {
+            if (GlobalAvailabilitySystem(architecture, systemTargetAvailability) >= 1) {
                 eligibleArchitectures.add(architecture);
             }
         }
@@ -100,7 +99,7 @@ public final class ArchitectureMetrics {
                                                                      double systemTargetCost) {
         ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
         for (Architecture architecture : architectures) {
-            if (GlobalCostSystem(architecture.getComponents(), systemTargetCost) >= 1) {
+            if (GlobalCostSystem(architecture, systemTargetCost) >= 1) {
                 eligibleArchitectures.add(architecture);
             }
         }

@@ -2,6 +2,7 @@ package it.polimi.adaptanalyzertool.gui;
 
 import it.polimi.adaptanalyzertool.gui.utility.ChildScreenController;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
+import it.polimi.adaptanalyzertool.metrics.ArchitectureMetrics;
 import it.polimi.adaptanalyzertool.metrics.ComponentMetrics;
 import it.polimi.adaptanalyzertool.metrics.ServicesMetrics;
 import it.polimi.adaptanalyzertool.model.*;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 
 public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
-    private final String doubleRegex = "(?:\\d*\\.)?\\d+";
+    private final String doubleRegex = "(?:\\d*\\.)?\\d+"; //TODO make this for double and 99 notation
     private final DecimalFormat df = new DecimalFormat("0.00");
     @FXML
     public VBox servicesVBox;
@@ -108,6 +109,15 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Label inActionLabel;
     @FXML
     private Label serviceMetricsErrorLabel;
+    /*
+        Architecture Metrics
+     */
+    @FXML
+    private Label globalAvailabilityLabel;
+    @FXML
+    private Label globalCostLabel;
+    @FXML
+    private Label architectureMetricsErrorLabel;
 
     private Architecture architecture;
     private HashMap<String, Component> architectureComponents;
@@ -283,22 +293,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         }
     }
 
-    @FXML
-    private void calculateServiceMetrics() {
-        serviceMetricsErrorLabel.setText("");
-        if (selectedService != null) {
-            double noe = ServicesMetrics.NumberOfExecutions(architecture, selectedService);
-            double ptbr = ServicesMetrics.ProbabilityToBeRunning(architecture, selectedService);
-            double ia = ServicesMetrics.InAction();
-            numberOfExecutionsLabel.setText(df.format(noe));
-            probabilityToBeRunningLabel.setText(df.format(ptbr));
-            inActionLabel.setText(df.format(ia));
-        } else {
-            serviceMetricsErrorLabel.setText("Select a service first");
-        }
-    }
-
-
     private void updateServicesList() {
         HashMap<String, AbstractService> componentServices = new HashMap<>();
         componentServices.putAll(selectedComponent.getProvidedServices());
@@ -347,6 +341,35 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             serviceNumberOfExecutionsLabel.setDisable(false);
             usedProbabilityDetailLabel.setDisable(false);
             serviceUsedProbabilityLabel.setDisable(false);
+        }
+    }
+
+    @FXML
+    private void calculateServiceMetrics() {
+        serviceMetricsErrorLabel.setText("");
+        if (selectedService != null) {
+            double noe = ServicesMetrics.NumberOfExecutions(architecture, selectedService);
+            double ptbr = ServicesMetrics.ProbabilityToBeRunning(architecture, selectedService);
+            double ia = ServicesMetrics.InAction();
+            numberOfExecutionsLabel.setText(df.format(noe));
+            probabilityToBeRunningLabel.setText(df.format(ptbr));
+            inActionLabel.setText(df.format(ia));
+        } else {
+            serviceMetricsErrorLabel.setText("Select a service first");
+        }
+    }
+
+    @FXML
+    private void calculateArchitectureMetrics() {
+        String sta = systemTargetAvailabilityTextField.getText().trim();
+        String stc = systemTargetCostTextField.getText().trim();
+        if (!sta.equals("") && sta.matches(doubleRegex) && !stc.equals("") && stc.matches(doubleRegex)) {
+            double gas = ArchitectureMetrics.GlobalAvailabilitySystem(architecture, Double.valueOf(sta));
+            double gcs = ArchitectureMetrics.GlobalCostSystem(architecture, Double.valueOf(stc));
+            globalAvailabilityLabel.setText(df.format(gas));
+            globalCostLabel.setText(df.format(gcs));
+        } else {
+            architectureMetricsErrorLabel.setText("Check input for mistakes");
         }
     }
 
