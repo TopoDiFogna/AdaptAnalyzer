@@ -3,6 +3,7 @@ version = 0.1
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'application'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -21,3 +22,5 @@ jar {
 dependencies {
     testCompile 'junit:junit:4.12'
 }
+
+mainClassName = 'it.polimi.adaptanalyzertool.gui.Main'
