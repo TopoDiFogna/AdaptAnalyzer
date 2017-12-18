@@ -8,16 +8,16 @@ public enum CenterScreens {
     private String layout;
     private ChildScreenController controller;
 
-    CenterScreens(String name, String layout, ChildScreenController controller){
+    CenterScreens(String name, String layout, ChildScreenController controller) {
         this.name = name;
         this.layout = layout;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public String getLayout(){
+    public String getLayout() {
         return layout;
     }
 

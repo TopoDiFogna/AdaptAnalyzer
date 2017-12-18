@@ -5,14 +5,15 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
-
-<VBox alignment="BASELINE_CENTER" spacing="15.0" stylesheets="@welcomeScreen.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.adaptanalyzertool.gui.WelcomeScreenController">
-    <Label id="mainTitle" text="Adaptability Analyzer Tool" />
+<VBox alignment="BASELINE_CENTER" spacing="15.0" stylesheets="@welcomeScreen.css"
+      xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.polimi.adaptanalyzertool.gui.WelcomeScreenController">
+    <Label id="mainTitle" text="Adaptability Analyzer Tool"/>
     <ImageView preserveRatio="true" smooth="false">
-        <Image url="@/images/logo.png" />
-      <VBox.margin>
-         <Insets />
-      </VBox.margin>
+        <Image url="@/images/logo.png"/>
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
     </ImageView>
 
 </VBox>

@@ -53,7 +53,7 @@ public class MainController {
         this.parent = parent;
     }
 
-    void setScreenController(ScreenController screenController){
+    void setScreenController(ScreenController screenController) {
         this.screenController = screenController;
     }
 }

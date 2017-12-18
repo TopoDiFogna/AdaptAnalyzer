@@ -8,7 +8,7 @@ public class Path {
     private double executionProbability;
     private LinkedList<Message> messagesList;
 
-    public Path (String name, double executionProbability, Message startingMessage){
+    public Path(String name, double executionProbability, Message startingMessage) {
         this.name = name;
         this.executionProbability = executionProbability;
         messagesList = new LinkedList<>();
@@ -31,19 +31,19 @@ public class Path {
         return messagesList;
     }
 
-    public void addMessage(Message message){
+    public void addMessage(Message message) {
         messagesList.add(message);
     }
 
-    public void removeLastMessage(){
+    public void removeLastMessage() {
         messagesList.removeLast();
     }
 
-    public void removeMessage(Message message){
+    public void removeMessage(Message message) {
         messagesList.remove(message);
     }
 
-    public void removeMessage(int index){
+    public void removeMessage(int index) {
         messagesList.remove(index);
     }
 }

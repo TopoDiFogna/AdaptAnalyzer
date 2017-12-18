@@ -2,6 +2,8 @@ package it.polimi.adaptanalyzertool.gui;
 
 import it.polimi.adaptanalyzertool.gui.utility.ChildScreenController;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
+import it.polimi.adaptanalyzertool.metrics.ComponentMetrics;
+import it.polimi.adaptanalyzertool.metrics.ServicesMetrics;
 import it.polimi.adaptanalyzertool.model.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -18,10 +20,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
+    private final String doubleRegex = "(?:\\d*\\.)?\\d+";
+    private final DecimalFormat df = new DecimalFormat("0.00");
     @FXML
     public VBox servicesVBox;
     @FXML
@@ -32,13 +38,11 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Tab componentsTab;
     @FXML
     private Tab servicesTab;
-
     /*
         Component List
      */
     @FXML
     private VBox componentsVBox;
-
     /*
         Selected Component details
      */
@@ -54,7 +58,22 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Label componentColorLabel;
     @FXML
     private Button showComponentServicesButton;
-
+    @FXML
+    private Label fitnessRatioAvailabilityLabel;
+    @FXML
+    private Label booleanSuitabilityAvailabilityLabel;
+    @FXML
+    private Label fitnessRatioCostLabel;
+    @FXML
+    private Label booleanSuitabilityCostLabel;
+    @FXML
+    private Label weightResidenceTimeLabel;
+    @FXML
+    private TextField systemTargetAvailabilityTextField;
+    @FXML
+    private TextField systemTargetCostTextField;
+    @FXML
+    private Label componentMetricsErrorLabel;
     /*
         Services list
      */
@@ -62,7 +81,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private ChoiceBox<String> componentChoiceBox;
     @FXML
     private Button serviceAddButton;
-
     /*
         Selected service details
      */
@@ -82,7 +100,14 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Label usedProbabilityDetailLabel;
     @FXML
     private Label numberOfExecutionsDetailLabel;
-
+    @FXML
+    private Label numberOfExecutionsLabel;
+    @FXML
+    private Label probabilityToBeRunningLabel;
+    @FXML
+    private Label inActionLabel;
+    @FXML
+    private Label serviceMetricsErrorLabel;
 
     private Architecture architecture;
     private HashMap<String, Component> architectureComponents;
@@ -98,6 +123,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 updateServicesList();
             }
         });
+        df.setRoundingMode(RoundingMode.DOWN);
     }
 
     public void setArchitecture(Architecture architecture) {
@@ -150,7 +176,10 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             componentHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 componentHBox.requestFocus();
                 showComponentDetail(component);
-                this.selectedComponent = component;
+                if (this.selectedComponent != component) {
+                    this.selectedComponent = component;
+                    clearComponentMetrics();
+                }
             });
             componentsVBox.getChildren().add(componentHBox);
         }
@@ -164,6 +193,14 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         componentColorRectangle.setVisible(true);
         componentColorLabel.setText(component.getColor().toString());
         showComponentServicesButton.setDisable(false);
+    }
+
+    private void clearComponentMetrics() {
+        fitnessRatioAvailabilityLabel.setText("NaN");
+        booleanSuitabilityAvailabilityLabel.setText("NaN");
+        fitnessRatioCostLabel.setText("NaN");
+        booleanSuitabilityCostLabel.setText("NaN");
+        weightResidenceTimeLabel.setText("NaN");
     }
 
     @FXML
@@ -213,6 +250,52 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         this.selectedService = newService;
         updateServicesList();
         showServiceDetail(selectedService);
+    }
+
+    @FXML
+    private void calculateComponentMetrics() {
+        componentMetricsErrorLabel.setText("");
+        if (selectedComponent != null) {
+            String sta = systemTargetAvailabilityTextField.getText().trim();
+            String stc = systemTargetCostTextField.getText().trim();
+            if (!sta.equals("") && sta.matches(doubleRegex) && !stc.equals("") && stc.matches(doubleRegex)) {
+                double fra = ComponentMetrics.FitnessRatioAvailability(Double.valueOf(sta), selectedComponent.getAvailability());
+                double frc = ComponentMetrics.FitnessRatioCost(Double.valueOf(stc), selectedComponent.getCost());
+                fitnessRatioAvailabilityLabel.setText(df.format(fra));
+                fitnessRatioCostLabel.setText(df.format(frc));
+                if (ComponentMetrics.BooleanSuitabilityAvailability(fra)) {
+                    booleanSuitabilityAvailabilityLabel.setText("Suitable");
+                } else {
+                    booleanSuitabilityAvailabilityLabel.setText("Not Suitable");
+                }
+                if (ComponentMetrics.BooleanSuitabilityCost(frc)) {
+                    booleanSuitabilityCostLabel.setText("Suitable");
+                } else {
+                    booleanSuitabilityCostLabel.setText("Not Suitable");
+                }
+                double wrt = ComponentMetrics.WeightResidenceTime(architecture, selectedComponent);
+                weightResidenceTimeLabel.setText(df.format(wrt));
+            } else {
+                componentMetricsErrorLabel.setText("Check input for mistakes");
+            }
+        } else {
+            componentMetricsErrorLabel.setText("Select a component first");
+        }
+    }
+
+    @FXML
+    private void calculateServiceMetrics() {
+        serviceMetricsErrorLabel.setText("");
+        if (selectedService != null) {
+            double noe = ServicesMetrics.NumberOfExecutions(architecture, selectedService);
+            double ptbr = ServicesMetrics.ProbabilityToBeRunning(architecture, selectedService);
+            double ia = ServicesMetrics.InAction();
+            numberOfExecutionsLabel.setText(df.format(noe));
+            probabilityToBeRunningLabel.setText(df.format(ptbr));
+            inActionLabel.setText(df.format(ia));
+        } else {
+            serviceMetricsErrorLabel.setText("Select a service first");
+        }
     }
 
 

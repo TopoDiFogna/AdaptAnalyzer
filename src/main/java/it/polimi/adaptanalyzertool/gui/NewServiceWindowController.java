@@ -36,7 +36,7 @@ public class NewServiceWindowController extends NewModalWindowController {
     private final String doubleRegex = "(?:\\d*\\.)?\\d+";
 
     @FXML
-    private void saveService(){
+    private void saveService() {
         String newServiceName = serviceTextField.getText().trim();
         if (!"".equals(newServiceName)) {
             switch (serviceComboBox.getValue().toString()) {

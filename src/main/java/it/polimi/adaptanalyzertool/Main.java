@@ -8,7 +8,7 @@ import it.polimi.adaptanalyzertool.model.RequiredService;
 
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         ProvidedService c11s1 = new ProvidedService("s1", 1);
         RequiredService c11s2 = new RequiredService("s2", 0.8, 1);
         RequiredService c11s3 = new RequiredService("s3", 1, 2);

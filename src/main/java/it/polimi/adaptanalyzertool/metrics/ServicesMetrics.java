@@ -68,9 +68,12 @@ public final class ServicesMetrics {
         return NumberOfExecutions(architecture, service) / totalExecutionTimes;
     }
 
+    /**
+     * @return
+     */
     public static double InAction() { //TODO
         return 0;
-    }// TODO
+    }
 
     /**
      * Collects all the services in a given architecture and returns them.

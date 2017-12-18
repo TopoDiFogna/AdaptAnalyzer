@@ -11,11 +11,11 @@ public class ScreenController extends StackPane {
 
     private HashMap<String, Pane> loadedScreens = new HashMap<>();
 
-    public ScreenController (){
+    public ScreenController() {
         super();
     }
 
-    public ChildScreenController loadScreen(String name, String layout){
+    public ChildScreenController loadScreen(String name, String layout) {
         try {
             FXMLLoader screenLoader = new FXMLLoader();
             screenLoader.setLocation(getClass().getResource(layout));
@@ -31,13 +31,12 @@ public class ScreenController extends StackPane {
         }
     }
 
-    public boolean setScreen(String name){
-        if (loadedScreens.get(name) == null){
+    public boolean setScreen(String name) {
+        if (loadedScreens.get(name) == null) {
             System.err.println("Screen " + name + " not loaded!");
             return false;
-        }
-        else {
-            if (!getChildren().isEmpty()){
+        } else {
+            if (!getChildren().isEmpty()) {
                 getChildren().remove(0);
             }
             getChildren().add(loadedScreens.get(name));
@@ -45,8 +44,8 @@ public class ScreenController extends StackPane {
         }
     }
 
-    public boolean unloadScreen(String name){
-        if(loadedScreens.remove(name) == null){
+    public boolean unloadScreen(String name) {
+        if (loadedScreens.remove(name) == null) {
             System.err.println("Screen " + name + " not loaded!");
             return false;
         }

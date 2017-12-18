@@ -4,7 +4,7 @@ import it.polimi.adaptanalyzertool.gui.utility.ChildScreenController;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
 import javafx.scene.layout.StackPane;
 
-public class WelcomeScreenController implements ChildScreenController{
+public class WelcomeScreenController implements ChildScreenController {
 
     private StackPane parent;
 
