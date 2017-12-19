@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -10,10 +9,7 @@
       fx:controller="it.polimi.adaptanalyzertool.gui.WelcomeScreenController">
     <Label id="mainTitle" text="Adaptability Analyzer Tool"/>
     <ImageView preserveRatio="true" smooth="false">
-        <Image url="@/images/logo.png"/>
-        <VBox.margin>
-            <Insets/>
-        </VBox.margin>
+        <Image url="@../../../../../images/logo.png"/>
     </ImageView>
-
+    <Label/>
 </VBox>

@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -44,6 +45,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
      */
     @FXML
     private VBox componentsVBox;
+    private ContextMenu componentContextMenu;
     /*
         Selected Component details
      */
@@ -82,6 +84,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private ChoiceBox<String> componentChoiceBox;
     @FXML
     private Button serviceAddButton;
+    private ContextMenu serviceContextMenu;
     /*
         Selected service details
      */
@@ -127,13 +130,38 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     public void initialize() {
+        //Adds listener to the component choicebox to update the services displayed
         componentChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 selectedComponent = architectureComponents.get(newValue);
                 updateServicesList();
             }
         });
+
+        //Sets the rounding mode of the DecimalFormat used in metrics
         df.setRoundingMode(RoundingMode.DOWN);
+
+        //Creates the context menu used to manipulate component and services
+        componentContextMenu = new ContextMenu();
+        MenuItem componentRemoveMenuItem = new MenuItem("Remove");
+        componentRemoveMenuItem.setOnAction(event -> {
+            architecture.removeComponent(selectedComponent);
+            selectedComponent = null;
+            updateComponentList();
+            clearComponentMetrics();
+            clearComponentDetail();
+        });
+        componentContextMenu.getItems().add(componentRemoveMenuItem);
+
+        serviceContextMenu = new ContextMenu();
+        MenuItem serviceRemoveMenuItem = new MenuItem("Remove");
+        serviceRemoveMenuItem.setOnAction(event -> {
+            selectedComponent.removeService(selectedService);
+            clearServiceDetails();
+            selectedService = null;
+            updateServicesList();
+        });
+        serviceContextMenu.getItems().add(serviceRemoveMenuItem);
     }
 
     public void setArchitecture(Architecture architecture) {
@@ -141,7 +169,9 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     public void setUpScreen() {
+        architectureComponents = architecture.getComponents();
         architectureName.setText("Architecture name: " + architecture.getName());
+        tabPane.getSelectionModel().select(componentsTab);
     }
 
     @FXML
@@ -184,13 +214,23 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             componentHBox.setFocusTraversable(true);
             componentHBox.setId("componentHBox");
             componentHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                MouseButton mb = event.getButton();
                 componentHBox.requestFocus();
-                showComponentDetail(component);
-                if (this.selectedComponent != component) {
-                    this.selectedComponent = component;
-                    clearComponentMetrics();
+                switch (mb) {
+                    case PRIMARY:
+                        showComponentDetail(component);
+                        if (this.selectedComponent != component) {
+                            this.selectedComponent = component;
+                            clearComponentMetrics();
+                        }
+                        break;
+                    case SECONDARY:
+                        this.selectedComponent = component;
+                        componentContextMenu.show(componentHBox, event.getScreenX(), event.getScreenY());
+                        break;
                 }
             });
+
             componentsVBox.getChildren().add(componentHBox);
         }
     }
@@ -213,6 +253,14 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         weightResidenceTimeLabel.setText("NaN");
     }
 
+    private void clearComponentDetail() {
+        componentNameLabel.setText("");
+        componentCostLabel.setText("");
+        componentAvailabilityLabel.setText("");
+        componentColorRectangle.setVisible(false);
+        componentColorLabel.setText("");
+    }
+
     @FXML
     private void showComponentServices() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
@@ -221,14 +269,12 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void onChangedTab() {
-        if (architectureComponents != null) {
-            componentChoiceBox.setItems(FXCollections.observableArrayList(architectureComponents.keySet()));
+        componentChoiceBox.setItems(FXCollections.observableArrayList(architectureComponents.keySet()));
+        if (!architectureComponents.values().isEmpty() && selectedComponent != null) {
             componentChoiceBox.setValue(selectedComponent.getName());
-
             this.serviceAddButton.setDisable(false);
         }
     }
-
 
     @FXML
     private void createNewService() throws IOException {
@@ -256,10 +302,10 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             } else if (newService instanceof RequiredService) {
                 this.selectedComponent.addRequiredService((RequiredService) newService);
             }
+            this.selectedService = newService;
+            updateServicesList();
+            showServiceDetail(selectedService);
         }
-        this.selectedService = newService;
-        updateServicesList();
-        showServiceDetail(selectedService);
     }
 
     @FXML
@@ -311,8 +357,16 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             servicesHBox.setId("serviceHBox");
             servicesVBox.getChildren().add(servicesHBox);
             servicesHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                MouseButton mb = event.getButton();
                 servicesHBox.requestFocus();
-                showServiceDetail(service);
+                this.selectedService = service;
+                switch (mb) {
+                    case PRIMARY:
+                        showServiceDetail(selectedService);
+                        break;
+                    case SECONDARY:
+                        serviceContextMenu.show(servicesHBox, event.getScreenX(), event.getScreenY());
+                }
             });
         }
     }
@@ -342,6 +396,15 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             usedProbabilityDetailLabel.setDisable(false);
             serviceUsedProbabilityLabel.setDisable(false);
         }
+    }
+
+    private void clearServiceDetails() {
+        serviceNameLabel.setText("");
+        serviceTypeLabel.setText("");
+        serviceExecutionTimeLabel.setText("");
+        serviceUsedProbabilityLabel.setText("");
+        serviceNumberOfExecutionsLabel.setText("");
+
     }
 
     @FXML

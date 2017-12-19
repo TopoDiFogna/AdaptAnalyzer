@@ -5,33 +5,29 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="768.0" minWidth="1024.0"
-            stylesheets="@architectureScreen.css" xmlns="http://javafx.com/javafx/8.0.121"
+<BorderPane stylesheets="@architectureScreen.css" xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.polimi.adaptanalyzertool.gui.ArchitectureScreenControllerBeta">
     <center>
         <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                  tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <Tab fx:id="componentsTab" text="Components">
-                <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                <HBox>
                     <padding>
                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
                     </padding>
-                    <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" spacing="10.0"
-                          HBox.hgrow="SOMETIMES">
+                    <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="SOMETIMES">
                         <HBox.margin>
                             <Insets top="5.0"/>
                         </HBox.margin>
                         <Label text="Components List"/>
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308"
-                                    maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="430.0"
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="350.0"
                                     prefWidth="200.0">
                             <VBox fx:id="componentsVBox"/>
                         </ScrollPane>
                         <Button mnemonicParsing="false" onMouseClicked="#createNewComponent" text="Add Component"/>
                     </VBox>
-                    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
-                          HBox.hgrow="ALWAYS">
+                    <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                         <Label text="Component Details"/>
                         <GridPane alignment="TOP_CENTER" VBox.vgrow="NEVER">
                             <columnConstraints>
@@ -123,12 +119,11 @@
                 </HBox>
             </Tab>
             <Tab fx:id="servicesTab" onSelectionChanged="#onChangedTab" text="Services">
-                <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                <HBox>
                     <padding>
                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
                     </padding>
-                    <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" spacing="10.0"
-                          HBox.hgrow="SOMETIMES">
+                    <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="SOMETIMES">
                         <HBox.margin>
                             <Insets top="5.0"/>
                         </HBox.margin>
@@ -143,8 +138,7 @@
                         <Button fx:id="serviceAddButton" disable="true" mnemonicParsing="false"
                                 onMouseClicked="#createNewService" text="Add Service"/>
                     </VBox>
-                    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
-                          HBox.hgrow="ALWAYS">
+                    <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                         <HBox.margin>
                             <Insets top="5.0"/>
                         </HBox.margin>

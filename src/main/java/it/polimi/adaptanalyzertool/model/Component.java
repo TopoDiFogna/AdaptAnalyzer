@@ -250,6 +250,19 @@ public class Component {
     }
 
     /**
+     * //TODO
+     *
+     * @param service
+     */
+    public void removeService(AbstractService service) {
+        if (service instanceof ProvidedService) {
+            removeProvidedService((ProvidedService) service);
+        } else if (service instanceof RequiredService) {
+            removeRequiredService((RequiredService) service);
+        } else throw new IllegalArgumentException("Service " + service.getName() + " not recognized");
+    }
+
+    /**
      * Removes all the required services from the current component.
      */
     public void removeAllRequiredServices() {
