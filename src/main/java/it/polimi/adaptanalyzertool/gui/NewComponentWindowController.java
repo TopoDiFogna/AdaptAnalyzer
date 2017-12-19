@@ -33,7 +33,8 @@ public class NewComponentWindowController extends NewModalWindowController {
                 newComponent = new Component(newComponentName,
                         Double.parseDouble(componentCostTextField.getText().trim()),
                         Double.parseDouble(componentAvailabilityTextField.getText().trim()),
-                        componentColorPicker.getValue());
+                        componentColorPicker.getValue().getRed(), componentColorPicker.getValue().getGreen(),
+                        componentColorPicker.getValue().getBlue(), componentColorPicker.getValue().getOpacity());
                 stage.close();
 
             }

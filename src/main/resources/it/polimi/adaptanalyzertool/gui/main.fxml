@@ -8,8 +8,8 @@
         <MenuBar>
             <Menu text="File">
                 <MenuItem accelerator="Ctrl+N" onAction="#createNewArchitecture" text="New"/>
-                <MenuItem text="Import"/>
-                <MenuItem text="Export"/>
+                <MenuItem text="Import" accelerator="Ctrl+I" onAction="#importArchitecture"/>
+                <MenuItem text="Export" accelerator="Ctrl+S" onAction="#exportArchitecture"/>
                 <MenuItem accelerator="Ctrl+X" onAction="#exit" text="Exit"/>
             </Menu>
         </MenuBar>

@@ -130,7 +130,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     public void initialize() {
-        //Adds listener to the component choicebox to update the services displayed
+        //Adds listener to the component choice box to update the services displayed
         componentChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 selectedComponent = architectureComponents.get(newValue);
@@ -172,6 +172,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         architectureComponents = architecture.getComponents();
         architectureName.setText("Architecture name: " + architecture.getName());
         tabPane.getSelectionModel().select(componentsTab);
+        updateComponentList();
     }
 
     @FXML
@@ -439,5 +440,9 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @Override
     public void setParentScreen(ScreenController screen) {
         this.parent = screen;
+    }
+
+    public Architecture getArchitecture() {
+        return architecture;
     }
 }

@@ -90,11 +90,9 @@ public class Architecture {
      * Removes a component from the current architecture.
      *
      * @param component The component to be removed.
-     *
-     * @return <code>true</code> if this set contained the specified element
      */
-    public boolean removeComponent(Component component) {
-        return components.remove(component.getName(), component);
+    public void removeComponent(Component component) {
+        components.remove(component.getName(), component);
     }
 
     /**

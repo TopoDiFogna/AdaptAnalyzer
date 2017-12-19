@@ -129,7 +129,7 @@
                         </HBox.margin>
                         <Label text="Component:"/>
                         <ChoiceBox fx:id="componentChoiceBox" prefWidth="150.0"/>
-                        <Label text="Servicers List"/>
+                        <Label text="Services List"/>
                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308"
                                     maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0"
                                     prefWidth="200.0">
@@ -240,25 +240,21 @@
     </bottom>
     <top>
         <VBox alignment="TOP_CENTER" spacing="5.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label fx:id="architectureName" text="Architecture name:">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
-                </Label>
-                <HBox alignment="TOP_CENTER" spacing="10.0">
-                    <children>
-                        <Label text="System Target Cost:"/>
-                        <TextField fx:id="systemTargetCostTextField" minWidth="10.0" prefWidth="50.0"/>
-                        <Separator orientation="VERTICAL"/>
-                        <Label text="System Target Availability:"/>
-                        <TextField fx:id="systemTargetAvailabilityTextField" minWidth="10.0" prefWidth="50.0"/>
-                    </children>
-                </HBox>
-            </children>
             <BorderPane.margin>
                 <Insets bottom="5.0"/>
             </BorderPane.margin>
+            <Label fx:id="architectureName" text="Architecture name:">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </Label>
+            <HBox alignment="TOP_CENTER" spacing="10.0">
+                <Label text="System Target Cost:"/>
+                <TextField fx:id="systemTargetCostTextField" minWidth="10.0" prefWidth="50.0"/>
+                <Separator orientation="VERTICAL"/>
+                <Label text="System Target Availability:"/>
+                <TextField fx:id="systemTargetAvailabilityTextField" minWidth="10.0" prefWidth="50.0"/>
+            </HBox>
         </VBox>
     </top>
 </BorderPane>

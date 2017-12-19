@@ -11,6 +11,7 @@ public enum CenterScreens {
     CenterScreens(String name, String layout, ChildScreenController controller) {
         this.name = name;
         this.layout = layout;
+        this.controller = controller;
     }
 
     public String getName() {

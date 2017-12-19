@@ -1,6 +1,7 @@
 package it.polimi.adaptanalyzertool.model;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.HashMap;
 
@@ -22,7 +23,10 @@ public class Component {
     private final String name;
     private double cost;
     private double availability;
-    private Color color;
+    private double colorRed;
+    private double colorBlue;
+    private double colorGreen;
+    private double colorOpacity;
     private HashMap<String, ProvidedService> providedServices;
     private HashMap<String, RequiredService> requiredServices;
 
@@ -43,7 +47,7 @@ public class Component {
      * @see ProvidedService
      */
     public Component(String name, double cost, double availability) {
-        this(name, cost, availability, Color.WHITE, new HashMap<>(), new HashMap<>());
+        this(name, cost, availability, 1, 1, 1, 1, new HashMap<>(), new HashMap<>());
     }
 
     /**
@@ -57,13 +61,17 @@ public class Component {
      * @param name         the name of the component.
      * @param cost         the cost of the component.
      * @param availability availability expressed in 0-1 range.
-     * @param color        color for the component in the UI.
+     * @param colorRed     red component color for the component in the UI.
+     * @param colorBlue    blue component color for the component in the UI.
+     * @param colorGreen   green component color for the component in the UI.
+     * @param colorOpacity opacity component color for the component in the UI.
      *
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, Color color) {
-        this(name, cost, availability, color, new HashMap<>(), new HashMap<>());
+    public Component(String name, double cost, double availability, double colorRed, double colorGreen, double colorBlue,
+                     double colorOpacity) {
+        this(name, cost, availability, colorRed, colorGreen, colorBlue, colorOpacity, new HashMap<>(), new HashMap<>());
     }
 
     /**
@@ -76,15 +84,19 @@ public class Component {
      * @param name             the name of the component.
      * @param cost             the cost of the component.
      * @param availability     availability expressed in 0-1 range.
-     * @param color            color for the component in the UI.
+     * @param colorRed         red component color for the component in the UI.
+     * @param colorBlue        blue component color for the component in the UI.
+     * @param colorGreen       green component color for the component in the UI.
+     * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
      *
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, Color color,
+    public Component(String name, double cost, double availability, double colorRed, double colorGreen, double colorBlue,
+                     double colorOpacity,
                      HashMap<String, ProvidedService> providedServices) {
-        this(name, cost, availability, color, providedServices, new HashMap<>());
+        this(name, cost, availability, colorRed, colorGreen, colorBlue, colorOpacity, providedServices, new HashMap<>());
     }
 
     /**
@@ -93,20 +105,27 @@ public class Component {
      * @param name             the name of the component.
      * @param cost             the cost of the component.
      * @param availability     availability expressed in 0-1 range.
-     * @param color            color for the component in the UI.
+     * @param colorRed         red component color for the component in the UI.
+     * @param colorBlue        blue component color for the component in the UI.
+     * @param colorGreen       green component color for the component in the UI.
+     * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
      * @param requiredServices the services required by this component.
      *
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, Color color,
+    public Component(String name, double cost, double availability, double colorRed, double colorGreen, double colorBlue,
+                     double colorOpacity,
                      HashMap<String, ProvidedService> providedServices,
                      HashMap<String, RequiredService> requiredServices) {
         this.name = name;
         this.cost = cost;
         this.availability = availability;
-        this.color = color;
+        this.colorRed = colorRed;
+        this.colorGreen = colorGreen;
+        this.colorBlue = colorBlue;
+        this.colorOpacity = colorOpacity;
         this.providedServices = providedServices;
         this.requiredServices = requiredServices;
     }
@@ -160,24 +179,83 @@ public class Component {
     }
 
     /**
-     * Gets the color for the current Component.
+     * Gets the red component color for the current Component.
      *
-     * @return the color for the current Component.
-     * @see Color
+     * @return the red component color for the current Component.
      */
-    public Color getColor() {
-        return color;
+    public double getColorRed() {
+        return colorRed;
     }
 
     /**
-     * Changes the color for the current Component.
+     * Changes the red component color for the current Component.
      *
-     * @param color the new execution time for the Component.
+     * @param colorRed the new red component color for the Component.
      *
      * @see Color
      */
-    public void setColor(Color color) {
-        this.color = color;
+    public void setColorRed(double colorRed) {
+        this.colorRed = colorRed;
+    }
+
+    /**
+     * Gets the blue component color for the current Component.
+     *
+     * @return the blue component color for the current Component.
+     */
+    public double getColorBlue() {
+        return colorBlue;
+    }
+
+    /**
+     * Changes the blue component color for the current Component.
+     *
+     * @param colorBlue the new blue component color for the Component.
+     *
+     * @see Color
+     */
+    public void setColorBlue(double colorBlue) {
+        this.colorBlue = colorBlue;
+    }
+
+    /**
+     * Gets the green component color for the current Component.
+     *
+     * @return the green component color for the current Component.
+     */
+    public double getColorGreen() {
+        return colorGreen;
+    }
+
+    /**
+     * Changes the green component color for the current Component.
+     *
+     * @param colorGreen the new green component color for the Component.
+     *
+     * @see Color
+     */
+    public void setColorGreen(double colorGreen) {
+        this.colorGreen = colorGreen;
+    }
+
+    /**
+     * Gets the opacity component color for the current Component.
+     *
+     * @return the opacity component color for the current Component.
+     */
+    public double getColorOpacity() {
+        return colorOpacity;
+    }
+
+    /**
+     * Changes the opacity component color for the current Component.
+     *
+     * @param colorOpacity the new opacity component color for the Component.
+     *
+     * @see Color
+     */
+    public void setColorOpacity(double colorOpacity) {
+        this.colorOpacity = colorOpacity;
     }
 
     /**
@@ -204,8 +282,6 @@ public class Component {
      * (or equivalently, if this set changed as a result of the call).
      *
      * @param serviceProvided the provided service to be removed from the component.
-     *
-     * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
     public void removeProvidedService(ProvidedService serviceProvided) {
         providedServices.remove(serviceProvided.getName(), serviceProvided);
@@ -242,17 +318,17 @@ public class Component {
      * (or equivalently, if this set changed as a result of the call).
      *
      * @param serviceRequired the required service to be removed from the component.
-     *
-     * @return <code>true</code> if the service is removed, thus the set has changed; <code>false</code> otherwise.
      */
     public void removeRequiredService(RequiredService serviceRequired) {
         requiredServices.remove(serviceRequired.getName(), serviceRequired);
     }
 
     /**
-     * //TODO
+     * Removes a generic service from a component.
      *
-     * @param service
+     * @param service the service to be removed, the type of service must extend {@link AbstractService}
+     *
+     * @throws IllegalArgumentException if the service does not extend {@link AbstractService}
      */
     public void removeService(AbstractService service) {
         if (service instanceof ProvidedService) {
@@ -275,5 +351,9 @@ public class Component {
     public void removeAllServices() {
         removeAllProvidedServices();
         removeAllRequiredServices();
+    }
+
+    public Paint getColor() {
+        return new Color(colorRed, colorGreen, colorBlue, colorOpacity);
     }
 }
