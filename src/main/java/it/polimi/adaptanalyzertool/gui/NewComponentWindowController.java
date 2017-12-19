@@ -2,6 +2,7 @@ package it.polimi.adaptanalyzertool.gui;
 
 import it.polimi.adaptanalyzertool.model.Component;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -18,6 +19,8 @@ public class NewComponentWindowController extends NewModalWindowController {
     @FXML
     private TextField componentAvailabilityTextField;
     @FXML
+    private CheckBox usedCheckBox;
+    @FXML
     private ColorPicker componentColorPicker;
     @FXML
     private Label componentErrorLabel;
@@ -33,6 +36,7 @@ public class NewComponentWindowController extends NewModalWindowController {
                 newComponent = new Component(newComponentName,
                         Double.parseDouble(componentCostTextField.getText().trim()),
                         Double.parseDouble(componentAvailabilityTextField.getText().trim()),
+                        usedCheckBox.isSelected(),
                         componentColorPicker.getValue().getRed(), componentColorPicker.getValue().getGreen(),
                         componentColorPicker.getValue().getBlue(), componentColorPicker.getValue().getOpacity());
                 stage.close();

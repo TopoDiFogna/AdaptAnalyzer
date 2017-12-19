@@ -23,6 +23,7 @@ public class Component {
     private final String name;
     private double cost;
     private double availability;
+    private boolean used;
     private double colorRed;
     private double colorBlue;
     private double colorGreen;
@@ -42,12 +43,11 @@ public class Component {
      * @param name         the name of the component.
      * @param cost         the cost of the component.
      * @param availability availability expressed in 0-1 range.
-     *
      * @see RequiredService
      * @see ProvidedService
      */
     public Component(String name, double cost, double availability) {
-        this(name, cost, availability, 1, 1, 1, 1, new HashMap<>(), new HashMap<>());
+        this(name, cost, availability, true, 1, 1, 1, 1, new HashMap<>(), new HashMap<>());
     }
 
     /**
@@ -61,17 +61,17 @@ public class Component {
      * @param name         the name of the component.
      * @param cost         the cost of the component.
      * @param availability availability expressed in 0-1 range.
+     * @param used         if this component is used or not.
      * @param colorRed     red component color for the component in the UI.
      * @param colorBlue    blue component color for the component in the UI.
      * @param colorGreen   green component color for the component in the UI.
      * @param colorOpacity opacity component color for the component in the UI.
-     *
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, double colorRed, double colorGreen, double colorBlue,
+    public Component(String name, double cost, double availability, boolean used, double colorRed, double colorGreen, double colorBlue,
                      double colorOpacity) {
-        this(name, cost, availability, colorRed, colorGreen, colorBlue, colorOpacity, new HashMap<>(), new HashMap<>());
+        this(name, cost, availability, used, colorRed, colorGreen, colorBlue, colorOpacity, new HashMap<>(), new HashMap<>());
     }
 
     /**
@@ -84,19 +84,19 @@ public class Component {
      * @param name             the name of the component.
      * @param cost             the cost of the component.
      * @param availability     availability expressed in 0-1 range.
+     * @param used             if this component is used or not.
      * @param colorRed         red component color for the component in the UI.
      * @param colorBlue        blue component color for the component in the UI.
      * @param colorGreen       green component color for the component in the UI.
      * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
-     *
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, double colorRed, double colorGreen, double colorBlue,
+    public Component(String name, double cost, double availability, boolean used, double colorRed, double colorGreen, double colorBlue,
                      double colorOpacity,
                      HashMap<String, ProvidedService> providedServices) {
-        this(name, cost, availability, colorRed, colorGreen, colorBlue, colorOpacity, providedServices, new HashMap<>());
+        this(name, cost, availability, used, colorRed, colorGreen, colorBlue, colorOpacity, providedServices, new HashMap<>());
     }
 
     /**
@@ -105,23 +105,24 @@ public class Component {
      * @param name             the name of the component.
      * @param cost             the cost of the component.
      * @param availability     availability expressed in 0-1 range.
+     * @param used             if this component is used or not.
      * @param colorRed         red component color for the component in the UI.
      * @param colorBlue        blue component color for the component in the UI.
      * @param colorGreen       green component color for the component in the UI.
      * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
      * @param requiredServices the services required by this component.
-     *
      * @see RequiredService
      * @see ProvidedService
      */
-    public Component(String name, double cost, double availability, double colorRed, double colorGreen, double colorBlue,
+    public Component(String name, double cost, double availability, boolean used, double colorRed, double colorGreen, double colorBlue,
                      double colorOpacity,
                      HashMap<String, ProvidedService> providedServices,
                      HashMap<String, RequiredService> requiredServices) {
         this.name = name;
         this.cost = cost;
         this.availability = availability;
+        this.used = used;
         this.colorRed = colorRed;
         this.colorGreen = colorGreen;
         this.colorBlue = colorBlue;
@@ -191,7 +192,6 @@ public class Component {
      * Changes the red component color for the current Component.
      *
      * @param colorRed the new red component color for the Component.
-     *
      * @see Color
      */
     public void setColorRed(double colorRed) {
@@ -211,7 +211,6 @@ public class Component {
      * Changes the blue component color for the current Component.
      *
      * @param colorBlue the new blue component color for the Component.
-     *
      * @see Color
      */
     public void setColorBlue(double colorBlue) {
@@ -231,7 +230,6 @@ public class Component {
      * Changes the green component color for the current Component.
      *
      * @param colorGreen the new green component color for the Component.
-     *
      * @see Color
      */
     public void setColorGreen(double colorGreen) {
@@ -251,11 +249,28 @@ public class Component {
      * Changes the opacity component color for the current Component.
      *
      * @param colorOpacity the new opacity component color for the Component.
-     *
      * @see Color
      */
     public void setColorOpacity(double colorOpacity) {
         this.colorOpacity = colorOpacity;
+    }
+
+    /**
+     * Tells if this component is used in the architecture.
+     *
+     * @return <code>true</code> if the component is actually used, <code>false</code> otherwise.
+     */
+    public boolean isUsed() {
+        return used;
+    }
+
+    /**
+     * Sets the component status, if it's used or no.
+     *
+     * @param used <code>true</code> if the component is used, <code>false</code> otherwise.
+     */
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 
     /**
@@ -327,7 +342,6 @@ public class Component {
      * Removes a generic service from a component.
      *
      * @param service the service to be removed, the type of service must extend {@link AbstractService}
-     *
      * @throws IllegalArgumentException if the service does not extend {@link AbstractService}
      */
     public void removeService(AbstractService service) {

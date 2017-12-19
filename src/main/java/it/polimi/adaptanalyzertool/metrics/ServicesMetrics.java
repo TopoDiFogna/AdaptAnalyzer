@@ -75,6 +75,28 @@ public final class ServicesMetrics {
         return 0;
     }
 
+    public static int AbsoluteAdaptability (AbstractService service){
+        //TODO
+        return 0;
+    }
+
+    public static double RelativeAdaptability(AbstractService service){
+        //TODO
+        return 0;
+    }
+
+    public static double MeanAbsoluteAdaptability(AbstractService service){
+        //TODO
+        return 0;
+    }
+
+    public static double MeanRelativeAdaptability(AbstractService service){
+        //TODO
+        return 0;
+    }
+
+
+
     /**
      * Collects all the services in a given architecture and returns them.
      *

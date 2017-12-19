@@ -31,7 +31,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private final String doubleRegex = "(?:\\d*\\.)?\\d+"; //TODO make this for double and 99 notation
     private final DecimalFormat df = new DecimalFormat("0.00");
     @FXML
-    public VBox servicesVBox;
+    private VBox servicesVBox;
     @FXML
     private Label architectureName;
     @FXML
@@ -55,6 +55,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Label componentCostLabel;
     @FXML
     private Label componentAvailabilityLabel;
+    @FXML
+    private CheckBox componentUsedCheckBox;
     @FXML
     private Rectangle componentColorRectangle;
     @FXML
@@ -240,6 +242,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         componentNameLabel.setText(component.getName());
         componentCostLabel.setText(String.valueOf(component.getCost()));
         componentAvailabilityLabel.setText(String.valueOf(component.getAvailability()));
+        componentUsedCheckBox.setSelected(component.isUsed());
         componentColorRectangle.setFill(component.getColor());
         componentColorRectangle.setVisible(true);
         componentColorLabel.setText(component.getColor().toString());
