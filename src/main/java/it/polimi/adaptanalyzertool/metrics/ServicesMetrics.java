@@ -75,27 +75,61 @@ public final class ServicesMetrics {
         return 0;
     }
 
-    public static int AbsoluteAdaptability (AbstractService service){
-        //TODO
-        return 0;
+    public static int AbsoluteAdaptability(Architecture architecture, ProvidedService service) {
+        int usedProvidedTimes = 0;
+        for (Component component : architecture.getComponents().values()) {
+            if (component.getProvidedServices().containsKey(service.getName()) && component.isUsed()) {
+                usedProvidedTimes += 1;
+            }
+        }
+        return usedProvidedTimes;
     }
 
-    public static double RelativeAdaptability(AbstractService service){
-        //TODO
-        return 0;
+    public static double RelativeAdaptability(Architecture architecture, ProvidedService service) {
+        int usedProvidedTimes = AbsoluteAdaptability(architecture, service);
+        int providedTimes = 0;
+        for (Component component : architecture.getComponents().values()) {
+            if (component.getProvidedServices().containsKey(service.getName())) {
+                providedTimes += 1;
+            }
+        }
+        return usedProvidedTimes / providedTimes;
     }
 
-    public static double MeanAbsoluteAdaptability(AbstractService service){
-        //TODO
-        return 0;
+    public static double MeanAbsoluteAdaptability(Architecture architecture) {
+        HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
+        int numberOfProvidedServices = servicesHashMap.size();
+        int aas = 0;
+        for (ProvidedService providedService : servicesHashMap.values()) {
+            aas += AbsoluteAdaptability(architecture, providedService);
+        }
+        return aas / numberOfProvidedServices;
     }
 
-    public static double MeanRelativeAdaptability(AbstractService service){
-        //TODO
-        return 0;
+    public static double MeanRelativeAdaptability(Architecture architecture) {
+        HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
+        int numberOfProvidedServices = servicesHashMap.size();
+        int ras = 0;
+        for (ProvidedService providedService : servicesHashMap.values()) {
+            ras += RelativeAdaptability(architecture, providedService);
+        }
+        return ras / numberOfProvidedServices;
     }
 
-
+    public static double LevelSystemAdaptability(Architecture architecture) {
+        HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
+        int aas = 0;
+        int n = 0;
+        for (ProvidedService providedService : servicesHashMap.values()) {
+            aas += AbsoluteAdaptability(architecture, providedService);
+        }
+        for (Component component : architecture.getComponents().values()) {
+            if (!component.getProvidedServices().isEmpty()) {
+                n += 1;
+            }
+        }
+        return aas / n;
+    }
 
     /**
      * Collects all the services in a given architecture and returns them.
@@ -108,6 +142,14 @@ public final class ServicesMetrics {
         HashMap<String, AbstractService> servicesHashMap = new HashMap<>();
         for (Component component : architecture.getComponents().values()) {
             servicesHashMap.putAll(component.getRequiredServices());
+            servicesHashMap.putAll(component.getProvidedServices());
+        }
+        return servicesHashMap;
+    }
+
+    private static HashMap<String, ProvidedService> collectProvidedServices(Architecture architecture) {
+        HashMap<String, ProvidedService> servicesHashMap = new HashMap<>();
+        for (Component component : architecture.getComponents().values()) {
             servicesHashMap.putAll(component.getProvidedServices());
         }
         return servicesHashMap;

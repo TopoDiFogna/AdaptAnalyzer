@@ -66,11 +66,6 @@ public final class ArchitectureMetrics {
         return gcs;
     }
 
-    public static double LevelSystemAdaptability(Architecture architecture){
-        //TODO
-        return 0;
-    }
-
     /**
      * Defines which architectures are suitable for the specified availability.
      *

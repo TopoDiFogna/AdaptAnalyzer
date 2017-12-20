@@ -2,7 +2,7 @@ package it.polimi.adaptanalyzertool.gui;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import it.polimi.adaptanalyzertool.gui.error.ImportErrorController;
+import it.polimi.adaptanalyzertool.gui.error.GenericErrorController;
 import it.polimi.adaptanalyzertool.gui.utility.CenterScreens;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
 import it.polimi.adaptanalyzertool.model.Architecture;
@@ -65,7 +65,7 @@ public class MainController {
     }
 
     @FXML
-    private void exportArchitecture() {
+    private void exportArchitecture() throws IOException {
         if (childScreenController != null) {
             Gson gson = new Gson();
             String json = gson.toJson(childScreenController.getArchitecture());
@@ -76,6 +76,8 @@ public class MainController {
             if (file != null) {
                 saveTextFile(json, file);
             }
+        } else {
+            showErrorMessage("Error", "Nothing to export");
         }
     }
 
@@ -96,21 +98,7 @@ public class MainController {
                     architecture = gson.fromJson(json, Architecture.class);
                     showArchitectureScreen(architecture);
                 } catch (JsonSyntaxException e) {
-                    Stage stage = new Stage();
-                    stage.setTitle("Error");
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("error/importError.fxml"));
-
-                    Parent root = loader.load();
-                    ImportErrorController controller = loader.getController();
-                    controller.setStage(stage);
-
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.initOwner(parent);
-                    stage.setResizable(false);
-                    stage.initModality(Modality.WINDOW_MODAL);
-                    stage.showAndWait();
+                    showErrorMessage("Error", "Json file not valid!");
                 }
             }
         }
@@ -141,6 +129,25 @@ public class MainController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void showErrorMessage(String title, String errorMessage) throws IOException {
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("error/genericErrorWindow.fxml"));
+
+        Parent root = loader.load();
+        GenericErrorController controller = loader.getController();
+        controller.setErrorMessage(errorMessage);
+        controller.setStage(stage);
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.initOwner(parent);
+        stage.setResizable(false);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
     }
 
 }

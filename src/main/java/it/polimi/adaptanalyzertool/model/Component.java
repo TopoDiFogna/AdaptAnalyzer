@@ -43,6 +43,7 @@ public class Component {
      * @param name         the name of the component.
      * @param cost         the cost of the component.
      * @param availability availability expressed in 0-1 range.
+     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -66,6 +67,7 @@ public class Component {
      * @param colorBlue    blue component color for the component in the UI.
      * @param colorGreen   green component color for the component in the UI.
      * @param colorOpacity opacity component color for the component in the UI.
+     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -90,6 +92,7 @@ public class Component {
      * @param colorGreen       green component color for the component in the UI.
      * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
+     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -112,6 +115,7 @@ public class Component {
      * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
      * @param requiredServices the services required by this component.
+     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -192,6 +196,7 @@ public class Component {
      * Changes the red component color for the current Component.
      *
      * @param colorRed the new red component color for the Component.
+     *
      * @see Color
      */
     public void setColorRed(double colorRed) {
@@ -211,6 +216,7 @@ public class Component {
      * Changes the blue component color for the current Component.
      *
      * @param colorBlue the new blue component color for the Component.
+     *
      * @see Color
      */
     public void setColorBlue(double colorBlue) {
@@ -230,6 +236,7 @@ public class Component {
      * Changes the green component color for the current Component.
      *
      * @param colorGreen the new green component color for the Component.
+     *
      * @see Color
      */
     public void setColorGreen(double colorGreen) {
@@ -249,6 +256,7 @@ public class Component {
      * Changes the opacity component color for the current Component.
      *
      * @param colorOpacity the new opacity component color for the Component.
+     *
      * @see Color
      */
     public void setColorOpacity(double colorOpacity) {
@@ -342,6 +350,7 @@ public class Component {
      * Removes a generic service from a component.
      *
      * @param service the service to be removed, the type of service must extend {@link AbstractService}
+     *
      * @throws IllegalArgumentException if the service does not extend {@link AbstractService}
      */
     public void removeService(AbstractService service) {
