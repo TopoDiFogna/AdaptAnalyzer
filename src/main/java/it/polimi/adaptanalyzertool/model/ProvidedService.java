@@ -18,6 +18,7 @@ public class ProvidedService extends AbstractService {
      * Constructor for a Provided Service; only requires the service name.
      *
      * @param name the name of the service.
+     * @param executionTime the time this service needs to complete its execution.
      */
     public ProvidedService(String name, double executionTime) {
         super(name);

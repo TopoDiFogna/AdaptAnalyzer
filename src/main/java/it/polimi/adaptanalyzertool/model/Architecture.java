@@ -105,20 +105,38 @@ public class Architecture {
         components.clear();
     }
 
+    /**
+     * Return the workflow associated with this architecture.
+     *
+     * @return the workflows associated with this architecture.
+     * @see Workflow
+     */
     public HashMap<String, Workflow> getWorkflows() {
         return workflows;
     }
 
+    /**
+     * Adds a workflow to the list of workflow associated with this architecture.
+     *
+     * @param workflow the workflow to be added.
+     */
     public void addWorkflow(Workflow workflow) {
         workflows.put(workflow.getName(), workflow);
     }
 
+    /**
+     * Removes a workflow from the list of workflow associated with this architecture.
+     *
+     * @param workflow the workflow to remove from the list.
+     */
     public void removeWorkflow(Workflow workflow) {
         workflows.remove(workflow.getName(), workflow);
     }
 
+    /**
+     * Removes all workflow from the current architecture.
+     */
     public void removeAllWorkflows() {
         workflows.clear();
     }
-
 }
