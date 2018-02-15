@@ -6,8 +6,8 @@ package it.polimi.adaptanalyzertool.model;
  */
 public class Message {
 
-    private Component startingComponent;
-    private Component endingComponent;
+    private String startingComponentName;
+    private String endingComponentName;
 
     private String name;
 
@@ -15,30 +15,30 @@ public class Message {
         this(name, null, null);
     }
 
-    public Message(String name, Component startingComponent, Component endingComponent) {
+    public Message(String name, String startingComponent, String endingComponent) {
         this.name = name;
-        this.startingComponent = startingComponent;
-        this.endingComponent = endingComponent;
+        this.startingComponentName = startingComponent;
+        this.endingComponentName = endingComponent;
     }
 
     public String getName() {
         return name;
     }
 
-    public Component getStartingComponent() {
+    public String getStartingComponentName() {
 
-        return startingComponent;
+        return startingComponentName;
     }
 
-    public void setStartingComponent(Component startingComponent) {
-        this.startingComponent = startingComponent;
+    public void setStartingComponentName(String startingComponentName) {
+        this.startingComponentName = startingComponentName;
     }
 
-    public void setEndingComponent(Component endingComponent) {
-        this.endingComponent = endingComponent;
+    public void setEndingComponentName(String endingComponentName) {
+        this.endingComponentName = endingComponentName;
     }
 
-    public Component getEndingComponent() {
-        return endingComponent;
+    public String getEndingComponentName() {
+        return endingComponentName;
     }
 }

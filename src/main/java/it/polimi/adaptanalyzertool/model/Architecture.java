@@ -27,7 +27,7 @@ public class Architecture {
      * @param name The name for this architecture.
      */
     public Architecture(String name) {
-        this(name, new HashMap<>());
+        this(name, new HashMap<>(), new HashMap<>());
     }
 
     /**
@@ -39,9 +39,24 @@ public class Architecture {
      * @param name       The name for this architecture.
      * @param components The HashMap containing the components.
      */
-    public Architecture(String name, HashMap<String, Component> components) {
+    public Architecture(String name, HashMap<String, Component> components){
+        this(name, components, new HashMap<>());
+    }
+
+    /**
+     * Creates a new architecture with the specified set of components.
+     * <p>
+     * More components can be added later by using {@link Architecture#addComponent addComponent}.
+     * </p>
+     *
+     * @param name       The name for this architecture.
+     * @param components The HashMap containing the components.
+     * @param workflows The HashMap containing the workflows asscociated with this architecture.
+     */
+    public Architecture(String name, HashMap<String, Component> components, HashMap<String, Workflow> workflows) {
         this.name = name;
         this.components = components;
+        this.workflows = workflows;
     }
 
     /**
@@ -69,6 +84,7 @@ public class Architecture {
      * Gets all the components associated with the current architecture.
      *
      * @return an <code>HashMap</code> containing all the components related to this architecture.
+     * @see Component
      */
     public HashMap<String, Component> getComponents() {
         return components;

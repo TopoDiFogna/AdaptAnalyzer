@@ -1,8 +1,6 @@
 package it.polimi.adaptanalyzertool.metrics;
 
-import it.polimi.adaptanalyzertool.model.Architecture;
-import it.polimi.adaptanalyzertool.model.Component;
-import it.polimi.adaptanalyzertool.model.ProvidedService;
+import it.polimi.adaptanalyzertool.model.*;
 
 import static it.polimi.adaptanalyzertool.metrics.ServicesMetrics.NumberOfExecutions;
 
@@ -115,5 +113,20 @@ public final class ComponentMetrics {
             componentTime += NumberOfExecutions(architecture, providedService) * providedService.getExecutionTime();
         }
         return componentTime / totalTime;
+    }
+
+
+    public static double InAction(Workflow workflow, Component component) {
+        double inAction = 0;
+        for(Path path: workflow.getPathHashMap().values()){
+            int componentExes = 0;
+            for(Message message: path.getMessagesList()){
+                if(message.getStartingComponentName().equals(component.getName())){
+                    componentExes++;
+                }
+            }
+            inAction += path.getExecutionProbability() * componentExes/path.getMessagesList().size();//if we include the responses we need to half the message list size
+        }
+        return inAction;
     }
 }

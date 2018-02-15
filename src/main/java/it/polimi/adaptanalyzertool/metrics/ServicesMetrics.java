@@ -68,13 +68,6 @@ public final class ServicesMetrics {
         return NumberOfExecutions(architecture, service) / totalExecutionTimes;
     }
 
-    /**
-     * @return //todo
-     */
-    public static double InAction() { //TODO
-        return 0;
-    }
-
     public static int AbsoluteAdaptability(Architecture architecture, ProvidedService service) {
         int usedProvidedTimes = 0;
         for (Component component : architecture.getComponents().values()) {

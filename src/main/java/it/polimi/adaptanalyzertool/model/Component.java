@@ -282,6 +282,19 @@ public class Component {
     }
 
     /**
+     * Returns the color associated with this component.
+     * <p>
+     * Note that this is a shorthand for all the colors; if the single colors need to be retrieved then
+     * use the color getters.
+     * </p>
+     *
+     * @return a new {@link Color} associated with this component.
+     */
+    public Paint getColor() {
+        return new Color(colorRed, colorGreen, colorBlue, colorOpacity);
+    }
+
+    /**
      * Gets the services provided by the current Component.
      *
      * @return a <code>HashMap</code> containing the services provided by the current component.
@@ -374,9 +387,5 @@ public class Component {
     public void removeAllServices() {
         removeAllProvidedServices();
         removeAllRequiredServices();
-    }
-
-    public Paint getColor() {
-        return new Color(colorRed, colorGreen, colorBlue, colorOpacity);
     }
 }

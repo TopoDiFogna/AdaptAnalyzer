@@ -417,10 +417,10 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         if (selectedService != null) {
             double noe = ServicesMetrics.NumberOfExecutions(architecture, selectedService);
             double ptbr = ServicesMetrics.ProbabilityToBeRunning(architecture, selectedService);
-            double ia = ServicesMetrics.InAction();
+            //double ia = ServicesMetrics.InAction();
             numberOfExecutionsLabel.setText(df.format(noe));
             probabilityToBeRunningLabel.setText(df.format(ptbr));
-            inActionLabel.setText(df.format(ia));
+            //inActionLabel.setText(df.format(ia));
         } else {
             serviceMetricsErrorLabel.setText("Select a service first");
         }
