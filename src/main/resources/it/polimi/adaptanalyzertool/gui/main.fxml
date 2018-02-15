@@ -12,6 +12,9 @@
                 <MenuItem text="Export" accelerator="Ctrl+S" onAction="#exportArchitecture"/>
                 <MenuItem accelerator="Ctrl+X" onAction="#exit" text="Exit"/>
             </Menu>
+            <Menu text="View">
+                <MenuItem accelerator="Ctrl+V" text="Show Architecture" onAction="#showArchitectureGraph"/>
+            </Menu>
         </MenuBar>
     </top>
 </BorderPane>

@@ -6,7 +6,7 @@ import javafx.scene.shape.Polygon;
 
 public class TriangleCell extends Cell {
 
-    public TriangleCell(String id) {
+    public TriangleCell(String id, Color fillColor, Color strokeColor) {
         super(id);
 
         double width = 50;
@@ -14,8 +14,8 @@ public class TriangleCell extends Cell {
 
         Polygon view = new Polygon(width / 2, 0, width, height, 0, height);
 
-        view.setStroke(Color.RED);
-        view.setFill(Color.RED);
+        view.setStroke(strokeColor);
+        view.setFill(fillColor);
 
         setView(view);
 

@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -104,6 +105,29 @@ public class MainController {
         }
     }
 
+    @FXML
+    private void showArchitectureGraph() throws IOException {
+        if (childScreenController != null){
+            Stage stage = new Stage();
+            stage.setTitle("Graph");
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("graph/graph.fxml"));
+            BorderPane root = loader.load();
+
+            GraphController controller = loader.getController();
+            controller.setArchitecture(childScreenController.getArchitecture());
+            controller.setRoot(root);
+            controller.inizitalize();
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initOwner(parent);
+            stage.setMinHeight(root.getMinHeight());
+            stage.setMinWidth(root.getMinWidth());
+            stage.show();
+        }
+    }
+
     void setParent(Window parent) {
         this.parent = parent;
     }
@@ -118,7 +142,7 @@ public class MainController {
             fw.write(content);
             fw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();//TODO
         }
     }
 
@@ -126,7 +150,7 @@ public class MainController {
         try {
             return new String(Files.readAllBytes(Paths.get(file.toURI())));
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();//TODO
         }
         return null;
     }
@@ -149,5 +173,4 @@ public class MainController {
         stage.initModality(Modality.WINDOW_MODAL);
         stage.showAndWait();
     }
-
 }

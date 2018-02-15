@@ -14,14 +14,13 @@ public class Graph {
      */
     CellLayer cellLayer;
     private Model model;
-    private Group canvas;
     private ZoomableScrollPane scrollPane;
 
     public Graph() {
 
         this.model = new Model();
 
-        canvas = new Group();
+        Group canvas = new Group();
         cellLayer = new CellLayer();
 
         canvas.getChildren().add(cellLayer);

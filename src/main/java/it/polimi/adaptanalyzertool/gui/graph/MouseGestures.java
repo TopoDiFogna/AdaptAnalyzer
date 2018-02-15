@@ -6,10 +6,13 @@ import javafx.scene.input.MouseEvent;
 
 public class MouseGestures {
 
-    final DragContext dragContext = new DragContext();
+    private final DragContext dragContext = new DragContext();
 
     Graph graph;
-    EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
+    private EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> {
+
+    };
+    private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<>() {
 
         @Override
         public void handle(MouseEvent event) {
@@ -23,7 +26,7 @@ public class MouseGestures {
 
         }
     };
-    EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
+    private EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<>() {
 
         @Override
         public void handle(MouseEvent event) {
@@ -43,13 +46,6 @@ public class MouseGestures {
 
         }
     };
-    EventHandler<MouseEvent> onMouseReleasedEventHandler = new EventHandler<MouseEvent>() {
-
-        @Override
-        public void handle(MouseEvent event) {
-
-        }
-    };
 
     public MouseGestures(Graph graph) {
         this.graph = graph;
@@ -57,14 +53,12 @@ public class MouseGestures {
 
     public void makeDraggable(final Node node) {
 
-
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
         node.setOnMouseReleased(onMouseReleasedEventHandler);
-
     }
 
-    class DragContext {
+    private class DragContext {
 
         double x;
         double y;

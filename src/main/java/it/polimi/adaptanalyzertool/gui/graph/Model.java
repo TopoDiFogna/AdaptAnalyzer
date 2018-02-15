@@ -2,14 +2,31 @@ package it.polimi.adaptanalyzertool.gui.graph;
 
 import it.polimi.adaptanalyzertool.gui.graph.cells.RectangleCell;
 import it.polimi.adaptanalyzertool.gui.graph.cells.TriangleCell;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The model contains all the graph's elements.
+ * <p>
+ * All the created Cells and Edges are stored in this model to be used later.
+ * </p>
+ * <p>
+ * In particular this class contains all the methods to add and remove Cells and Edges; it also contains an
+ * invisible Cell that is the parent of all Cells without parents.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class Model {
 
+    /**
+     * The invisible node where all cells spawn at.
+     */
     private Cell graphParent;
 
     private List<Cell> allCells;
@@ -20,17 +37,14 @@ public class Model {
     private List<Edge> addedEdges;
     private List<Edge> removedEdges;
 
+    /**
+     * Map containing the reference of every cell with its id
+     */
     private Map<String, Cell> cellMap; // <id,cell>
 
     public Model() {
 
         graphParent = new Cell("_ROOT_");
-
-        // clear model, create lists
-        clear();
-    }
-
-    public void clear() {
 
         allCells = new ArrayList<>();
         addedCells = new ArrayList<>();
@@ -40,15 +54,22 @@ public class Model {
         addedEdges = new ArrayList<>();
         removedEdges = new ArrayList<>();
 
-        cellMap = new HashMap<>(); // <id,cell>
-
+        cellMap = new HashMap<>();
     }
 
+    /**
+     * Clears the list containing the added elements.
+     */
     public void clearAddedLists() {
         addedCells.clear();
         addedEdges.clear();
     }
 
+    /**
+     * Gets all the cells added to the current model.
+     *
+     * @return the list of cells added to the model.
+     */
     public List<Cell> getAddedCells() {
         return addedCells;
     }
@@ -73,17 +94,17 @@ public class Model {
         return allEdges;
     }
 
-    public void addCell(String id, CellType type) {
+    public void addCell(String id, CellType type) { //TODO add color
 
         switch (type) {
 
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id);
+                RectangleCell rectangleCell = new RectangleCell(id, Color.DODGERBLUE, Color.DODGERBLUE);
                 addCell(rectangleCell);
                 break;
 
             case TRIANGLE:
-                TriangleCell circleCell = new TriangleCell(id);
+                TriangleCell circleCell = new TriangleCell(id, Color.RED, Color.RED);
                 addCell(circleCell);
                 break;
 
@@ -112,7 +133,7 @@ public class Model {
     }
 
     /**
-     * Attach all cells which don't have a parent to graphParent
+     * Attach all cells which don't have a parent to graphParent.
      *
      * @param cellList
      */
@@ -127,7 +148,7 @@ public class Model {
     }
 
     /**
-     * Remove the graphParent reference if it is set
+     * Remove the graphParent reference if it is set.
      *
      * @param cellList
      */
