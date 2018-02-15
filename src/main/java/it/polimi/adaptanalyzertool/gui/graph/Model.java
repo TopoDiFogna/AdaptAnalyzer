@@ -4,6 +4,7 @@ import it.polimi.adaptanalyzertool.gui.graph.cells.RectangleCell;
 import it.polimi.adaptanalyzertool.gui.graph.cells.TriangleCell;
 import javafx.scene.paint.Color;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,23 +95,27 @@ public class Model {
         return allEdges;
     }
 
-    public void addCell(String id, CellType type) { //TODO add color
+    public void addCell(String id, CellType type, Color fillColor, Color strokeColor) {
 
         switch (type) {
 
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id, Color.DODGERBLUE, Color.DODGERBLUE);
+                RectangleCell rectangleCell = new RectangleCell(id, fillColor, strokeColor);
                 addCell(rectangleCell);
                 break;
 
             case TRIANGLE:
-                TriangleCell circleCell = new TriangleCell(id, Color.RED, Color.RED);
+                TriangleCell circleCell = new TriangleCell(id, fillColor, strokeColor);
                 addCell(circleCell);
                 break;
 
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
         }
+    }
+
+    public void addCell(String id, CellType type, Color fillColor){
+        addCell(id, type,fillColor, Color.BLACK);
     }
 
     private void addCell(Cell cell) {

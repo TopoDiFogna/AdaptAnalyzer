@@ -117,7 +117,7 @@ public class MainController {
             GraphController controller = loader.getController();
             controller.setArchitecture(childScreenController.getArchitecture());
             controller.setRoot(root);
-            controller.inizitalize();
+            controller.setUp();
 
             Scene scene = new Scene(root);
             stage.setScene(scene);

@@ -24,7 +24,7 @@ public class ZoomableScrollPane extends ScrollPane {
         Group contentGroup = new Group();
         contentGroup.getChildren().add(zoomGroup);
 
-        setContent(zoomGroup);
+        setContent(contentGroup);
 
         scaleTransform = new Scale(scaleValue, scaleValue, 0, 0);
         zoomGroup.getTransforms().add(scaleTransform);

@@ -6,6 +6,9 @@ import it.polimi.adaptanalyzertool.gui.graph.Layout;
 import it.polimi.adaptanalyzertool.gui.graph.Model;
 import it.polimi.adaptanalyzertool.gui.graph.layouts.RandomLayout;
 import it.polimi.adaptanalyzertool.model.Architecture;
+import it.polimi.adaptanalyzertool.model.Component;
+import it.polimi.adaptanalyzertool.model.ProvidedService;
+import it.polimi.adaptanalyzertool.model.RequiredService;
 import javafx.scene.layout.BorderPane;
 
 public class GraphController {
@@ -22,40 +25,32 @@ public class GraphController {
         this.root = root;
     }
 
-    public void inizitalize() {
+    public void setUp() {
         graph = new Graph();
         root.setCenter(graph.getScrollPane());
 
-        //TODO remove this after testing
-        addGraphComponents();
-        Layout layout = new RandomLayout(graph);
-        layout.execute();
-    }
-
-
-    private void addGraphComponents() {
-
         Model model = graph.getModel();
-
         graph.beginUpdate();
 
-        model.addCell("Cell A", CellType.RECTANGLE);
-        model.addCell("Cell B", CellType.RECTANGLE);
-        model.addCell("Cell C", CellType.RECTANGLE);
-        model.addCell("Cell D", CellType.TRIANGLE);
-        model.addCell("Cell E", CellType.TRIANGLE);
-        model.addCell("Cell F", CellType.RECTANGLE);
-        model.addCell("Cell G", CellType.RECTANGLE);
+        for (Component component: architecture.getComponents().values()) {
 
-        model.addEdge("Cell A", "Cell B");
-        model.addEdge("Cell A", "Cell C");
-        model.addEdge("Cell B", "Cell C");
-        model.addEdge("Cell C", "Cell D");
-        model.addEdge("Cell B", "Cell E");
-        model.addEdge("Cell D", "Cell F");
-        model.addEdge("Cell D", "Cell G");
+            model.addCell(component.getName(), CellType.RECTANGLE, component.getColor());
+
+        }
+        for (Component component: architecture.getComponents().values()) {//TODO remove spaghetti code
+            for(RequiredService requiredService: component.getRequiredServices().values()){
+                for(Component component1: architecture.getComponents().values()){
+                    for (ProvidedService providedService: component1.getProvidedServices().values()){
+                        if (requiredService.getName().equals(providedService.getName())){
+                            model.addEdge(component.getName(), component1.getName());
+                        }
+                    }
+                }
+            }
+        }
 
         graph.endUpdate();
-
+        Layout layout = new RandomLayout(graph);
+        layout.execute();
     }
 }

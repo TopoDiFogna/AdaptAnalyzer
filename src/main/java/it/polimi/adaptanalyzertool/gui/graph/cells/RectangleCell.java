@@ -1,20 +1,27 @@
 package it.polimi.adaptanalyzertool.gui.graph.cells;
 
 import it.polimi.adaptanalyzertool.gui.graph.Cell;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 public class RectangleCell extends Cell {
 
     public RectangleCell(String id, Color fillColor, Color strokeColor) {
         super(id);
 
-        Rectangle view = new Rectangle(50, 50);
+        StackPane root = new StackPane();
 
-        view.setStroke(strokeColor);
-        view.setFill(fillColor);
+        Text name = new Text(id);
+        Rectangle rectangle = new Rectangle(50, 50);
 
-        setView(view);
+        rectangle.setStroke(strokeColor);
+        rectangle.setFill(fillColor);
+
+        root.getChildren().addAll(rectangle, name);
+
+        setView(root);
 
     }
 
