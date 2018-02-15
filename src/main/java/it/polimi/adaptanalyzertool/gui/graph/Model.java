@@ -1,5 +1,6 @@
 package it.polimi.adaptanalyzertool.gui.graph;
 
+import it.polimi.adaptanalyzertool.gui.graph.cells.CircleCell;
 import it.polimi.adaptanalyzertool.gui.graph.cells.RectangleCell;
 import it.polimi.adaptanalyzertool.gui.graph.cells.TriangleCell;
 import javafx.scene.paint.Color;
@@ -105,7 +106,12 @@ public class Model {
                 break;
 
             case TRIANGLE:
-                TriangleCell circleCell = new TriangleCell(id, fillColor, strokeColor);
+                TriangleCell triangleCell = new TriangleCell(id, fillColor, strokeColor);
+                addCell(triangleCell);
+                break;
+
+            case CIRCLE:
+                CircleCell circleCell = new CircleCell(id, fillColor, strokeColor);
                 addCell(circleCell);
                 break;
 

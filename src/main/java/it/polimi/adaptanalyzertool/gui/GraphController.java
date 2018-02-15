@@ -34,7 +34,7 @@ public class GraphController {
 
         for (Component component: architecture.getComponents().values()) {
 
-            model.addCell(component.getName(), CellType.RECTANGLE, component.getColor());
+            model.addCell(component.getName(), CellType.CIRCLE, component.getColor());
 
         }
         for (Component component: architecture.getComponents().values()) {//TODO remove spaghetti code
