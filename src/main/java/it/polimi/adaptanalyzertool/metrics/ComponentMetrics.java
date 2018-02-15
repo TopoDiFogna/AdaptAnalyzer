@@ -116,16 +116,30 @@ public final class ComponentMetrics {
     }
 
 
-    public static double InAction(Workflow workflow, Component component) {
+    public static double InAction(Architecture architecture, Workflow workflow, Component component) {
         double inAction = 0;
         for(Path path: workflow.getPathHashMap().values()){
-            int componentExes = 0;
+            double pathProb = path.getExecutionProbability();
+            double totExecTime = 0;
+            int selectedComponentExes = 0;
+            double selectedComponentExecTime = 0;
             for(Message message: path.getMessagesList()){
-                if(message.getStartingComponentName().equals(component.getName())){
-                    componentExes++;
+                Component currComponent = architecture.getComponents().get(message.getStartingComponentName());
+                double maxExecTime = 0;
+                for(ProvidedService service: currComponent.getProvidedServices().values()){
+                    if (service.getExecutionTime() > maxExecTime){
+                        maxExecTime = service.getExecutionTime();
+                        if(currComponent == component){
+                            selectedComponentExecTime = maxExecTime;
+                        }
+                    }
+                }
+                totExecTime += maxExecTime;
+                if(currComponent == component){
+                    selectedComponentExes++;
                 }
             }
-            inAction += path.getExecutionProbability() * componentExes/path.getMessagesList().size();//if we include the responses we need to half the message list size
+            inAction += pathProb*selectedComponentExes*selectedComponentExecTime/totExecTime;
         }
         return inAction;
     }
