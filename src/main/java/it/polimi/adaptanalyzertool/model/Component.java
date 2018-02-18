@@ -1,7 +1,6 @@
 package it.polimi.adaptanalyzertool.model;
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import java.util.HashMap;
 
@@ -290,7 +289,7 @@ public class Component {
      *
      * @return a new {@link Color} associated with this component.
      */
-    public Paint getColor() {
+    public Color getColor() {
         return new Color(colorRed, colorGreen, colorBlue, colorOpacity);
     }
 
