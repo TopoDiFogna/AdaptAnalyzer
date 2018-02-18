@@ -143,6 +143,15 @@ public class Model {
 
     }
 
+    public void addArrow(String sourceId, String targetId){
+        Cell sourceCell = cellMap.get(sourceId);
+        Cell targetCell = cellMap.get(targetId);
+
+        Edge edge = new Arrow(sourceCell, targetCell);
+
+        addedEdges.add(edge);
+    }
+
     /**
      * Attach all cells which don't have a parent to graphParent.
      *

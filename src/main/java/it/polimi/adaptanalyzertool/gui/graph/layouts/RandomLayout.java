@@ -7,7 +7,7 @@ import it.polimi.adaptanalyzertool.gui.graph.Layout;
 import java.util.List;
 import java.util.Random;
 
-public class RandomLayout extends Layout {
+public class RandomLayout implements Layout {
 
     private Graph graph;
 

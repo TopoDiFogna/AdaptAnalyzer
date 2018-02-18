@@ -43,6 +43,7 @@ public class GraphController {
                     for (ProvidedService providedService: component1.getProvidedServices().values()){
                         if (requiredService.getName().equals(providedService.getName())){
                             model.addEdge(component.getName(), component1.getName());
+                            //TODO model.addArrow(component.getName(), component1.getName());
                         }
                     }
                 }

@@ -12,6 +12,7 @@ public class MouseGestures {
     private EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> {
 
     };
+
     private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<>() {
 
         @Override
@@ -26,6 +27,7 @@ public class MouseGestures {
 
         }
     };
+
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<>() {
 
         @Override

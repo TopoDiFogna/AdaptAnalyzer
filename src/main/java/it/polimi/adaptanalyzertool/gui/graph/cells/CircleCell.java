@@ -15,7 +15,7 @@ public class CircleCell extends Cell {
         StackPane root = new StackPane();
 
         Text name = new Text(id);
-        Circle circle = new Circle(50);
+        Circle circle = new Circle(25);
 
         circle.setStroke(strokeColor);
         circle.setFill(fillColor);

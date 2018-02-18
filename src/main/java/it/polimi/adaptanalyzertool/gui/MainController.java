@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -27,6 +28,11 @@ public class MainController {
     private Window parent;
     private ScreenController screenController;
     private ArchitectureScreenControllerBeta childScreenController;
+    private GraphController controller = null;
+    private boolean graphIsShowing = false;
+
+    @FXML
+    private MenuItem showArchitectureGraphMenuItem;
 
     @FXML
     public void exit() {
@@ -58,6 +64,7 @@ public class MainController {
 
     private void showArchitectureScreen(Architecture architecture) {
         if (architecture != null) {
+            showArchitectureGraphMenuItem.setDisable(false);
             screenController.setScreen(CenterScreens.ARCHITECTURE.getName());
             childScreenController = (ArchitectureScreenControllerBeta) CenterScreens.ARCHITECTURE.getController();
             childScreenController.setArchitecture(architecture);
@@ -78,7 +85,7 @@ public class MainController {
                 saveTextFile(json, file);
             }
         } else {
-            showErrorMessage("Error", "Nothing to export");
+            showErrorMessage("Nothing to export");
         }
     }
 
@@ -99,7 +106,7 @@ public class MainController {
                     architecture = gson.fromJson(json, Architecture.class);
                     showArchitectureScreen(architecture);
                 } catch (JsonSyntaxException e) {
-                    showErrorMessage("Error", "Json file not valid!");
+                    showErrorMessage("Json file not valid!");
                 }
             }
         }
@@ -107,14 +114,14 @@ public class MainController {
 
     @FXML
     private void showArchitectureGraph() throws IOException {
-        if (childScreenController != null){
+        if (childScreenController != null && !graphIsShowing){
             Stage stage = new Stage();
             stage.setTitle("Graph");
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("graph/graph.fxml"));
             BorderPane root = loader.load();
 
-            GraphController controller = loader.getController();
+            controller = loader.getController();
             controller.setArchitecture(childScreenController.getArchitecture());
             controller.setRoot(root);
             controller.setUp();
@@ -124,7 +131,12 @@ public class MainController {
             stage.initOwner(parent);
             stage.setMinHeight(root.getMinHeight());
             stage.setMinWidth(root.getMinWidth());
-            stage.show();
+            graphIsShowing = true;
+            stage.showAndWait();
+            graphIsShowing = false;
+        }
+        else if(graphIsShowing){
+            controller.setUp();
         }
     }
 
@@ -155,9 +167,9 @@ public class MainController {
         return null;
     }
 
-    private void showErrorMessage(String title, String errorMessage) throws IOException {
+    private void showErrorMessage(String errorMessage) throws IOException {
         Stage stage = new Stage();
-        stage.setTitle(title);
+        stage.setTitle("Error");
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("error/genericErrorWindow.fxml"));
 
