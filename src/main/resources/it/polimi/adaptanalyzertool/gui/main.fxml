@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-
-<BorderPane prefHeight="768.0" prefWidth="1024.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.adaptanalyzertool.gui.MainController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="768.0" prefWidth="1024.0" stylesheets="@main.css"
+            xmlns="http://javafx.com/javafx/8.0.121" fx:controller="it.polimi.adaptanalyzertool.gui.MainController">
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem accelerator="Ctrl+N" onAction="#createNewArchitecture" text="New" />
-                <MenuItem accelerator="Ctrl+I" onAction="#importArchitecture" text="Import" />
-                <MenuItem accelerator="Ctrl+S" onAction="#exportArchitecture" text="Export" />
-                <MenuItem accelerator="Ctrl+X" onAction="#exit" text="Exit" />
+                <Menu text="New">
+                    <items>
+                        <MenuItem accelerator="Ctrl+N" onAction="#createNewArchitecture" text="Create"/>
+                        <MenuItem text="Generate" onAction="#generateNewArchitecture" accelerator="Ctrl+G"/>
+                    </items>
+                </Menu>
+                <MenuItem accelerator="Ctrl+I" onAction="#importArchitecture" text="Import"/>
+                <MenuItem accelerator="Ctrl+S" onAction="#exportArchitecture" text="Export"/>
+                <MenuItem accelerator="Ctrl+X" onAction="#exit" text="Exit"/>
             </Menu>
             <Menu text="View">
-                <MenuItem fx:id="showArchitectureGraphMenuItem" accelerator="Ctrl+V" onAction="#showArchitectureGraph" text="Show Architecture" disable="true"/>
+                <MenuItem fx:id="showArchitectureGraphMenuItem" accelerator="Ctrl+V" disable="true"
+                          onAction="#showArchitectureGraph" text="Show Architecture"/>
             </Menu>
         </MenuBar>
     </top>

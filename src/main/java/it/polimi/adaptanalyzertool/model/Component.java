@@ -51,6 +51,31 @@ public class Component {
     }
 
     /**
+     * Basic constructor for the component. Only the mandatory attributes are required; all non mandatory attributes are
+     * set to default values:
+     * <ul>
+     * <li>Color: WHITE</li>
+     * <li>Services Provided: EMPTY</li>
+     * <li>Services Required: EMPTY</li>
+     * </ul>
+     *
+     * @param name         the name of the component.
+     * @param cost         the cost of the component.
+     * @param availability availability expressed in 0-1 range.
+     * @param used         if this component is used or not.
+     *
+     * @see RequiredService
+     * @see ProvidedService
+     */
+    public Component(String name, double cost, double availability, boolean used) {
+        this(name, cost, availability, used, 1, 1, 1, 1, new HashMap<>(), new HashMap<>());
+    }
+
+    public Component(String name, double cost, double availability, boolean used, double colorRed, double colorGreen, double colorBlue){
+        this(name, cost, availability, used, colorRed, colorGreen, colorBlue, 1, new HashMap<>(), new HashMap<>());
+    }
+
+    /**
      * Only the mandatory attributes are required but color; all non mandatory attributes are
      * set to default values:
      * <ul>

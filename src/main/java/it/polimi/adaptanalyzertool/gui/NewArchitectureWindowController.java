@@ -18,7 +18,7 @@ public class NewArchitectureWindowController extends NewModalWindowController {
     private Architecture architecture;
 
     @FXML
-    public void newArchitectureSubmitted() {
+    private void newArchitectureSubmitted() {
         String architectureName = architectureNameTextField.getText().trim();
         if (!architectureName.equals("")) {
             architecture = new Architecture(architectureName);
@@ -30,13 +30,13 @@ public class NewArchitectureWindowController extends NewModalWindowController {
     }
 
     @FXML
-    public void enterPressed(KeyEvent keyEvent) {
+    private void enterPressed(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.ENTER) {
             newArchitectureSubmitted();
         }
     }
 
-    public Architecture getArchitecture() {
+    Architecture getArchitecture() {
         return architecture;
     }
 }
