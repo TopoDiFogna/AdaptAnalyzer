@@ -35,12 +35,12 @@ public class MainController {
     private MenuItem showArchitectureGraphMenuItem;
 
     @FXML
-    public void exit() {
+    private void exit() {
         System.exit(0);
     }
 
     @FXML
-    public void createNewArchitecture() throws IOException {
+    private void createNewArchitecture() throws IOException {
         Stage stage = new Stage();
         stage.setTitle("New Architecture");
 
@@ -49,6 +49,29 @@ public class MainController {
 
         Parent root = loader.load();
         NewArchitectureWindowController controller = loader.getController();
+        controller.setStage(stage);
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.initOwner(parent);
+        stage.setResizable(false);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
+
+        Architecture architecture = controller.getArchitecture();
+        showArchitectureScreen(architecture);
+    }
+
+    @FXML
+    private void generateNewArchitecture() throws IOException {
+        Stage stage = new Stage();
+        stage.setTitle("Generate Architecture");
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("newarchitecturewindow/generatedArchitectureWindow.fxml"));
+
+        Parent root = loader.load();
+        GeneratedArchitectureWindowController controller = loader.getController();
         controller.setStage(stage);
 
         Scene scene = new Scene(root);
