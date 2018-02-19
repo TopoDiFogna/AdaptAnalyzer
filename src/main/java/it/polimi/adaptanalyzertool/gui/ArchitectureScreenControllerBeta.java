@@ -74,6 +74,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private Label weightResidenceTimeLabel;
     @FXML
+    private Label inActionLabel;
+    @FXML
     private TextField systemTargetAvailabilityTextField;
     @FXML
     private TextField systemTargetCostTextField;
@@ -111,8 +113,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private Label probabilityToBeRunningLabel;
     @FXML
-    private Label inActionLabel;
-    @FXML
     private Label serviceMetricsErrorLabel;
     /*
         Architecture Metrics
@@ -131,7 +131,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private ScreenController parent;
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         //Adds listener to the component choice box to update the services displayed
         componentChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -335,6 +335,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 }
                 double wrt = ComponentMetrics.WeightResidenceTime(architecture, selectedComponent);
                 weightResidenceTimeLabel.setText(df.format(wrt));
+//                double ia = ComponentMetrics.InAction(architecture, ,selectedComponent);
+//                inActionLabel.setText(df.format(ia)); TODO inAction
             } else {
                 componentMetricsErrorLabel.setText("Check input for mistakes");
             }
@@ -417,10 +419,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         if (selectedService != null) {
             double noe = ServicesMetrics.NumberOfExecutions(architecture, selectedService);
             double ptbr = ServicesMetrics.ProbabilityToBeRunning(architecture, selectedService);
-            //double ia = ServicesMetrics.InAction();
             numberOfExecutionsLabel.setText(df.format(noe));
             probabilityToBeRunningLabel.setText(df.format(ptbr));
-            //inActionLabel.setText(df.format(ia));
         } else {
             serviceMetricsErrorLabel.setText("Select a service first");
         }
