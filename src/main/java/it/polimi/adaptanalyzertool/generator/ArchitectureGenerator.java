@@ -64,13 +64,13 @@ public class ArchitectureGenerator{
                 newComponent.addProvidedService(new ProvidedService(SERVICE_NAME+i, random.nextDouble() * MAX_EXEC_TIME)); //TODO only one provided service per component?
 
                 for(int reqFunc=1; reqFunc<=numberOfRequiredFunctions; reqFunc++){
-                    if((lastRequiredFunc+reqFunc)<=(numberOfComponents/adaptabilityDegree)){
+                    if((lastRequiredFunc+reqFunc) <= (numberOfComponents/adaptabilityDegree)){
                         int funcToReq=lastRequiredFunc+reqFunc;
                         newComponent.addRequiredService(new RequiredService(
                                 SERVICE_NAME + funcToReq,
                                 MIN_PROBABILITY + (MAX_PROBABILITY - MIN_PROBABILITY) * random.nextDouble(),
-                                MIN_EXECS + (MAX_EXECS - MIN_EXECS) * random.nextInt()
-                                ));
+                                random.nextInt((MAX_EXECS - MIN_EXECS) + 1) + MIN_EXECS)
+                                );
                     }
                 }
             }
