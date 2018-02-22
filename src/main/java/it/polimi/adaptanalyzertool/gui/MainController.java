@@ -137,7 +137,7 @@ public class MainController {
 
     @FXML
     private void showArchitectureGraph() throws IOException {
-        if (childScreenController != null && !graphIsShowing){
+        if (childScreenController != null && !graphIsShowing) {
             Stage stage = new Stage();
             stage.setTitle("Graph");
             FXMLLoader loader = new FXMLLoader();
@@ -157,8 +157,7 @@ public class MainController {
             graphIsShowing = true;
             stage.showAndWait();
             graphIsShowing = false;
-        }
-        else if(graphIsShowing){
+        } else if (graphIsShowing) {
             controller.setUp();
         }
     }

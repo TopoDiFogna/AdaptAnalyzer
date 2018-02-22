@@ -19,6 +19,10 @@ public class RectangleCell extends Cell {
         rectangle.setStroke(strokeColor);
         rectangle.setFill(fillColor);
 
+        if (isColorDark(fillColor)) {
+            name.setFill(Color.WHITE); //set to white the text if the cell is dark
+        }
+
         root.getChildren().addAll(rectangle, name);
 
         setView(root);

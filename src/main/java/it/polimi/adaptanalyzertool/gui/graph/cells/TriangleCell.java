@@ -23,6 +23,10 @@ public class TriangleCell extends Cell {
         triangle.setStroke(strokeColor);
         triangle.setFill(fillColor);
 
+        if (isColorDark(fillColor)) {
+            name.setFill(Color.WHITE); //set to white the text if the cell is dark
+        }
+
         root.getChildren().addAll(triangle, name);
 
         setView(root);

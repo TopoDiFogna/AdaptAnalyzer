@@ -32,16 +32,16 @@ public class GraphController {
         Model model = graph.getModel();
         graph.beginUpdate();
 
-        for (Component component: architecture.getComponents().values()) {
+        for (Component component : architecture.getComponents().values()) {
 
             model.addCell(component.getName(), CellType.CIRCLE, component.getColor());
 
         }
-        for (Component component: architecture.getComponents().values()) {//TODO remove spaghetti code
-            for(RequiredService requiredService: component.getRequiredServices().values()){
-                for(Component component1: architecture.getComponents().values()){
-                    for (ProvidedService providedService: component1.getProvidedServices().values()){
-                        if (requiredService.getName().equals(providedService.getName())){
+        for (Component component : architecture.getComponents().values()) {//TODO remove spaghetti code
+            for (RequiredService requiredService : component.getRequiredServices().values()) {
+                for (Component component1 : architecture.getComponents().values()) {
+                    for (ProvidedService providedService : component1.getProvidedServices().values()) {
+                        if (requiredService.getName().equals(providedService.getName())) {
                             model.addEdge(component.getName(), component1.getName());
                             //TODO model.addArrow(component.getName(), component1.getName());
                         }

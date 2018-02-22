@@ -7,7 +7,7 @@ import it.polimi.adaptanalyzertool.model.RequiredService;
 
 import java.util.Random;
 
-public class ArchitectureGenerator{
+public class ArchitectureGenerator {
 
     private final static String COMPONENT_NAME = "C";
     private final static String SERVICE_NAME = "S";
@@ -27,14 +27,14 @@ public class ArchitectureGenerator{
     private int numberOfRequiredFunctions;
     private int adaptabilityDegree;
 
-    public ArchitectureGenerator(int numberOfComponents, int numberOfRequiredFunctions, int adaptabilityDegree){
+    public ArchitectureGenerator(int numberOfComponents, int numberOfRequiredFunctions, int adaptabilityDegree) {
         this.numberOfComponents = numberOfComponents;
         this.numberOfRequiredFunctions = numberOfRequiredFunctions;
         this.adaptabilityDegree = adaptabilityDegree;
         random = new Random();
     }
 
-    public ArchitectureGenerator(int numberOfComponents, int numberOfRequiredFunctions, int adaptabilityDegree, long seed){
+    public ArchitectureGenerator(int numberOfComponents, int numberOfRequiredFunctions, int adaptabilityDegree, long seed) {
         this.numberOfComponents = numberOfComponents;
         this.numberOfRequiredFunctions = numberOfRequiredFunctions;
         this.adaptabilityDegree = adaptabilityDegree;
@@ -45,10 +45,10 @@ public class ArchitectureGenerator{
 
         Architecture newArchitecture = new Architecture(name);
 
-        int lastRequiredFunc=1;
+        int lastRequiredFunc = 1;
 
-        for(int i=1; i<=(numberOfComponents/adaptabilityDegree); i++){
-            for(int adaptability=1; adaptability<=adaptabilityDegree; adaptability++){
+        for (int i = 1; i <= (numberOfComponents / adaptabilityDegree); i++) {
+            for (int adaptability = 1; adaptability <= adaptabilityDegree; adaptability++) {
 
                 Component newComponent = new Component(
                         COMPONENT_NAME + i + adaptability,
@@ -61,16 +61,16 @@ public class ArchitectureGenerator{
 
                 newArchitecture.addComponent(newComponent);
 
-                newComponent.addProvidedService(new ProvidedService(SERVICE_NAME+i, random.nextDouble() * MAX_EXEC_TIME)); //TODO only one provided service per component?
+                newComponent.addProvidedService(new ProvidedService(SERVICE_NAME + i, random.nextDouble() * MAX_EXEC_TIME));
 
-                for(int reqFunc=1; reqFunc<=numberOfRequiredFunctions; reqFunc++){
-                    if((lastRequiredFunc+reqFunc) <= (numberOfComponents/adaptabilityDegree)){
-                        int funcToReq=lastRequiredFunc+reqFunc;
+                for (int reqFunc = 1; reqFunc <= numberOfRequiredFunctions; reqFunc++) {
+                    if ((lastRequiredFunc + reqFunc) <= (numberOfComponents / adaptabilityDegree)) {
+                        int funcToReq = lastRequiredFunc + reqFunc;
                         newComponent.addRequiredService(new RequiredService(
                                 SERVICE_NAME + funcToReq,
                                 MIN_PROBABILITY + (MAX_PROBABILITY - MIN_PROBABILITY) * random.nextDouble(),
                                 random.nextInt((MAX_EXECS - MIN_EXECS) + 1) + MIN_EXECS)
-                                );
+                        );
                     }
                 }
             }

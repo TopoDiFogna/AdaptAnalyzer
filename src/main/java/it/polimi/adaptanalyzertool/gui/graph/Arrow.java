@@ -26,8 +26,8 @@ class Arrow extends Edge { //TODO finish arrow displaying
         double cos = Math.cos(angle);
 
         //point1
-        double x1 = (- 1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * 50 + arrowEndX;
-        double y1 = (- 1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * 50 + arrowEndY;
+        double x1 = (-1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * 50 + arrowEndX;
+        double y1 = (-1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * 50 + arrowEndY;
         //point2
         double x2 = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * 50 + arrowEndX;
         double y2 = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * 50 + arrowEndY;

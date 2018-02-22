@@ -4,7 +4,6 @@ import it.polimi.adaptanalyzertool.gui.graph.Cell;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class CircleCell extends Cell {
@@ -19,6 +18,10 @@ public class CircleCell extends Cell {
 
         circle.setStroke(strokeColor);
         circle.setFill(fillColor);
+
+        if (isColorDark(fillColor)) {
+            name.setFill(Color.WHITE); //set to white the text if the cell is dark
+        }
 
         root.getChildren().addAll(circle, name);
 

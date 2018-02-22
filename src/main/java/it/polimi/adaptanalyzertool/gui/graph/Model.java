@@ -5,7 +5,6 @@ import it.polimi.adaptanalyzertool.gui.graph.cells.RectangleCell;
 import it.polimi.adaptanalyzertool.gui.graph.cells.TriangleCell;
 import javafx.scene.paint.Color;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,8 +119,8 @@ public class Model {
         }
     }
 
-    public void addCell(String id, CellType type, Color fillColor){
-        addCell(id, type,fillColor, Color.BLACK);
+    public void addCell(String id, CellType type, Color fillColor) {
+        addCell(id, type, fillColor, Color.BLACK);
     }
 
     private void addCell(Cell cell) {
@@ -143,7 +142,7 @@ public class Model {
 
     }
 
-    public void addArrow(String sourceId, String targetId){
+    public void addArrow(String sourceId, String targetId) {
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
 

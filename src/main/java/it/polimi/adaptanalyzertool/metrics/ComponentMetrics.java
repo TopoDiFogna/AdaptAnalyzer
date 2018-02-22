@@ -119,41 +119,41 @@ public final class ComponentMetrics {
      * This metrics calculates the probability to find a given component active considering the dynamic analysis
      * of the architecture.
      * <p>
-     *     It considers all the possible paths available in the architecture workflow. Note that the workflows are
-     *     specified per architecture and must be inputted by the user.
+     * It considers all the possible paths available in the architecture workflow. Note that the workflows are
+     * specified per architecture and must be inputted by the user.
      * </p>
      *
-     *
      * @param architecture the architecture where the component resides.
-     * @param workflow the workflow associated with this architecture.
-     * @param component the selected component to calculate the probability on.
+     * @param workflow     the workflow associated with this architecture.
+     * @param component    the selected component to calculate the probability on.
+     *
      * @return the probability to find a component active given a workflow for the architecture.
      * @see Workflow
      */
     public static double InAction(Architecture architecture, Workflow workflow, Component component) {
         double inAction = 0;
-        for(Path path: workflow.getPathHashMap().values()){
+        for (Path path : workflow.getPathHashMap().values()) {
             double pathProb = path.getExecutionProbability();
             double totExecTime = 0;
             int selectedComponentExes = 0;
             double selectedComponentExecTime = 0;
-            for(Message message: path.getMessagesList()){
+            for (Message message : path.getMessagesList()) {
                 Component currComponent = architecture.getComponents().get(message.getStartingComponentName());
                 double maxExecTime = 0;
-                for(ProvidedService service: currComponent.getProvidedServices().values()){
-                    if (service.getExecutionTime() > maxExecTime){
+                for (ProvidedService service : currComponent.getProvidedServices().values()) {
+                    if (service.getExecutionTime() > maxExecTime) {
                         maxExecTime = service.getExecutionTime();
-                        if(currComponent == component){
+                        if (currComponent == component) {
                             selectedComponentExecTime = maxExecTime;
                         }
                     }
                 }
                 totExecTime += maxExecTime;
-                if(currComponent == component){
+                if (currComponent == component) {
                     selectedComponentExes++;
                 }
             }
-            inAction += pathProb*selectedComponentExes*selectedComponentExecTime/totExecTime;
+            inAction += pathProb * selectedComponentExes * selectedComponentExecTime / totExecTime;
         }
         return inAction;
     }

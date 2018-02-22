@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 
 public class NewServiceWindowController extends NewModalWindowController {
 
+    private final String doubleRegex = "(?:\\d*\\.)?\\d+";
     /*
     New service
     */
@@ -31,9 +32,7 @@ public class NewServiceWindowController extends NewModalWindowController {
     private TextField numberOfExecutionTextField;
     @FXML
     private Label serviceErrorLabel;
-
     private AbstractService newService;
-    private final String doubleRegex = "(?:\\d*\\.)?\\d+";
 
     @FXML
     private void saveService() {

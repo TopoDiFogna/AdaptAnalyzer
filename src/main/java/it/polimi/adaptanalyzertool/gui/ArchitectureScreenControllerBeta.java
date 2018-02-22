@@ -166,10 +166,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         serviceContextMenu.getItems().add(serviceRemoveMenuItem);
     }
 
-    public void setArchitecture(Architecture architecture) {
-        this.architecture = architecture;
-    }
-
     public void setUpScreen() {
         architectureComponents = architecture.getComponents();
         architectureName.setText("Architecture name: " + architecture.getName());
@@ -204,7 +200,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             showComponentDetail(selectedComponent);
         }
     }
-
 
     private void updateComponentList() {
         architectureComponents = architecture.getComponents();
@@ -447,5 +442,9 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     public Architecture getArchitecture() {
         return architecture;
+    }
+
+    public void setArchitecture(Architecture architecture) {
+        this.architecture = architecture;
     }
 }

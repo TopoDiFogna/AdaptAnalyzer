@@ -71,7 +71,7 @@ public class Component {
         this(name, cost, availability, used, 1, 1, 1, 1, new HashMap<>(), new HashMap<>());
     }
 
-    public Component(String name, double cost, double availability, boolean used, double colorRed, double colorGreen, double colorBlue){
+    public Component(String name, double cost, double availability, boolean used, double colorRed, double colorGreen, double colorBlue) {
         this(name, cost, availability, used, colorRed, colorGreen, colorBlue, 1, new HashMap<>(), new HashMap<>());
     }
 

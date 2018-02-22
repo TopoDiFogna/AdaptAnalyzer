@@ -34,11 +34,11 @@ public class Message {
         this.startingComponentName = startingComponentName;
     }
 
-    public void setEndingComponentName(String endingComponentName) {
-        this.endingComponentName = endingComponentName;
-    }
-
     public String getEndingComponentName() {
         return endingComponentName;
+    }
+
+    public void setEndingComponentName(String endingComponentName) {
+        this.endingComponentName = endingComponentName;
     }
 }
