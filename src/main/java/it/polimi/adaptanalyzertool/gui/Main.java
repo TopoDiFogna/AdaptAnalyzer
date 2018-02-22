@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 
 public class Main extends Application {
 
@@ -25,7 +27,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Adaptability Analyzer Tool");
         primaryStage.setMinWidth(800);
@@ -34,23 +36,28 @@ public class Main extends Application {
         FXMLLoader mainLoader = new FXMLLoader();
         mainLoader.setLocation(getClass().getResource("main.fxml"));
 
-        BorderPane root = mainLoader.load();
-        MainController mainController = mainLoader.getController();
-        mainController.setParent(primaryStage);
+        try {
+            BorderPane root = mainLoader.load();
+            MainController mainController = mainLoader.getController();
+            mainController.setParent(primaryStage);
 
-        ScreenController screenController = new ScreenController();
-        ChildScreenController controller;
-        controller = screenController.loadScreen(CenterScreens.WELCOME.getName(), CenterScreens.WELCOME.getLayout());
-        CenterScreens.WELCOME.setController(controller);
-        controller = screenController.loadScreen(CenterScreens.ARCHITECTURE.getName(), CenterScreens.ARCHITECTURE.getLayout());
-        CenterScreens.ARCHITECTURE.setController(controller);
-        screenController.setScreen(CenterScreens.WELCOME.getName());
+            ScreenController screenController = new ScreenController();
+            ChildScreenController controller;
+            controller = screenController.loadScreen(CenterScreens.WELCOME.getName(), CenterScreens.WELCOME.getLayout());
+            CenterScreens.WELCOME.setController(controller);
+            controller = screenController.loadScreen(CenterScreens.ARCHITECTURE.getName(), CenterScreens.ARCHITECTURE.getLayout());
+            CenterScreens.ARCHITECTURE.setController(controller);
+            screenController.setScreen(CenterScreens.WELCOME.getName());
 
-        mainController.setScreenController(screenController);
-        root.setCenter(screenController);
+            mainController.setScreenController(screenController);
+            root.setCenter(screenController);
 
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: main.fxml");
+        }
+
     }
 }

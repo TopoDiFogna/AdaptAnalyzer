@@ -28,7 +28,7 @@ public class MainController {
     private Window parent;
     private ScreenController screenController;
     private ArchitectureScreenControllerBeta childScreenController;
-    private GraphController controller = null;
+    private GraphController graphController;
     private boolean graphIsShowing = false;
 
     @FXML
@@ -40,49 +40,57 @@ public class MainController {
     }
 
     @FXML
-    private void createNewArchitecture() throws IOException {
+    private void createNewArchitecture() {
         Stage stage = new Stage();
         stage.setTitle("New Architecture");
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newarchitecturewindow/newArchitectureWindow.fxml"));
 
-        Parent root = loader.load();
-        NewArchitectureWindowController controller = loader.getController();
-        controller.setStage(stage);
+        try {
+            Parent root = loader.load();
+            NewArchitectureWindowController controller = loader.getController();
+            controller.setStage(stage);
 
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.initOwner(parent);
-        stage.setResizable(false);
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.showAndWait();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initOwner(parent);
+            stage.setResizable(false);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
 
-        Architecture architecture = controller.getArchitecture();
-        showArchitectureScreen(architecture);
+            Architecture architecture = controller.getArchitecture();
+            showArchitectureScreen(architecture);
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: newarchitecturewindow/newArchitectureWindow.fxml");
+        }
     }
 
     @FXML
-    private void generateNewArchitecture() throws IOException {
+    private void generateNewArchitecture() {
         Stage stage = new Stage();
         stage.setTitle("Generate Architecture");
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newarchitecturewindow/generatedArchitectureWindow.fxml"));
 
-        Parent root = loader.load();
-        GeneratedArchitectureWindowController controller = loader.getController();
-        controller.setStage(stage);
+        try {
+            Parent root = loader.load();
+            GeneratedArchitectureWindowController controller = loader.getController();
+            controller.setStage(stage);
 
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.initOwner(parent);
-        stage.setResizable(false);
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.showAndWait();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initOwner(parent);
+            stage.setResizable(false);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
 
-        Architecture architecture = controller.getArchitecture();
-        showArchitectureScreen(architecture);
+            Architecture architecture = controller.getArchitecture();
+            showArchitectureScreen(architecture);
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: newarchitecturewindow/generatedArchitectureWindow.fxml");
+        }
     }
 
     private void showArchitectureScreen(Architecture architecture) {
@@ -136,29 +144,32 @@ public class MainController {
     }
 
     @FXML
-    private void showArchitectureGraph() throws IOException {
+    private void showArchitectureGraph() {
         if (childScreenController != null && !graphIsShowing) {
             Stage stage = new Stage();
             stage.setTitle("Graph");
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("graph/graph.fxml"));
-            BorderPane root = loader.load();
+            try {
+                BorderPane root = loader.load();
+                graphController = loader.getController();
+                graphController.setArchitecture(childScreenController.getArchitecture());
+                graphController.setRoot(root);
+                graphController.setUp();
 
-            controller = loader.getController();
-            controller.setArchitecture(childScreenController.getArchitecture());
-            controller.setRoot(root);
-            controller.setUp();
-
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.initOwner(parent);
-            stage.setMinHeight(root.getMinHeight());
-            stage.setMinWidth(root.getMinWidth());
-            graphIsShowing = true;
-            stage.showAndWait();
-            graphIsShowing = false;
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.initOwner(parent);
+                stage.setMinHeight(root.getMinHeight());
+                stage.setMinWidth(root.getMinWidth());
+                graphIsShowing = true;
+                stage.showAndWait();
+                graphIsShowing = false;
+            } catch (IOException e) {
+                System.err.println("Error loading intenal resource: graph/graph.fxml");
+            }
         } else if (graphIsShowing) {
-            controller.setUp();
+            graphController.setUp();
         }
     }
 
@@ -195,21 +206,21 @@ public class MainController {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("error/genericErrorWindow.fxml"));
 
-        Parent root = null;
+        Parent root;
         try {
             root = loader.load();
+            GenericErrorController controller = loader.getController();
+            controller.setErrorMessage(errorMessage);
+            controller.setStage(stage);
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initOwner(parent);
+            stage.setResizable(false);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
         } catch (IOException e) {
             System.err.println("Error loading resource file");
         }
-        GenericErrorController controller = loader.getController();
-        controller.setErrorMessage(errorMessage);
-        controller.setStage(stage);
-
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.initOwner(parent);
-        stage.setResizable(false);
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.showAndWait();
     }
 }

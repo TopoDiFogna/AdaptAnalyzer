@@ -174,31 +174,37 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     @FXML
-    private void createNewComponent() throws IOException {
+    private void createNewComponent() {
         Stage newComponentStage = new Stage();
         newComponentStage.setTitle("New Component");
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newcomponentwindow/newComponentWindow.fxml"));
 
-        Parent root = loader.load();
-        NewComponentWindowController controller = loader.getController();
-        controller.setStage(newComponentStage);
 
-        Scene scene = new Scene(root);
-        newComponentStage.setScene(scene);
-        newComponentStage.initOwner(parent.getScene().getWindow());
-        newComponentStage.setResizable(false);
-        newComponentStage.initModality(Modality.WINDOW_MODAL);
-        newComponentStage.showAndWait();
+        try {
+            Parent root = loader.load();
+            NewComponentWindowController controller = loader.getController();
+            controller.setStage(newComponentStage);
 
-        Component newComponent = controller.getNewComponent();
-        if (newComponent != null) {
-            this.selectedComponent = newComponent;
-            architecture.addComponent(newComponent);
-            updateComponentList();
-            showComponentDetail(selectedComponent);
+            Scene scene = new Scene(root);
+            newComponentStage.setScene(scene);
+            newComponentStage.initOwner(parent.getScene().getWindow());
+            newComponentStage.setResizable(false);
+            newComponentStage.initModality(Modality.WINDOW_MODAL);
+            newComponentStage.showAndWait();
+
+            Component newComponent = controller.getNewComponent();
+            if (newComponent != null) {
+                this.selectedComponent = newComponent;
+                architecture.addComponent(newComponent);
+                updateComponentList();
+                showComponentDetail(selectedComponent);
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: newcomponentwindow/newComponentWindow.fxml");
         }
+
     }
 
     private void updateComponentList() {
@@ -276,34 +282,38 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     @FXML
-    private void createNewService() throws IOException {
+    private void createNewService() {
         Stage newServiceStage = new Stage();
         newServiceStage.setTitle("New Service");
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newservicewindow/newServiceWindow.fxml"));
 
-        Parent root = loader.load();
-        NewServiceWindowController controller = loader.getController();
-        controller.setStage(newServiceStage);
+        try {
+            Parent root = loader.load();
+            NewServiceWindowController controller = loader.getController();
+            controller.setStage(newServiceStage);
 
-        Scene scene = new Scene(root);
-        newServiceStage.setScene(scene);
-        newServiceStage.initOwner(parent.getScene().getWindow());
-        newServiceStage.setResizable(false);
-        newServiceStage.initModality(Modality.WINDOW_MODAL);
-        newServiceStage.showAndWait();
+            Scene scene = new Scene(root);
+            newServiceStage.setScene(scene);
+            newServiceStage.initOwner(parent.getScene().getWindow());
+            newServiceStage.setResizable(false);
+            newServiceStage.initModality(Modality.WINDOW_MODAL);
+            newServiceStage.showAndWait();
 
-        AbstractService newService = controller.getNewService();
-        if (newService != null) {
-            if (newService instanceof ProvidedService) {
-                this.selectedComponent.addProvidedService((ProvidedService) newService);
-            } else if (newService instanceof RequiredService) {
-                this.selectedComponent.addRequiredService((RequiredService) newService);
+            AbstractService newService = controller.getNewService();
+            if (newService != null) {
+                if (newService instanceof ProvidedService) {
+                    this.selectedComponent.addProvidedService((ProvidedService) newService);
+                } else if (newService instanceof RequiredService) {
+                    this.selectedComponent.addRequiredService((RequiredService) newService);
+                }
+                this.selectedService = newService;
+                updateServicesList();
+                showServiceDetail(selectedService);
             }
-            this.selectedService = newService;
-            updateServicesList();
-            showServiceDetail(selectedService);
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: newservicewindow/newServiceWindow.fxml");
         }
     }
 
