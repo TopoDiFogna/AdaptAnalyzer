@@ -96,7 +96,7 @@ public class MainController {
     }
 
     @FXML
-    private void exportArchitecture() throws IOException {
+    private void exportArchitecture() {
         if (childScreenController != null) {
             Gson gson = new Gson();
             String json = gson.toJson(childScreenController.getArchitecture());
@@ -113,7 +113,7 @@ public class MainController {
     }
 
     @FXML
-    private void importArchitecture() throws IOException {
+    private void importArchitecture() {
         Architecture architecture;
         FileChooser fc = new FileChooser();
         fc.setTitle("Import Architecture");
@@ -176,7 +176,7 @@ public class MainController {
             fw.write(content);
             fw.close();
         } catch (IOException e) {
-            e.printStackTrace();//TODO
+            showErrorMessage("Error Saving the file.");
         }
     }
 
@@ -184,18 +184,23 @@ public class MainController {
         try {
             return new String(Files.readAllBytes(Paths.get(file.toURI())));
         } catch (IOException e) {
-            e.printStackTrace();//TODO
+            showErrorMessage("Error opening the file");
         }
         return null;
     }
 
-    private void showErrorMessage(String errorMessage) throws IOException {
+    private void showErrorMessage(String errorMessage) {
         Stage stage = new Stage();
         stage.setTitle("Error");
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("error/genericErrorWindow.fxml"));
 
-        Parent root = loader.load();
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            System.err.println("Error loading resource file");
+        }
         GenericErrorController controller = loader.getController();
         controller.setErrorMessage(errorMessage);
         controller.setStage(stage);

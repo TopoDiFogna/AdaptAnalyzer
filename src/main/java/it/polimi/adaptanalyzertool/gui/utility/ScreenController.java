@@ -26,7 +26,6 @@ public class ScreenController extends StackPane {
             return childScreenController;
         } catch (IOException e) {
             System.err.println("Cannot load screen " + name);
-            e.printStackTrace(); //TODO
             return null;
         }
     }
