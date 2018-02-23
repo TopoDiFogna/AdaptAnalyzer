@@ -13,7 +13,9 @@ public class ArchitectureGenerator {
     private final static String SERVICE_NAME = "S";
     private final static double MIN_AVAILABILITY = 0.8;
     private final static double MAX_AVAILABILITY = 1;
-    private final static double MAX_COST = 100;
+    private final static double MIN_COST = 1;
+    private final static double MAX_COST = 10;
+    private final static double MIN_EXEC_TIME = 1;
     private final static double MAX_EXEC_TIME = 10;
     private final static double MIN_PROBABILITY = 0.8;
     private final static double MAX_PROBABILITY = 1;
@@ -51,8 +53,8 @@ public class ArchitectureGenerator {
             for (int adaptability = 1; adaptability <= adaptabilityDegree; adaptability++) {
 
                 Component newComponent = new Component(
-                        COMPONENT_NAME + i + adaptability,
-                        random.nextDouble() * MAX_COST,
+                        COMPONENT_NAME + i + "-" + adaptability,
+                        MIN_COST + (MAX_COST - MIN_COST) * random.nextDouble(),
                         MIN_AVAILABILITY + (MAX_AVAILABILITY - MIN_AVAILABILITY) * random.nextDouble(),
                         true,
                         random.nextDouble(),
@@ -61,7 +63,8 @@ public class ArchitectureGenerator {
 
                 newArchitecture.addComponent(newComponent);
 
-                newComponent.addProvidedService(new ProvidedService(SERVICE_NAME + i, random.nextDouble() * MAX_EXEC_TIME));
+                newComponent.addProvidedService(new ProvidedService(SERVICE_NAME + i,
+                        MIN_EXEC_TIME + (MAX_EXEC_TIME - MIN_EXEC_TIME) * random.nextDouble()));
 
                 for (int reqFunc = 1; reqFunc <= numberOfRequiredFunctions; reqFunc++) {
                     if ((lastRequiredFunc + reqFunc) <= (numberOfComponents / adaptabilityDegree)) {
