@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" minHeight="400" minWidth="600" prefHeight="400.0" prefWidth="600.0"
-            stylesheets="@graph.css" xmlns="http://javafx.com/javafx/8.0.121"
-            fx:controller="it.polimi.adaptanalyzertool.gui.GraphController">
-
+            xmlns="http://javafx.com/javafx/8.0.121" fx:controller="it.polimi.adaptanalyzertool.gui.GraphController">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" text="Close" accelerator="Ctrl+X" onAction="#closeGraphWindow"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+                <MenuItem mnemonicParsing="false" text="Save Image" accelerator="Ctrl+S" onAction="#exportGraphImage"/>
+            </Menu>
+        </MenuBar>
+    </top>
 </BorderPane>

@@ -2,7 +2,7 @@ package it.polimi.adaptanalyzertool.gui;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import it.polimi.adaptanalyzertool.gui.error.GenericErrorController;
+import it.polimi.adaptanalyzertool.gui.error.ErrorWindow;
 import it.polimi.adaptanalyzertool.gui.utility.CenterScreens;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
 import it.polimi.adaptanalyzertool.model.Architecture;
@@ -30,6 +30,7 @@ public class MainController {
     private ArchitectureScreenControllerBeta childScreenController;
     private GraphController graphController;
     private boolean graphIsShowing = false;
+    private ErrorWindow errorWindow = new ErrorWindow();
 
     @FXML
     private MenuItem showArchitectureGraphMenuItem;
@@ -116,7 +117,7 @@ public class MainController {
                 saveTextFile(json, file);
             }
         } else {
-            showErrorMessage("Nothing to export");
+            errorWindow.showErrorMessage("Nothing to export", parent);
         }
     }
 
@@ -137,7 +138,7 @@ public class MainController {
                     architecture = gson.fromJson(json, Architecture.class);
                     showArchitectureScreen(architecture);
                 } catch (JsonSyntaxException e) {
-                    showErrorMessage("Json file not valid!");
+                    errorWindow.showErrorMessage("Json file not valid!", parent);
                 }
             }
         }
@@ -187,7 +188,7 @@ public class MainController {
             fw.write(content);
             fw.close();
         } catch (IOException e) {
-            showErrorMessage("Error Saving the file.");
+            errorWindow.showErrorMessage("Error Saving the file.", parent);
         }
     }
 
@@ -195,32 +196,8 @@ public class MainController {
         try {
             return new String(Files.readAllBytes(Paths.get(file.toURI())));
         } catch (IOException e) {
-            showErrorMessage("Error opening the file");
+            errorWindow.showErrorMessage("Error opening the file", parent);
         }
         return null;
-    }
-
-    private void showErrorMessage(String errorMessage) {
-        Stage stage = new Stage();
-        stage.setTitle("Error");
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("error/genericErrorWindow.fxml"));
-
-        Parent root;
-        try {
-            root = loader.load();
-            GenericErrorController controller = loader.getController();
-            controller.setErrorMessage(errorMessage);
-            controller.setStage(stage);
-
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.initOwner(parent);
-            stage.setResizable(false);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.showAndWait();
-        } catch (IOException e) {
-            System.err.println("Error loading resource file");
-        }
     }
 }

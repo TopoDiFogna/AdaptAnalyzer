@@ -5,21 +5,22 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="768.0" prefWidth="1024.0" stylesheets="@main.css"
             xmlns="http://javafx.com/javafx/8.0.121" fx:controller="it.polimi.adaptanalyzertool.gui.MainController">
     <top>
-        <MenuBar>
-            <Menu text="File">
-                <Menu text="New">
-                    <items>
-                        <MenuItem accelerator="Ctrl+N" onAction="#createNewArchitecture" text="Create"/>
-                        <MenuItem text="Generate" onAction="#generateNewArchitecture" accelerator="Ctrl+G"/>
-                    </items>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <Menu mnemonicParsing="false" text="New">
+                    <MenuItem mnemonicParsing="false" text="Create" accelerator="Ctrl+N"
+                              onAction="#createNewArchitecture"/>
+                    <MenuItem mnemonicParsing="false" text="Generate" accelerator="Ctrl+G"
+                              onAction="#generateNewArchitecture"/>
                 </Menu>
-                <MenuItem accelerator="Ctrl+I" onAction="#importArchitecture" text="Import"/>
-                <MenuItem accelerator="Ctrl+S" onAction="#exportArchitecture" text="Export"/>
-                <MenuItem accelerator="Ctrl+X" onAction="#exit" text="Exit"/>
+                <MenuItem mnemonicParsing="false" text="Import" accelerator="Ctrl+I" onAction="#importArchitecture"/>
+                <MenuItem mnemonicParsing="false" text="Export" accelerator="Ctrl+S" onAction="#exportArchitecture"/>
+                <MenuItem mnemonicParsing="false" text="Exit" accelerator="Ctrl+X" onAction="#exit"/>
             </Menu>
-            <Menu text="View">
-                <MenuItem fx:id="showArchitectureGraphMenuItem" accelerator="Ctrl+V" disable="true"
-                          onAction="#showArchitectureGraph" text="Show Architecture"/>
+            <Menu mnemonicParsing="false" text="View">
+                <MenuItem mnemonicParsing="false" text="Show Architecture" accelerator="Ctrl+V"
+                          onAction="#showArchitectureGraph"
+                          fx:id="showArchitectureGraphMenuItem" disable="true"/>
             </Menu>
         </MenuBar>
     </top>

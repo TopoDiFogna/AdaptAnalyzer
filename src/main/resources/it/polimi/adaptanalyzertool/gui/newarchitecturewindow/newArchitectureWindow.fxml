@@ -7,8 +7,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane stylesheets="@newArchitectureWindow.css" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@newArchitectureWindow.css"
+            xmlns="http://javafx.com/javafx/8.0.121"
             fx:controller="it.polimi.adaptanalyzertool.gui.NewArchitectureWindowController">
     <center>
         <HBox alignment="BASELINE_CENTER" spacing="5">

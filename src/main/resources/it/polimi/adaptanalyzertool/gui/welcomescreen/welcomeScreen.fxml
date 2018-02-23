@@ -4,8 +4,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
-<VBox alignment="BASELINE_CENTER" spacing="15.0" stylesheets="@welcomeScreen.css"
-      xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="BASELINE_CENTER" spacing="15.0"
+      stylesheets="@welcomeScreen.css" xmlns="http://javafx.com/javafx/8.0.121"
       fx:controller="it.polimi.adaptanalyzertool.gui.WelcomeScreenController">
     <Label id="mainTitle" text="Adaptability Analyzer Tool"/>
     <ImageView preserveRatio="true" smooth="false">
