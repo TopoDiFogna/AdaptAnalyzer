@@ -4,11 +4,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
-public class MouseGestures {
+class MouseGestures {
 
     private final DragContext dragContext = new DragContext();
 
-    Graph graph;
+    private Graph graph;
+
     private EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> {
 
     };
@@ -20,7 +21,7 @@ public class MouseGestures {
 
             Node node = (Node) event.getSource();
 
-            double scale = graph.getScale();
+            double scale = graph.getScrollPane().getScaleValue();
 
             dragContext.x = node.getBoundsInParent().getMinX() * scale - event.getScreenX();
             dragContext.y = node.getBoundsInParent().getMinY() * scale - event.getScreenY();
@@ -39,7 +40,7 @@ public class MouseGestures {
             double offsetY = event.getScreenY() + dragContext.y;
 
             // adjust the offset in case we are zoomed
-            double scale = graph.getScale();
+            double scale = graph.getScrollPane().getScaleValue();
 
             offsetX /= scale;
             offsetY /= scale;
@@ -49,11 +50,11 @@ public class MouseGestures {
         }
     };
 
-    public MouseGestures(Graph graph) {
+    MouseGestures(Graph graph) {
         this.graph = graph;
     }
 
-    public void makeDraggable(final Node node) {
+    void makeDraggable(final Node node) {
 
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
@@ -62,8 +63,7 @@ public class MouseGestures {
 
     private class DragContext {
 
-        double x;
-        double y;
-
+        private double x;
+        private double y;
     }
 }

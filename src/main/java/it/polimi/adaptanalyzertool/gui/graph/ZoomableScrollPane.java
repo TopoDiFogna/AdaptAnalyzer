@@ -2,27 +2,23 @@ package it.polimi.adaptanalyzertool.gui.graph;
 
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.transform.Scale;
 
 public class ZoomableScrollPane extends ScrollPane {
 
-    /**
-     * How much we zoom in or out per scroll.
-     */
-    private final double DELTA = 0.1;
-    private Scale scaleTransform;
     private double scaleValue = 1.0;
+    private Scale scaleTransform;
 
-    public ZoomableScrollPane(Node content) {
-
-        Group zoomGroup = new Group();
-        zoomGroup.getChildren().add(content);
+    ZoomableScrollPane(Pane content) {
 
         Group contentGroup = new Group();
+        Group zoomGroup = new Group();
+
         contentGroup.getChildren().add(zoomGroup);
+        zoomGroup.getChildren().add(content);
 
         setContent(contentGroup);
 
@@ -30,10 +26,6 @@ public class ZoomableScrollPane extends ScrollPane {
         zoomGroup.getTransforms().add(scaleTransform);
 
         contentGroup.setOnScroll(new ZoomHandler());
-    }
-
-    public double getScaleValue() {
-        return scaleValue;
     }
 
     /**
@@ -52,19 +44,24 @@ public class ZoomableScrollPane extends ScrollPane {
     /**
      * Reset the zoom to the default value.
      */
-    public void resetZoom() {
+    void resetZoom() {
         scaleValue = 1;
         zoomTo(scaleValue);
+    }
+
+    double getScaleValue() {
+        return scaleValue;
     }
 
     private class ZoomHandler implements EventHandler<ScrollEvent> {
 
         @Override
         public void handle(ScrollEvent scrollEvent) {
+            double delta = 0.1;
             if (scrollEvent.getDeltaY() < 0) {
-                scaleValue -= DELTA;
+                scaleValue -= delta;
             } else {
-                scaleValue += DELTA;
+                scaleValue += delta;
             }
 
             zoomTo(scaleValue);

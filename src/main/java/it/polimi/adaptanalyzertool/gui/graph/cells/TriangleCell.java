@@ -29,8 +29,6 @@ public class TriangleCell extends Cell {
 
         root.getChildren().addAll(triangle, name);
 
-        setView(root);
-
+        getChildren().add(root);
     }
-
 }

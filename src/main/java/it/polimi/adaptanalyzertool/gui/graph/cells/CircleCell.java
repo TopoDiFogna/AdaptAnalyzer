@@ -25,7 +25,6 @@ public class CircleCell extends Cell {
 
         root.getChildren().addAll(circle, name);
 
-        setView(root);
-
+        getChildren().add(root);
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.adaptanalyzertool.gui.graph;
 
+
 import it.polimi.adaptanalyzertool.gui.graph.cells.CircleCell;
 import it.polimi.adaptanalyzertool.gui.graph.cells.RectangleCell;
 import it.polimi.adaptanalyzertool.gui.graph.cells.TriangleCell;
@@ -10,189 +11,60 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * The model contains all the graph's elements.
- * <p>
- * All the created Cells and Edges are stored in this model to be used later.
- * </p>
- * <p>
- * In particular this class contains all the methods to add and remove Cells and Edges; it also contains an
- * invisible Cell that is the parent of all Cells without parents.
- * </p>
- *
- * @author Paolo Paterna
- * @version 0.1
- */
 public class Model {
 
-    /**
-     * The invisible node where all cells spawn at.
-     */
-    private Cell graphParent;
+    private Map<String, Cell> cells;
+    private List<Edge> edges;
 
-    private List<Cell> allCells;
-    private List<Cell> addedCells;
-    private List<Cell> removedCells;
-
-    private List<Edge> allEdges;
-    private List<Edge> addedEdges;
-    private List<Edge> removedEdges;
-
-    /**
-     * Map containing the reference of every cell with its id
-     */
-    private Map<String, Cell> cellMap; // <id,cell>
-
-    public Model() {
-
-        graphParent = new Cell("_ROOT_");
-
-        allCells = new ArrayList<>();
-        addedCells = new ArrayList<>();
-        removedCells = new ArrayList<>();
-
-        allEdges = new ArrayList<>();
-        addedEdges = new ArrayList<>();
-        removedEdges = new ArrayList<>();
-
-        cellMap = new HashMap<>();
+    Model() {
+        cells = new HashMap<>();
+        edges = new ArrayList<>();
     }
 
-    /**
-     * Clears the list containing the added elements.
-     */
-    public void clearAddedLists() {
-        addedCells.clear();
-        addedEdges.clear();
-    }
-
-    /**
-     * Gets all the cells added to the current model.
-     *
-     * @return the list of cells added to the model.
-     */
-    public List<Cell> getAddedCells() {
-        return addedCells;
-    }
-
-    public List<Cell> getRemovedCells() {
-        return removedCells;
-    }
-
-    public List<Cell> getAllCells() {
-        return allCells;
-    }
-
-    public List<Edge> getAddedEdges() {
-        return addedEdges;
-    }
-
-    public List<Edge> getRemovedEdges() {
-        return removedEdges;
-    }
-
-    public List<Edge> getAllEdges() {
-        return allEdges;
-    }
-
-    public void addCell(String id, CellType type, Color fillColor, Color strokeColor) {
-
+    public void addCell(String id, CellType type, Color fillColor) {
         switch (type) {
-
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id, fillColor, strokeColor);
+                RectangleCell rectangleCell = new RectangleCell(id, fillColor, Color.BLACK);
                 addCell(rectangleCell);
                 break;
-
-            case TRIANGLE:
-                TriangleCell triangleCell = new TriangleCell(id, fillColor, strokeColor);
-                addCell(triangleCell);
-                break;
-
             case CIRCLE:
-                CircleCell circleCell = new CircleCell(id, fillColor, strokeColor);
+                CircleCell circleCell = new CircleCell(id, fillColor, Color.BLACK);
                 addCell(circleCell);
                 break;
-
+            case TRIANGLE:
+                TriangleCell triangleCell = new TriangleCell(id, fillColor, Color.BLACK);
+                addCell(triangleCell);
+                break;
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
         }
     }
 
-    public void addCell(String id, CellType type, Color fillColor) {
-        addCell(id, type, fillColor, Color.BLACK);
+    private void addCell(Cell cell) {
+        cells.put(cell.getId(), cell);
     }
 
-    private void addCell(Cell cell) {
-
-        addedCells.add(cell);
-
-        cellMap.put(cell.getCellId(), cell);
-
+    public Map<String, Cell> getCells() {
+        return cells;
     }
 
     public void addEdge(String sourceId, String targetId) {
+        Cell source = cells.get(sourceId);
+        Cell target = cells.get(targetId);
 
-        Cell sourceCell = cellMap.get(sourceId);
-        Cell targetCell = cellMap.get(targetId);
-
-        Edge edge = new Edge(sourceCell, targetCell);
-
-        addedEdges.add(edge);
-
+        Edge edge = new Edge(source, target);
+        edges.add(edge);
     }
 
     public void addArrow(String sourceId, String targetId) {
-        Cell sourceCell = cellMap.get(sourceId);
-        Cell targetCell = cellMap.get(targetId);
+        Cell source = cells.get(sourceId);
+        Cell target = cells.get(targetId);
 
-        Edge edge = new Arrow(sourceCell, targetCell);
-
-        addedEdges.add(edge);
+        Edge arrow = new Arrow(source, target);
+        edges.add(arrow);
     }
 
-    /**
-     * Attach all cells which don't have a parent to graphParent.
-     *
-     * @param cellList
-     */
-    public void attachOrphansToGraphParent(List<Cell> cellList) {
-
-        for (Cell cell : cellList) {
-            if (cell.getCellParents().size() == 0) {
-                graphParent.addCellChild(cell);
-            }
-        }
-
-    }
-
-    /**
-     * Remove the graphParent reference if it is set.
-     *
-     * @param cellList
-     */
-    public void disconnectFromGraphParent(List<Cell> cellList) {
-
-        for (Cell cell : cellList) {
-            graphParent.removeCellChild(cell);
-        }
-    }
-
-    public void merge() {
-
-        // cells
-        allCells.addAll(addedCells);
-        allCells.removeAll(removedCells);
-
-        addedCells.clear();
-        removedCells.clear();
-
-        // edges
-        allEdges.addAll(addedEdges);
-        allEdges.removeAll(removedEdges);
-
-        addedEdges.clear();
-        removedEdges.clear();
-
+    public List<Edge> getEdges() {
+        return edges;
     }
 }

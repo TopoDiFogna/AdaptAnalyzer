@@ -25,8 +25,6 @@ public class RectangleCell extends Cell {
 
         root.getChildren().addAll(rectangle, name);
 
-        setView(root);
-
+        getChildren().add(root);
     }
-
 }

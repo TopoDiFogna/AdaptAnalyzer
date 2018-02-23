@@ -10,6 +10,9 @@ repositories {
     // Use 'jcenter' for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 jar {
@@ -21,6 +24,7 @@ jar {
 // In this section you declare the dependencies for your production and test code
 dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
+    compile 'eu.lestard:advanced-bindings:0.5.0-SNAPSHOT'
     testCompile 'junit:junit:4.12'
 }
 

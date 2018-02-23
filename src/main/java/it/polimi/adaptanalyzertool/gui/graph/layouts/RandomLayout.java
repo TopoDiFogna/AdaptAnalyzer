@@ -4,7 +4,6 @@ import it.polimi.adaptanalyzertool.gui.graph.Cell;
 import it.polimi.adaptanalyzertool.gui.graph.Graph;
 import it.polimi.adaptanalyzertool.gui.graph.Layout;
 
-import java.util.List;
 import java.util.Random;
 
 public class RandomLayout implements Layout {
@@ -14,23 +13,23 @@ public class RandomLayout implements Layout {
     private Random rnd = new Random();
 
     public RandomLayout(Graph graph) {
-
         this.graph = graph;
     }
 
-    public void execute() {
+    public void addCells() {
 
-        List<Cell> cells = graph.getModel().getAllCells();
-
-        for (Cell cell : cells) {
+        for (Cell cell : graph.getModel().getCells().values()) {
 
             double x = rnd.nextDouble() * 500;
             double y = rnd.nextDouble() * 500;
 
             cell.relocate(x, y);
-
+            graph.getCanvas().getChildren().add(cell);
         }
-
     }
 
+    @Override
+    public void addEdges() {
+        graph.getCanvas().getChildren().addAll(graph.getModel().getEdges());
+    }
 }

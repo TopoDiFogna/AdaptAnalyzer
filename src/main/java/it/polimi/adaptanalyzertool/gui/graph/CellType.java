@@ -4,6 +4,6 @@ public enum CellType {
 
     RECTANGLE,
     TRIANGLE,
-    CIRCLE;
+    CIRCLE
 
 }

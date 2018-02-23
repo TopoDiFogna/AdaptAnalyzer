@@ -166,7 +166,7 @@ public class MainController {
                 stage.showAndWait();
                 graphIsShowing = false;
             } catch (IOException e) {
-                System.err.println("Error loading intenal resource: graph/graph.fxml");
+                System.err.println("Error loading internal resource: graph/graph.fxml");
             }
         } else if (graphIsShowing) {
             graphController.setUp();

@@ -1,6 +1,5 @@
 package it.polimi.adaptanalyzertool.gui.graph;
 
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -9,48 +8,37 @@ import java.util.List;
 
 public class Cell extends Pane {
 
-    private String cellId;
-
-    private List<Cell> children = new ArrayList<>();
-    private List<Cell> parents = new ArrayList<>();
-
-    private Node view;
+    private List<Cell> childrenList;
+    private List<Cell> parentList;
 
     public Cell(String cellId) {
-        this.cellId = cellId;
+        this.idProperty().setValue(cellId);
+        this.childrenList = new ArrayList<>();
+        this.parentList = new ArrayList<>();
     }
 
-    public void addCellChild(Cell cell) {
-        children.add(cell);
+    public void addParentCell(Cell parent) {
+        parentList.add(parent);
     }
 
-    public List<Cell> getCellChildren() {
-        return children;
+    public void removeParentCell(Cell parent) {
+        parentList.remove(parent);
     }
 
-    public void addCellParent(Cell cell) {
-        parents.add(cell);
+    public List<Cell> getParentList() {
+        return parentList;
     }
 
-    public List<Cell> getCellParents() {
-        return parents;
+    public void addChildCell(Cell child) {
+        childrenList.add(child);
     }
 
-    public void removeCellChild(Cell cell) {
-        children.remove(cell);
+    public void removeChildCell(Cell child) {
+        childrenList.remove(child);
     }
 
-    public Node getView() {
-        return this.view;
-    }
-
-    public void setView(Node view) {
-        this.view = view;
-        getChildren().add(view);
-    }
-
-    public String getCellId() {
-        return cellId;
+    public List<Cell> getChildrenList() {
+        return childrenList;
     }
 
     protected boolean isColorDark(Color fillColor) {
