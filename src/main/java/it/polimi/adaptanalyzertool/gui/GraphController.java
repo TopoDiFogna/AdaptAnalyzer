@@ -1,10 +1,7 @@
 package it.polimi.adaptanalyzertool.gui;
 
 import it.polimi.adaptanalyzertool.gui.error.ErrorWindow;
-import it.polimi.adaptanalyzertool.gui.graph.CellType;
-import it.polimi.adaptanalyzertool.gui.graph.Graph;
-import it.polimi.adaptanalyzertool.gui.graph.Layout;
-import it.polimi.adaptanalyzertool.gui.graph.Model;
+import it.polimi.adaptanalyzertool.gui.graph.*;
 import it.polimi.adaptanalyzertool.gui.graph.layouts.RandomLayout;
 import it.polimi.adaptanalyzertool.model.Architecture;
 import it.polimi.adaptanalyzertool.model.Component;
@@ -71,9 +68,10 @@ public class GraphController {
 
     @FXML
     private void exportGraphImage() {
-        WritableImage image = root.getCenter().snapshot(new SnapshotParameters(), null);
+        WritableImage image = ((ZoomableScrollPane) root.getCenter()).getContent().snapshot(new SnapshotParameters(), null);
         FileChooser fc = new FileChooser();
         fc.setTitle("Export Architecture");
+        fc.setInitialFileName(architecture.getName());
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Png file", "*.png"));
         File file = fc.showSaveDialog(root.getScene().getWindow());
         if (file != null) {
