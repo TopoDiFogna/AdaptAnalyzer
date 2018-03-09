@@ -111,6 +111,7 @@ public class MainController {
             String json = gson.toJson(childScreenController.getArchitecture());
             FileChooser fc = new FileChooser();
             fc.setTitle("Export Architecture");
+            fc.setInitialFileName(childScreenController.getArchitecture().getName());
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Json file", "*.json"));
             File file = fc.showSaveDialog(parent);
             if (file != null) {
