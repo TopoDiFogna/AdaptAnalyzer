@@ -42,13 +42,14 @@
                                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                             </rowConstraints>
                             <Label text="Name:" GridPane.halignment="CENTER"/>
-                            <Label fx:id="componentNameLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
+                            <Label fx:id="componentNameLabel" text="NaN" GridPane.columnIndex="1"
+                                   GridPane.halignment="CENTER"/>
                             <Label text="Cost:" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                            <Label fx:id="componentCostLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                                   GridPane.rowIndex="1"/>
+                            <Label fx:id="componentCostLabel" text="NaN" GridPane.columnIndex="1"
+                                   GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                             <Label layoutX="143.0" layoutY="17.0" text="Availability:" GridPane.halignment="CENTER"
                                    GridPane.rowIndex="2"/>
-                            <Label fx:id="componentAvailabilityLabel" layoutX="107.0" layoutY="17.0"
+                            <Label fx:id="componentAvailabilityLabel" layoutX="107.0" layoutY="17.0" text="NaN"
                                    GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
                             <Label text="Used:" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
                             <CheckBox fx:id="componentUsedCheckBox" disable="true" mnemonicParsing="false"
@@ -58,12 +59,12 @@
                             <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                 <Rectangle fx:id="componentColorRectangle" arcHeight="5.0" arcWidth="5.0"
                                            fill="#ffffff00" height="17.0" stroke="BLACK" strokeType="INSIDE"
-                                           visible="false" width="17.0">
+                                           width="17.0">
                                     <HBox.margin>
                                         <Insets top="6.0"/>
                                     </HBox.margin>
                                 </Rectangle>
-                                <Label fx:id="componentColorLabel">
+                                <Label fx:id="componentColorLabel" text="NaN">
                                     <HBox.margin>
                                         <Insets left="3.0" top="6.0"/>
                                     </HBox.margin>
@@ -155,8 +156,10 @@
                         <Label text="Service Details"/>
                         <GridPane alignment="TOP_CENTER">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="NEVER" minWidth="150.0" prefWidth="150.0"/>
-                                <ColumnConstraints hgrow="NEVER" minWidth="150.0" prefWidth="150.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.0" minWidth="150.0"
+                                                   prefWidth="150.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="115.0"
+                                                   prefWidth="115.0"/>
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
@@ -166,21 +169,23 @@
                                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
                             </rowConstraints>
                             <Label text="Name:" GridPane.halignment="CENTER"/>
-                            <Label fx:id="serviceNameLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
+                            <Label fx:id="serviceNameLabel" text="NaN" GridPane.columnIndex="1"
+                                   GridPane.halignment="CENTER"/>
                             <Label text="Type:" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                            <Label fx:id="serviceTypeLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                                   GridPane.rowIndex="1"/>
+                            <Label fx:id="serviceTypeLabel" text="NaN" GridPane.columnIndex="1"
+                                   GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                             <Label fx:id="executionTimeDetailLabel" layoutX="143.0" layoutY="17.0"
                                    text="Execution Time:" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
-                            <Label fx:id="serviceExecutionTimeLabel" layoutX="107.0" layoutY="17.0"
+                            <Label fx:id="serviceExecutionTimeLabel" layoutX="107.0" layoutY="17.0" text="NaN"
                                    GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
                             <Label fx:id="usedProbabilityDetailLabel" layoutX="127.0" layoutY="77.0"
                                    text="Used Probability:" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
-                            <Label fx:id="serviceUsedProbabilityLabel" layoutX="307.0" layoutY="137.0"
+                            <Label fx:id="serviceUsedProbabilityLabel" layoutX="307.0" layoutY="137.0" text="NaN"
                                    GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
                             <Label fx:id="numberOfExecutionsDetailLabel" layoutX="212.0" layoutY="107.0"
-                                   text="Number of Executions:" GridPane.halignment="CENTER" GridPane.rowIndex="4"/>
-                            <Label fx:id="serviceNumberOfExecutionsLabel" layoutX="357.0" layoutY="77.0"
+                                   text="Number of Executions per Call:" GridPane.halignment="CENTER"
+                                   GridPane.rowIndex="4"/>
+                            <Label fx:id="serviceNumberOfExecutionsLabel" layoutX="357.0" layoutY="77.0" text="NaN"
                                    GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4"/>
                         </GridPane>
                         <TitledPane alignment="TOP_CENTER" animated="false" collapsible="false" text="Service Metrics">

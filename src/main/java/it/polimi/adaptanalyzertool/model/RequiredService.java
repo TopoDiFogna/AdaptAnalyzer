@@ -13,7 +13,7 @@ package it.polimi.adaptanalyzertool.model;
 public class RequiredService extends AbstractService {
 
     private double usedProbability;
-    private int numberOfExecutions;
+    private int numberOfExecutionsPerCall;
 
     /**
      * Constructor for the Required Service.
@@ -25,7 +25,7 @@ public class RequiredService extends AbstractService {
     public RequiredService(String name, double usedProbability, int numberOfExecutions) {
         super(name);
         this.usedProbability = usedProbability;
-        this.numberOfExecutions = numberOfExecutions;
+        this.numberOfExecutionsPerCall = numberOfExecutions;
     }
 
     /**
@@ -47,20 +47,20 @@ public class RequiredService extends AbstractService {
     }
 
     /**
-     * Gets how many times this service will be run.
+     * Gets how many times this service will be run per call.
      *
-     * @return how many times this service will be run.
+     * @return how many times this service will be run per call.
      */
-    public int getNumberOfExecutions() {
-        return numberOfExecutions;
+    public int getNumberOfExecutionsPerCall() {
+        return numberOfExecutionsPerCall;
     }
 
     /**
      * Changes how many times this service will be run.
      *
-     * @param numberOfExecutions the new number of times this service will be run.
+     * @param numberOfExecutionsPerCall the new number of times this service will be run.
      */
-    public void setNumberOfExecutions(int numberOfExecutions) {
-        this.numberOfExecutions = numberOfExecutions;
+    public void setNumberOfExecutionsPerCall(int numberOfExecutionsPerCall) {
+        this.numberOfExecutionsPerCall = numberOfExecutionsPerCall;
     }
 }

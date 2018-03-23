@@ -398,7 +398,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         } else if (service instanceof RequiredService) {
             serviceTypeLabel.setText("Required");
             serviceUsedProbabilityLabel.setText(String.valueOf(((RequiredService) service).getUsedProbability()));
-            serviceNumberOfExecutionsLabel.setText(String.valueOf(((RequiredService) service).getNumberOfExecutions()));
+            serviceNumberOfExecutionsLabel.setText(String.valueOf(((RequiredService) service).getNumberOfExecutionsPerCall()));
             serviceExecutionTimeLabel.setText("");
             executionTimeDetailLabel.setDisable(true);
             serviceExecutionTimeLabel.setDisable(true);

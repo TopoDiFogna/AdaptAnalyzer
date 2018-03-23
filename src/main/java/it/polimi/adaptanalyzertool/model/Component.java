@@ -336,23 +336,23 @@ public class Component {
     /**
      * Changes the color for the current component.
      *
-     * @param colorRed red color component.
-     * @param colorBlue blue color component.
+     * @param colorRed   red color component.
+     * @param colorBlue  blue color component.
      * @param colorGreen green color component.
      */
-    public void setColor(double colorRed, double colorBlue, double colorGreen){
+    public void setColor(double colorRed, double colorBlue, double colorGreen) {
         setColor(colorRed, colorBlue, colorGreen, 1.0);
     }
 
     /**
      * Changes the color for the current component.
      *
-     * @param colorRed red color component.
-     * @param colorBlue blue color component.
-     * @param colorGreen green color component.
+     * @param colorRed     red color component.
+     * @param colorBlue    blue color component.
+     * @param colorGreen   green color component.
      * @param colorOpacity opacity for the new color.
      */
-    public void setColor(double colorRed, double colorBlue, double colorGreen, double colorOpacity){
+    public void setColor(double colorRed, double colorBlue, double colorGreen, double colorOpacity) {
         this.colorRed = colorRed;
         this.colorBlue = colorBlue;
         this.colorGreen = colorGreen;

@@ -36,7 +36,7 @@ public final class ServicesMetrics {
                 found = true;
                 RequiredService requiredService = component.getRequiredServices().get(serviceName);
                 double execProbability = requiredService.getUsedProbability();
-                double executions = requiredService.getNumberOfExecutions();
+                double executions = requiredService.getNumberOfExecutionsPerCall();
                 double noOfExecs = 1;
                 for (ProvidedService ps : component.getProvidedServices().values()) {
                     noOfExecs = NumberOfExecutions(architecture, ps);
@@ -68,6 +68,14 @@ public final class ServicesMetrics {
         return NumberOfExecutions(architecture, service) / totalExecutionTimes;
     }
 
+    /**
+     * The absolute adaptability of a service (AAS) measures the number of used components for providing a given service.
+     *
+     * @param architecture the architecture where the service is.
+     * @param service      the service that is offered by the components.
+     *
+     * @return the number of used components that provide the required service.
+     */
     public static int AbsoluteAdaptability(Architecture architecture, ProvidedService service) {
         int usedProvidedTimes = 0;
         for (Component component : architecture.getComponents().values()) {
@@ -78,6 +86,15 @@ public final class ServicesMetrics {
         return usedProvidedTimes;
     }
 
+    /**
+     * The relative adaptability of a service (RAS) measures the number of used components that provide a given service with
+     * respect to the number of components actually offering suche service.
+     *
+     * @param architecture the architecture where the service is.
+     * @param service      the service that is offered by the components.
+     *
+     * @return the percentage of used component for the required service.
+     */
     public static double RelativeAdaptability(Architecture architecture, ProvidedService service) {
         int usedProvidedTimes = AbsoluteAdaptability(architecture, service);
         int providedTimes = 0;
@@ -89,6 +106,13 @@ public final class ServicesMetrics {
         return usedProvidedTimes / providedTimes;
     }
 
+    /**
+     * The Mean of absolute adaptability of services (MAAS) measures the mean number of used component per service.
+     *
+     * @param architecture the architecture to be analyzed.
+     *
+     * @return the mean number of used component per service.
+     */
     public static double MeanAbsoluteAdaptability(Architecture architecture) {
         HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
         int numberOfProvidedServices = servicesHashMap.size();
@@ -99,6 +123,14 @@ public final class ServicesMetrics {
         return aas / numberOfProvidedServices;
     }
 
+    /**
+     * The mean of relative adaptability of services (MRAS) represents the mean of RAS.
+     *
+     * @param architecture the architecture to be analyzed.
+     *
+     * @return the mean of RAS.
+     * @see #RelativeAdaptability(Architecture, ProvidedService)
+     */
     public static double MeanRelativeAdaptability(Architecture architecture) {
         HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
         int numberOfProvidedServices = servicesHashMap.size();
@@ -109,6 +141,15 @@ public final class ServicesMetrics {
         return ras / numberOfProvidedServices;
     }
 
+    /**
+     * The Level of system adaptability (LSA) measures the number of components used to make up the system with respect
+     * to the number of components that the most adaptable architecture would use.
+     *
+     * @param architecture the architecture to be analyzed.
+     *
+     * @return the number of components used to make up the system with respect to the number of components that the most
+     * adaptable architecture would use.
+     */
     public static double LevelSystemAdaptability(Architecture architecture) {
         HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
         int aas = 0;
