@@ -55,7 +55,7 @@ public class GeneratedArchitectureWindowController extends NewModalWindowControl
         }
     }
 
-    private boolean checkInputFields() {
+    private boolean checkInputFields() { //TODO check for correct numbers
         return !architectureNameTextField.getText().trim().equals("") &&
                 !numberOfComponentsTextField.getText().trim().equals("") &&
                 !numberOfReqFunctionsTextField.getText().trim().equals("") &&

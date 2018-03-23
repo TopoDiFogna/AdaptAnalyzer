@@ -78,7 +78,7 @@ public final class ServicesMetrics {
      *
      * @return the number of used components that provide the required service.
      */
-    public static int AbsoluteAdaptability(Architecture architecture, ProvidedService service) {
+    public static int AbsoluteAdaptability(Architecture architecture, AbstractService service) {
         int usedProvidedTimes = 0;
         for (Component component : architecture.getComponents().values()) {
             if (component.getProvidedServices().containsKey(service.getName()) && component.isUsed()) {
@@ -97,7 +97,7 @@ public final class ServicesMetrics {
      *
      * @return the percentage of used component for the required service.
      */
-    public static double RelativeAdaptability(Architecture architecture, ProvidedService service) {
+    public static double RelativeAdaptability(Architecture architecture, AbstractService service) {
         int usedProvidedTimes = AbsoluteAdaptability(architecture, service);
         int providedTimes = 0;
         for (Component component : architecture.getComponents().values()) {
@@ -106,41 +106,6 @@ public final class ServicesMetrics {
             }
         }
         return usedProvidedTimes / providedTimes;
-    }
-
-    /**
-     * The Mean of absolute adaptability of services (MAAS) measures the mean number of used component per service.
-     *
-     * @param architecture the architecture to be analyzed.
-     *
-     * @return the mean number of used component per service.
-     */
-    public static double MeanAbsoluteAdaptability(Architecture architecture) {
-        HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
-        int numberOfProvidedServices = servicesHashMap.size();
-        int aas = 0;
-        for (ProvidedService providedService : servicesHashMap.values()) {
-            aas += AbsoluteAdaptability(architecture, providedService);
-        }
-        return aas / numberOfProvidedServices;
-    }
-
-    /**
-     * The mean of relative adaptability of services (MRAS) represents the mean of RAS.
-     *
-     * @param architecture the architecture to be analyzed.
-     *
-     * @return the mean of RAS.
-     * @see #RelativeAdaptability(Architecture, ProvidedService)
-     */
-    public static double MeanRelativeAdaptability(Architecture architecture) {
-        HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
-        int numberOfProvidedServices = servicesHashMap.size();
-        int ras = 0;
-        for (ProvidedService providedService : servicesHashMap.values()) {
-            ras += RelativeAdaptability(architecture, providedService);
-        }
-        return ras / numberOfProvidedServices;
     }
 
     /**

@@ -201,8 +201,11 @@
                                                            prefWidth="90.0"/>
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                        <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="30.0"
+                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
+                                                        vgrow="SOMETIMES"/>
+                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
+                                                        vgrow="SOMETIMES"/>
+                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
                                                         vgrow="SOMETIMES"/>
                                         <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
                                                         vgrow="SOMETIMES"/>
@@ -214,6 +217,14 @@
                                            GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                                     <Label fx:id="probabilityToBeRunningLabel" layoutX="205.0" layoutY="17.0" text="NaN"
                                            GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                                    <Label layoutX="25.0" layoutY="17.0" text="Absolute adaptability"
+                                           GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+                                    <Label fx:id="absoluteAdaptabilityLabel" layoutX="193.0" layoutY="17.0" text="NaN"
+                                           GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+                                    <Label layoutX="16.0" layoutY="47.0" text="Relative adaptability"
+                                           GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
+                                    <Label fx:id="relativeAdaptabilityLabel" layoutX="193.0" layoutY="47.0" text="NaN"
+                                           GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
                                 </GridPane>
                                 <Button mnemonicParsing="false" onMouseClicked="#calculateServiceMetrics"
                                         text="Calculate!"/>
@@ -229,29 +240,57 @@
         <TitledPane alignment="TOP_CENTER" collapsible="false" text="Architecture Metrics"
                     BorderPane.alignment="CENTER">
             <VBox alignment="TOP_CENTER" fillWidth="false" spacing="5.0">
-                <GridPane>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="90.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <Label text="Global Availability:" GridPane.halignment="CENTER"/>
-                    <Label fx:id="globalAvailabilityLabel" text="NaN" GridPane.columnIndex="1"
-                           GridPane.halignment="CENTER"/>
-                    <Label fx:id="globalAvailabilitySuitabilityLabel" layoutX="193.0" layoutY="17.0" text="NaN"
-                           GridPane.columnIndex="2" GridPane.halignment="CENTER"/>
-                    <Label text="Global Cost:" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                    <Label fx:id="globalCostLabel" text="NaN" GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                           GridPane.rowIndex="1"/>
-                    <Label fx:id="globalCostSuitabilityLabel" layoutX="193.0" layoutY="47.0" text="NaN"
-                           GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                </GridPane>
+                <HBox spacing="5.0">
+                    <VBox alignment="TOP_CENTER">
+                        <children>
+                            <GridPane VBox.vgrow="ALWAYS">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                </rowConstraints>
+                                <Label text="Global Availability:" GridPane.halignment="CENTER"/>
+                                <Label fx:id="globalAvailabilityLabel" text="NaN" GridPane.columnIndex="1"
+                                       GridPane.halignment="CENTER"/>
+                                <Label fx:id="globalAvailabilitySuitabilityLabel" layoutX="193.0" layoutY="17.0"
+                                       text="NaN" GridPane.columnIndex="2" GridPane.halignment="CENTER"/>
+                                <Label text="Global Cost:" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                                <Label fx:id="globalCostLabel" text="NaN" GridPane.columnIndex="1"
+                                       GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                                <Label fx:id="globalCostSuitabilityLabel" layoutX="193.0" layoutY="47.0" text="NaN"
+                                       GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                            </GridPane>
+                            <Label fx:id="architectureMetricsErrorLabel" textFill="RED"/>
+                        </children>
+                    </VBox>
+                    <Separator orientation="VERTICAL"/>
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0"/>
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        </rowConstraints>
+                        <Label text="Mean of absolute adaptability:" GridPane.halignment="CENTER"/>
+                        <Label fx:id="meanAbsoluteAdaptabilityLabel" text="NaN" GridPane.columnIndex="1"
+                               GridPane.columnSpan="2147483647" GridPane.halignment="CENTER"/>
+                        <Label text="Mean of relative adaptability:" GridPane.halignment="CENTER"
+                               GridPane.rowIndex="1"/>
+                        <Label fx:id="meanRelativeAdaptabilityLabel" text="NaN" GridPane.columnIndex="1"
+                               GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                        <Label text="Level of system adaptability:" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+                        <Label fx:id="levelSystemAdaptabilityLabel" text="NaN" GridPane.columnIndex="1"
+                               GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+                    </GridPane>
+                </HBox>
                 <Button mnemonicParsing="false" onMouseClicked="#calculateArchitectureMetrics" text="Calculate!"/>
-                <Label fx:id="architectureMetricsErrorLabel"/>
             </VBox>
         </TitledPane>
     </bottom>

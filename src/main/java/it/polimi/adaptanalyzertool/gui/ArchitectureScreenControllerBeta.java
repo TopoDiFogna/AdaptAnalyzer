@@ -2,6 +2,7 @@ package it.polimi.adaptanalyzertool.gui;
 
 import it.polimi.adaptanalyzertool.gui.utility.ChildScreenController;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
+import it.polimi.adaptanalyzertool.metrics.AdaptabilityMetrics;
 import it.polimi.adaptanalyzertool.metrics.ArchitectureMetrics;
 import it.polimi.adaptanalyzertool.metrics.ComponentMetrics;
 import it.polimi.adaptanalyzertool.metrics.ServicesMetrics;
@@ -30,6 +31,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private final String doubleRegex = "(?:\\d*\\.)?\\d+"; //TODO make this for double and 99 notation
     private final DecimalFormat df = new DecimalFormat("0.00");
+
     @FXML
     private VBox servicesVBox;
     @FXML
@@ -113,6 +115,10 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private Label probabilityToBeRunningLabel;
     @FXML
+    private Label absoluteAdaptabilityLabel;
+    @FXML
+    private Label relativeAdaptabilityLabel;
+    @FXML
     private Label serviceMetricsErrorLabel;
     /*
         Architecture Metrics
@@ -125,6 +131,12 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Label globalCostLabel;
     @FXML
     private Label globalCostSuitabilityLabel;
+    @FXML
+    private Label meanAbsoluteAdaptabilityLabel;
+    @FXML
+    private Label meanRelativeAdaptabilityLabel;
+    @FXML
+    private Label levelSystemAdaptabilityLabel;
     @FXML
     private Label architectureMetricsErrorLabel;
 
@@ -428,8 +440,12 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         if (selectedService != null) {
             double noe = ServicesMetrics.NumberOfExecutions(architecture, selectedService);
             double ptbr = ServicesMetrics.ProbabilityToBeRunning(architecture, selectedService);
+            double aas = ServicesMetrics.AbsoluteAdaptability(architecture, selectedService);
+            double ras = ServicesMetrics.RelativeAdaptability(architecture, selectedService);
             numberOfExecutionsLabel.setText(df.format(noe));
             probabilityToBeRunningLabel.setText(df.format(ptbr));
+            absoluteAdaptabilityLabel.setText(df.format(aas));
+            relativeAdaptabilityLabel.setText(df.format(ras));
         } else {
             serviceMetricsErrorLabel.setText("Select a service first");
         }
@@ -458,6 +474,12 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         } else {
             architectureMetricsErrorLabel.setText("Check input for mistakes");
         }
+        double maas = AdaptabilityMetrics.MeanAbsoluteAdaptability(architecture);
+        double raas = AdaptabilityMetrics.MeanRelativeAdaptability(architecture);
+        double lsa = AdaptabilityMetrics.LevelSystemAdaptability(architecture);
+        meanAbsoluteAdaptabilityLabel.setText(df.format(maas));
+        meanRelativeAdaptabilityLabel.setText(df.format(raas));
+        levelSystemAdaptabilityLabel.setText(df.format(lsa));
     }
 
     @Override
