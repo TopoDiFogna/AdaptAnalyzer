@@ -34,6 +34,7 @@ public class Component {
      * Basic constructor for the component. Only the mandatory attributes are required; all non mandatory attributes are
      * set to default values:
      * <ul>
+     * <li>Used: True</li>
      * <li>Color: WHITE</li>
      * <li>Services Provided: EMPTY</li>
      * <li>Services Required: EMPTY</li>
@@ -71,6 +72,23 @@ public class Component {
         this(name, cost, availability, used, 1, 1, 1, 1, new HashMap<>(), new HashMap<>());
     }
 
+
+    /**
+     * Only the mandatory attributes are required but color; all non mandatory attributes are
+     * set to default values:
+     * <ul>
+     * <li>Services Provided: EMPTY</li>
+     * <li>Services Required: EMPTY</li>
+     * </ul>
+     *
+     * @param name         the name of the component.
+     * @param cost         the cost of the component.
+     * @param availability availability expressed in 0-1 range.
+     * @param used         if this component is used or not.
+     * @param colorRed     red component color for the component in the UI.
+     * @param colorBlue    blue component color for the component in the UI.
+     * @param colorGreen   green component color for the component in the UI.
+     */
     public Component(String name, double cost, double availability, boolean used, double colorRed, double colorGreen, double colorBlue) {
         this(name, cost, availability, used, colorRed, colorGreen, colorBlue, 1, new HashMap<>(), new HashMap<>());
     }
@@ -101,8 +119,7 @@ public class Component {
     }
 
     /**
-     * All the attributes are required but Services Provided; Services Required are
-     * set to default values:
+     * All the attributes are required but Services Provided; Services Required are set to default values:
      * <ul>
      * <li>Services Required: EMPTY</li>
      * </ul>
@@ -144,9 +161,7 @@ public class Component {
      * @see ProvidedService
      */
     public Component(String name, double cost, double availability, boolean used, double colorRed, double colorGreen, double colorBlue,
-                     double colorOpacity,
-                     HashMap<String, ProvidedService> providedServices,
-                     HashMap<String, RequiredService> requiredServices) {
+                     double colorOpacity, HashMap<String, ProvidedService> providedServices, HashMap<String, RequiredService> requiredServices) {
         this.name = name;
         this.cost = cost;
         this.availability = availability;
@@ -316,6 +331,32 @@ public class Component {
      */
     public Color getColor() {
         return new Color(colorRed, colorGreen, colorBlue, colorOpacity);
+    }
+
+    /**
+     * Changes the color for the current component.
+     *
+     * @param colorRed red color component.
+     * @param colorBlue blue color component.
+     * @param colorGreen green color component.
+     */
+    public void setColor(double colorRed, double colorBlue, double colorGreen){
+        setColor(colorRed, colorBlue, colorGreen, 1.0);
+    }
+
+    /**
+     * Changes the color for the current component.
+     *
+     * @param colorRed red color component.
+     * @param colorBlue blue color component.
+     * @param colorGreen green color component.
+     * @param colorOpacity opacity for the new color.
+     */
+    public void setColor(double colorRed, double colorBlue, double colorGreen, double colorOpacity){
+        this.colorRed = colorRed;
+        this.colorBlue = colorBlue;
+        this.colorGreen = colorGreen;
+        this.colorOpacity = colorOpacity;
     }
 
     /**
