@@ -120,7 +120,11 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private Label globalAvailabilityLabel;
     @FXML
+    private Label globalAvailabilitySuitabilityLabel;
+    @FXML
     private Label globalCostLabel;
+    @FXML
+    private Label globalCostSuitabilityLabel;
     @FXML
     private Label architectureMetricsErrorLabel;
 
@@ -436,10 +440,21 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         String sta = systemTargetAvailabilityTextField.getText().trim();
         String stc = systemTargetCostTextField.getText().trim();
         if (!sta.equals("") && sta.matches(doubleRegex) && !stc.equals("") && stc.matches(doubleRegex)) {
+            architectureMetricsErrorLabel.setText("");
             double gas = ArchitectureMetrics.GlobalAvailabilitySystem(architecture, Double.valueOf(sta));
             double gcs = ArchitectureMetrics.GlobalCostSystem(architecture, Double.valueOf(stc));
             globalAvailabilityLabel.setText(df.format(gas));
+            if (ArchitectureMetrics.suitableForAvailability(architecture, Double.valueOf(sta))) {
+                globalAvailabilitySuitabilityLabel.setText("Suitable");
+            } else {
+                globalAvailabilitySuitabilityLabel.setText("Not Suitable");
+            }
             globalCostLabel.setText(df.format(gcs));
+            if (ArchitectureMetrics.suitableForCost(architecture, Double.valueOf(stc))) {
+                globalCostSuitabilityLabel.setText("Suitable");
+            } else {
+                globalCostSuitabilityLabel.setText("Not Suitable");
+            }
         } else {
             architectureMetricsErrorLabel.setText("Check input for mistakes");
         }

@@ -30,8 +30,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Adaptability Analyzer Tool");
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(1020);
+        primaryStage.setMinHeight(766);
 
         FXMLLoader mainLoader = new FXMLLoader();
         mainLoader.setLocation(getClass().getResource("main.fxml"));

@@ -8,19 +8,18 @@
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
                 <Menu mnemonicParsing="false" text="New">
-                    <MenuItem mnemonicParsing="false" text="Create" accelerator="Ctrl+N"
-                              onAction="#createNewArchitecture"/>
-                    <MenuItem mnemonicParsing="false" text="Generate" accelerator="Ctrl+G"
-                              onAction="#generateNewArchitecture"/>
+                    <MenuItem accelerator="Ctrl+N" mnemonicParsing="false" onAction="#createNewArchitecture"
+                              text="Create"/>
+                    <MenuItem accelerator="Ctrl+G" mnemonicParsing="false" onAction="#generateNewArchitecture"
+                              text="Generate"/>
                 </Menu>
-                <MenuItem mnemonicParsing="false" text="Import" accelerator="Ctrl+I" onAction="#importArchitecture"/>
-                <MenuItem mnemonicParsing="false" text="Export" accelerator="Ctrl+S" onAction="#exportArchitecture"/>
-                <MenuItem mnemonicParsing="false" text="Exit" accelerator="Ctrl+X" onAction="#exit"/>
+                <MenuItem accelerator="Ctrl+I" mnemonicParsing="false" onAction="#importArchitecture" text="Import"/>
+                <MenuItem accelerator="Ctrl+S" mnemonicParsing="false" onAction="#exportArchitecture" text="Export"/>
+                <MenuItem accelerator="Ctrl+X" mnemonicParsing="false" onAction="#exit" text="Exit"/>
             </Menu>
             <Menu mnemonicParsing="false" text="View">
-                <MenuItem mnemonicParsing="false" text="Show Architecture" accelerator="Ctrl+V"
-                          onAction="#showArchitectureGraph"
-                          fx:id="showArchitectureGraphMenuItem" disable="true"/>
+                <MenuItem fx:id="showArchitectureGraphMenuItem" accelerator="Ctrl+V" disable="true"
+                          mnemonicParsing="false" onAction="#showArchitectureGraph" text="Show Architecture"/>
             </Menu>
         </MenuBar>
     </top>

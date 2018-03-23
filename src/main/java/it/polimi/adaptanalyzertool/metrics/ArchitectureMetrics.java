@@ -41,7 +41,7 @@ public final class ArchitectureMetrics {
     public static double GlobalAvailabilitySystem(Architecture architecture, double systemTargetAvailability) {
         double gas = 1;
         for (Component component : architecture.getComponents().values()) {
-            gas *= ComponentMetrics.FitnessRatioAvailability(component.getAvailability(), systemTargetAvailability);
+            gas *= ComponentMetrics.FitnessRatioAvailability(systemTargetAvailability, component.getAvailability());
         }
         return gas;
     }
@@ -61,9 +61,33 @@ public final class ArchitectureMetrics {
     public static double GlobalCostSystem(Architecture architecture, double systemTargetCost) {
         double gcs = 0;
         for (Component component : architecture.getComponents().values()) {
-            gcs += ComponentMetrics.FitnessRatioCost(component.getCost(), systemTargetCost);
+            gcs += ComponentMetrics.FitnessRatioCost(systemTargetCost, component.getCost());
         }
         return gcs;
+    }
+
+    /**
+     * Checks if an architecture is suitable for the target cost.
+     *
+     * @param architecture     the architecture to be analyzed.
+     * @param systemTargetCost the target cost.
+     *
+     * @return <code>true</code> if the architecture is suitable, <code>false</code> otherwise.
+     */
+    public static boolean suitableForCost(Architecture architecture, double systemTargetCost) {
+        return GlobalCostSystem(architecture, systemTargetCost) >= 1;
+    }
+
+    /**
+     * Checks if an architecture is suitable for the target availability.
+     *
+     * @param architecture             the architecture to be analyzed.
+     * @param systemTargetAvailability the target cost.
+     *
+     * @return <code>true</code> if the architecture is suitable, <code>false</code> otherwise.
+     */
+    public static boolean suitableForAvailability(Architecture architecture, double systemTargetAvailability) {
+        return GlobalAvailabilitySystem(architecture, systemTargetAvailability) >= 1;
     }
 
     /**
@@ -79,7 +103,7 @@ public final class ArchitectureMetrics {
                                                                              double systemTargetAvailability) {
         ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
         for (Architecture architecture : architectures) {
-            if (GlobalAvailabilitySystem(architecture, systemTargetAvailability) >= 1) {
+            if (suitableForAvailability(architecture, systemTargetAvailability)) {
                 eligibleArchitectures.add(architecture);
             }
         }
@@ -99,7 +123,7 @@ public final class ArchitectureMetrics {
                                                                      double systemTargetCost) {
         ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
         for (Architecture architecture : architectures) {
-            if (GlobalCostSystem(architecture, systemTargetCost) >= 1) {
+            if (suitableForCost(architecture, systemTargetCost)) {
                 eligibleArchitectures.add(architecture);
             }
         }
