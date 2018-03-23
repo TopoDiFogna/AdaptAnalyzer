@@ -8,8 +8,19 @@ import java.util.HashMap;
 
 import static it.polimi.adaptanalyzertool.metrics.ServicesMetrics.collectProvidedServices;
 
+/**
+ * This class provides the methods to calculate all the adaptability metrics.
+ * <p>
+ * It has to be used as a static class since no object must be instantiated before calling the methods that are
+ * all public and static.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public final class AdaptabilityMetrics {
 
+    private AdaptabilityMetrics(){}
 
     /**
      * The Level of system adaptability (LSA) measures the number of components used to make up the system with respect

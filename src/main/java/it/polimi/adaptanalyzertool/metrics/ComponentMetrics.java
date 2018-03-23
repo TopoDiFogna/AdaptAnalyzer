@@ -17,6 +17,8 @@ import static it.polimi.adaptanalyzertool.metrics.ServicesMetrics.NumberOfExecut
  */
 public final class ComponentMetrics {
 
+    private ComponentMetrics(){}
+
     /**
      * Defines the ratio between a component availability and the target system availability.
      * <p>

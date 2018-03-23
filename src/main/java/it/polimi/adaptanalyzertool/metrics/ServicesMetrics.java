@@ -19,6 +19,8 @@ import java.util.HashMap;
  */
 public final class ServicesMetrics {
 
+    private ServicesMetrics(){}
+
     /**
      * Defines the number of times a service is executed in a given architecture.
      *
