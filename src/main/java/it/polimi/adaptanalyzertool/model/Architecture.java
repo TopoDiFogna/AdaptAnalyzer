@@ -16,7 +16,7 @@ public class Architecture {
 
     private String name;
     private HashMap<String, Component> components;
-    private HashMap<String, Workflow> workflows;
+    private HashMap<String, Workflow> workflow;
 
     /**
      * Creates a new architecture with no components.
@@ -51,12 +51,12 @@ public class Architecture {
      *
      * @param name       The name for this architecture.
      * @param components The HashMap containing the components.
-     * @param workflows  The HashMap containing the workflows asscociated with this architecture.
+     * @param workflow  The HashMap containing the workflow associated with this architecture.
      */
-    public Architecture(String name, HashMap<String, Component> components, HashMap<String, Workflow> workflows) {
+    public Architecture(String name, HashMap<String, Component> components, HashMap<String, Workflow> workflow) {
         this.name = name;
         this.components = components;
-        this.workflows = workflows;
+        this.workflow = workflow;
     }
 
     /**
@@ -124,11 +124,11 @@ public class Architecture {
     /**
      * Return the workflow associated with this architecture.
      *
-     * @return the workflows associated with this architecture.
+     * @return the workflow associated with this architecture.
      * @see Workflow
      */
-    public HashMap<String, Workflow> getWorkflows() {
-        return workflows;
+    public HashMap<String, Workflow> getWorkflow() {
+        return workflow;
     }
 
     /**
@@ -137,7 +137,7 @@ public class Architecture {
      * @param workflow the workflow to be added.
      */
     public void addWorkflow(Workflow workflow) {
-        workflows.put(workflow.getName(), workflow);
+        this.workflow.put(workflow.getName(), workflow);
     }
 
     /**
@@ -146,13 +146,13 @@ public class Architecture {
      * @param workflow the workflow to remove from the list.
      */
     public void removeWorkflow(Workflow workflow) {
-        workflows.remove(workflow.getName(), workflow);
+        this.workflow.remove(workflow.getName(), workflow);
     }
 
     /**
      * Removes all workflow from the current architecture.
      */
-    public void removeAllWorkflows() {
-        workflows.clear();
+    public void removeAllWorkflow() {
+        workflow.clear();
     }
 }

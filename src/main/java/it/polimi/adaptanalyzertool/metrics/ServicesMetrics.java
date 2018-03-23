@@ -90,7 +90,7 @@ public final class ServicesMetrics {
 
     /**
      * The relative adaptability of a service (RAS) measures the number of used components that provide a given service with
-     * respect to the number of components actually offering suche service.
+     * respect to the number of components actually offering such service.
      *
      * @param architecture the architecture where the service is.
      * @param service      the service that is offered by the components.
