@@ -7,6 +7,14 @@ import it.polimi.adaptanalyzertool.model.RequiredService;
 
 import java.util.Random;
 
+/**
+ * <p>
+ * This class is in charge to create a new architecture using some parameters.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class ArchitectureGenerator {
 
     private final static String COMPONENT_NAME = "C";
@@ -29,6 +37,15 @@ public class ArchitectureGenerator {
     private int numberOfRequiredFunctions;
     private int adaptabilityDegree;
 
+    /**
+     * <p>
+     * Creates a generator with random seed.
+     * </p>
+     *
+     * @param numberOfComponents        number of components in the generated architecture.
+     * @param numberOfRequiredFunctions number of functions (services) that every component must require.
+     * @param adaptabilityDegree        how many times every component should be duplicated.
+     */
     public ArchitectureGenerator(int numberOfComponents, int numberOfRequiredFunctions, int adaptabilityDegree) {
         this.numberOfComponents = numberOfComponents;
         this.numberOfRequiredFunctions = numberOfRequiredFunctions;
@@ -36,6 +53,19 @@ public class ArchitectureGenerator {
         random = new Random();
     }
 
+    /**
+     * <p>
+     * Creates a generator with a specified seed.
+     * </p>
+     * <p>
+     * Use this constructor if you want to generate again a previously generated architecture.
+     * </p>
+     *
+     * @param numberOfComponents        number of components in the generated architecture.
+     * @param numberOfRequiredFunctions number of functions (services) that every component must require.
+     * @param adaptabilityDegree        how many times every component should be duplicated.
+     * @param seed                      seed for the random generation.
+     */
     public ArchitectureGenerator(int numberOfComponents, int numberOfRequiredFunctions, int adaptabilityDegree, long seed) {
         this.numberOfComponents = numberOfComponents;
         this.numberOfRequiredFunctions = numberOfRequiredFunctions;
@@ -43,6 +73,15 @@ public class ArchitectureGenerator {
         random = new Random(seed);
     }
 
+    /**
+     * <p>
+     * Generates an architecture eith the given name and parameters specified in the constructor.
+     * </p>
+     *
+     * @param name the architecture name.
+     *
+     * @return the newly generated architecture.
+     */
     public Architecture generateArchitecture(String name) {
 
         Architecture newArchitecture = new Architecture(name);

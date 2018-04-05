@@ -27,10 +27,19 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
+/**
+ * <p>
+ * This class represents the controller for the architecture controller screen. It contains all the method to
+ * manipulate the architecture and show all the details.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
-    private final String doubleRegex = "(?:\\d*\\.)?\\d+"; //TODO make this for double and 99 notation
-    private final String ninetynineRegex = "^0?\\.\\d+";
+    private static final String DOUBLE_REGEX = "(?:\\d*\\.)?\\d+";
+    private static final String NINETYNINE_REGEX = "^0?\\.\\d+";
     private final DecimalFormat df = new DecimalFormat("0.00");
 
     @FXML
@@ -358,7 +367,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         if (selectedComponent != null) {
             String sta = systemTargetAvailabilityTextField.getText().trim();
             String stc = systemTargetCostTextField.getText().trim();
-            if (!sta.equals("") && sta.matches(ninetynineRegex) && !stc.equals("") && stc.matches(doubleRegex)) {
+            if (!sta.equals("") && sta.matches(NINETYNINE_REGEX) && !stc.equals("") && stc.matches(DOUBLE_REGEX)) {
                 double fra = ComponentMetrics.FitnessRatioAvailability(Double.valueOf(sta), selectedComponent.getAvailability());
                 double frc = ComponentMetrics.FitnessRatioCost(Double.valueOf(stc), selectedComponent.getCost());
                 fitnessRatioAvailabilityLabel.setText(df.format(fra));
@@ -474,7 +483,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private void calculateArchitectureMetrics() {
         String sta = systemTargetAvailabilityTextField.getText().trim();
         String stc = systemTargetCostTextField.getText().trim();
-        if (!sta.equals("") && sta.matches(ninetynineRegex) && !stc.equals("") && stc.matches(doubleRegex)) {
+        if (!sta.equals("") && sta.matches(NINETYNINE_REGEX) && !stc.equals("") && stc.matches(DOUBLE_REGEX)) {
             architectureMetricsErrorLabel.setText("");
             double gas = ArchitectureMetrics.GlobalAvailabilitySystem(architecture, Double.valueOf(sta));
             double gcs = ArchitectureMetrics.GlobalCostSystem(architecture, Double.valueOf(stc));
@@ -506,10 +515,20 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         this.parent = screen;
     }
 
+    /**
+     * <p>Use this to retrieve the current architecture that is shown.</p>
+     *
+     * @return the currently shown architecture.
+     */
     public Architecture getArchitecture() {
         return architecture;
     }
 
+    /**
+     * <p>Sets the architecture that needs to be shown.</p>
+     *
+     * @param architecture the architecture that has to be shown.
+     */
     public void setArchitecture(Architecture architecture) {
         this.architecture = architecture;
     }

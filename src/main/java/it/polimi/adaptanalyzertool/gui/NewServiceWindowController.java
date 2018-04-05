@@ -8,10 +8,19 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+/**
+ * <p>
+ * This class represents the controller for the new service window, thus contains all the functions required to
+ * handle the creation of the new service.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class NewServiceWindowController extends NewModalWindowController {
 
-    private final String doubleRegex = "(?:\\d*\\.)?\\d+";
-    private final String ninetynineRegex = "^0?\\.\\d+";
+    private static final String DOUBLE_REGEX = "(?:\\d*\\.)?\\d+";
+    private static final String NINETYNINE_REGEX = "^0?\\.\\d+";
     /*
     New service
     */
@@ -63,7 +72,7 @@ public class NewServiceWindowController extends NewModalWindowController {
 
 
     private boolean validateProvidedServiceInput() {
-        if (!executionTimeTextField.getText().trim().matches(doubleRegex)) {
+        if (!executionTimeTextField.getText().trim().matches(DOUBLE_REGEX)) {
             serviceErrorLabel.setText("Check the inputs for mistakes");
             return false;
         } else {
@@ -73,8 +82,8 @@ public class NewServiceWindowController extends NewModalWindowController {
     }
 
     private boolean validateRequiredServiceInput() {
-        if (!usedProbabilityTextField.getText().trim().matches(ninetynineRegex)
-                || !numberOfExecutionTextField.getText().trim().matches(doubleRegex)) {
+        if (!usedProbabilityTextField.getText().trim().matches(NINETYNINE_REGEX)
+                || !numberOfExecutionTextField.getText().trim().matches(DOUBLE_REGEX)) {
             serviceErrorLabel.setText("Check the inputs for mistakes");
             return false;
         } else {

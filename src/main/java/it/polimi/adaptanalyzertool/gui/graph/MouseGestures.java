@@ -4,6 +4,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * <p>Contains all the handlers for the mouse in order to zoom the scroll pane and move the nodes.</p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 class MouseGestures {
 
     private final DragContext dragContext = new DragContext();

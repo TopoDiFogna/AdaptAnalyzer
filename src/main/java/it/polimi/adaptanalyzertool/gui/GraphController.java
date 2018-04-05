@@ -19,20 +19,38 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * <p>
+ * This class represents the controller for the graph window, thus contains all the functions required to
+ * handle the creation of the graph.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class GraphController {
 
     private Architecture architecture;
     private BorderPane root;
     private ErrorWindow errorWindow = new ErrorWindow();
 
+    /**
+     * <p>Used to store the architecture that needs to be shown in the graph.</p>
+     *
+     * @param architecture the architecture that needs to be shown.
+     */
     public void setArchitecture(Architecture architecture) {
         this.architecture = architecture;
     }
 
-    public void setRoot(BorderPane root) {
+    void setRoot(BorderPane root) {
         this.root = root;
     }
 
+    /**
+     * <p>Creates all the nodes and arrows that represents the architecture.</p>
+     * <p>Call this strictly after {@link #setArchitecture}.</p>
+     */
     public void setUp() {
         Graph graph = new Graph();
         root.setCenter(graph.getScrollPane());

@@ -4,6 +4,13 @@ import it.polimi.adaptanalyzertool.gui.graph.cells.CircleCell;
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.shape.Line;
 
+/**
+ * <p>This class defines an arrow that goes from cell to cell.</p>
+ * <p>An arrow is a line without a tail.</p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 class Arrow extends Edge {
 
     Arrow(Cell source, Cell target) {

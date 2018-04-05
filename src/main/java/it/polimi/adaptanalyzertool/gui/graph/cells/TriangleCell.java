@@ -6,8 +6,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
+/**
+ * <p>Creates a equilateral triangle cell with a fill color and a border color.</p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class TriangleCell extends Cell {
 
+    /**
+     * <p>Creates a equilateral triangle cell with a fill color and a border color.</p>
+     *
+     * @param id          unique id of the cell.
+     * @param fillColor   the inner color of the cell.
+     * @param strokeColor the border color of the cell.
+     */
     public TriangleCell(String id, Color fillColor, Color strokeColor) {
         super(id);
 

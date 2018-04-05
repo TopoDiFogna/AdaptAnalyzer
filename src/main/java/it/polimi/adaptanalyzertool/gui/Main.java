@@ -12,6 +12,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
+/**
+ * <p>
+ * Entry point for the application. This needs also to be written in the build.gradle file.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class Main extends Application {
 
     /**

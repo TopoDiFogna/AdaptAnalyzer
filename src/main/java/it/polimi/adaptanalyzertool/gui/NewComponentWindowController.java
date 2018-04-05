@@ -11,11 +11,20 @@ import javafx.scene.control.TextField;
 
 import java.util.HashMap;
 
+/**
+ * <p>
+ * This class represents the controller for the new component window, thus contains all the functions required to
+ * handle the creation of the new component.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class NewComponentWindowController extends NewModalWindowController {
 
-    private final String doubleRegex = "(?:\\d*\\.)?\\d+";
-    private final String ninetynineRegex = "^0?\\.\\d+";
-    /*
+    private static final String DOUBLE_REGEX = "(?:\\d*\\.)?\\d+";
+    private static final String NINETYNINE_REGEX = "^0?\\.\\d+";
+    /*static
        New Component
     */
     @FXML
@@ -76,8 +85,8 @@ public class NewComponentWindowController extends NewModalWindowController {
     }
 
     private boolean validateComponentInput() {
-        if (!componentCostTextField.getText().trim().matches(doubleRegex) ||
-                !componentAvailabilityTextField.getText().trim().matches(ninetynineRegex)) {
+        if (!componentCostTextField.getText().trim().matches(DOUBLE_REGEX) ||
+                !componentAvailabilityTextField.getText().trim().matches(NINETYNINE_REGEX)) {
             componentErrorLabel.setText("Check the inputs for mistakes");
             return false;
         } else {

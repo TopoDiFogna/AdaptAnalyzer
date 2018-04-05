@@ -8,7 +8,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * <p>
+ * This class represents the controller for the new generated architecture window, thus contains all the functions required to
+ * handle the creation of the new generated architecture.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class GeneratedArchitectureWindowController extends NewModalWindowController {
+
+    private static final String NUMBER_REGEX = "^\\d+";
+    private static final String SEED_REGEX = "^\\d*";
 
     @FXML
     private TextField numberOfComponentsTextField;
@@ -57,9 +69,10 @@ public class GeneratedArchitectureWindowController extends NewModalWindowControl
 
     private boolean checkInputFields() { //TODO check for correct numbers
         return !architectureNameTextField.getText().trim().equals("") &&
-                !numberOfComponentsTextField.getText().trim().equals("") &&
-                !numberOfReqFunctionsTextField.getText().trim().equals("") &&
-                !adaptabilityDegreeTextField.getText().trim().equals("");
+                !numberOfComponentsTextField.getText().trim().matches(NUMBER_REGEX) &&
+                !numberOfReqFunctionsTextField.getText().trim().matches(NUMBER_REGEX) &&
+                !adaptabilityDegreeTextField.getText().trim().matches(NUMBER_REGEX) &&
+                !seedTextField.getText().trim().matches(SEED_REGEX);
     }
 
     Architecture getArchitecture() {

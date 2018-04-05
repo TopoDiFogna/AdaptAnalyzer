@@ -8,6 +8,13 @@ import javafx.beans.value.ObservableDoubleValue;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
 
+/**
+ * <p>This class defines an edge that goes from cell to cell.</p>
+ * <p>An edge is a line without head nor tail.</p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 class Edge extends Group {
 
     DoubleBinding cosTarget;

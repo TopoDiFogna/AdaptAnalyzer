@@ -7,6 +7,12 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Scale;
 
+/**
+ * <p>This class was created because JavaFX doesn't include a scroll pane capable of zooming.</p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class ZoomableScrollPane extends ScrollPane {
 
     private double scaleValue = 1.0;

@@ -23,6 +23,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * <p>
+ * This class represents the controller for the main window of the application.
+ * </p>
+ * <p>
+ * All methods that control the top menu should be placed here.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class MainController {
 
     private Window parent;

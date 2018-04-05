@@ -7,6 +7,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * <p>
+ * This class represents the controller for the new architecture window, thus contains all the functions required to
+ * handle the creation of the new architecture.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class NewArchitectureWindowController extends NewModalWindowController {
 
     @FXML
