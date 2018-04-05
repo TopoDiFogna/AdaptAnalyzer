@@ -99,7 +99,7 @@ public final class ServicesMetrics {
      */
     public static double RelativeAdaptability(Architecture architecture, AbstractService service) {
         int usedProvidedTimes = AbsoluteAdaptability(architecture, service);
-        int providedTimes = 0;
+        double providedTimes = 0;
         for (Component component : architecture.getComponents().values()) {
             if (component.getProvidedServices().containsKey(service.getName())) {
                 providedTimes += 1;

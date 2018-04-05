@@ -35,7 +35,7 @@ public final class AdaptabilityMetrics {
     public static double LevelSystemAdaptability(Architecture architecture) {
         HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
         int aas = 0;
-        int n = 0;
+        double n = 0;
         for (ProvidedService providedService : servicesHashMap.values()) {
             aas += AbsoluteAdaptability(architecture, providedService);
         }
@@ -56,7 +56,7 @@ public final class AdaptabilityMetrics {
      */
     public static double MeanAbsoluteAdaptability(Architecture architecture) {
         HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
-        int numberOfProvidedServices = servicesHashMap.size();
+        double numberOfProvidedServices = servicesHashMap.size();
         int aas = 0;
         for (ProvidedService providedService : servicesHashMap.values()) {
             aas += AbsoluteAdaptability(architecture, providedService);
@@ -74,7 +74,7 @@ public final class AdaptabilityMetrics {
      */
     public static double MeanRelativeAdaptability(Architecture architecture) {
         HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
-        int numberOfProvidedServices = servicesHashMap.size();
+        double numberOfProvidedServices = servicesHashMap.size();
         int ras = 0;
         for (ProvidedService providedService : servicesHashMap.values()) {
             ras += RelativeAdaptability(architecture, providedService);
