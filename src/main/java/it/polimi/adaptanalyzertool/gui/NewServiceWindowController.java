@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 public class NewServiceWindowController extends NewModalWindowController {
 
     private final String doubleRegex = "(?:\\d*\\.)?\\d+";
+    private final String ninetynineRegex = "^0?\\.\\d+";
     /*
     New service
     */
@@ -72,7 +73,7 @@ public class NewServiceWindowController extends NewModalWindowController {
     }
 
     private boolean validateRequiredServiceInput() {
-        if (!usedProbabilityTextField.getText().trim().matches(doubleRegex)
+        if (!usedProbabilityTextField.getText().trim().matches(ninetynineRegex)
                 || !numberOfExecutionTextField.getText().trim().matches(doubleRegex)) {
             serviceErrorLabel.setText("Check the inputs for mistakes");
             return false;
@@ -104,7 +105,7 @@ public class NewServiceWindowController extends NewModalWindowController {
         }
     }
 
-    public AbstractService getNewService() {
+    AbstractService getNewService() {
         return newService;
     }
 }

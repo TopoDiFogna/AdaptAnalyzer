@@ -30,6 +30,7 @@ import java.util.HashMap;
 public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private final String doubleRegex = "(?:\\d*\\.)?\\d+"; //TODO make this for double and 99 notation
+    private final String ninetynineRegex = "^0?\\.\\d+";
     private final DecimalFormat df = new DecimalFormat("0.00");
 
     @FXML
@@ -182,7 +183,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         serviceContextMenu.getItems().add(serviceRemoveMenuItem);
     }
 
-    public void setUpScreen() {
+    void setUpScreen() {
         architectureComponents = architecture.getComponents();
         architectureName.setText("Architecture name: " + architecture.getName());
         tabPane.getSelectionModel().select(componentsTab);
@@ -191,36 +192,54 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void createNewComponent() {
+        try {
+            showNewModifyComponent(false);
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: newcomponentwindow/newComponentWindow.fxml");
+        }
+    }
+
+    @FXML
+    private void modifyComponent() {
+        try {
+            showNewModifyComponent(true);
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: newcomponentwindow/newComponentWindow.fxml");
+        }
+    }
+
+    private void showNewModifyComponent(boolean modify) throws IOException {
         Stage newComponentStage = new Stage();
         newComponentStage.setTitle("New Component");
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newcomponentwindow/newComponentWindow.fxml"));
 
+        Parent root = loader.load();
+        NewComponentWindowController controller = loader.getController();
+        controller.setStage(newComponentStage);
 
-        try {
-            Parent root = loader.load();
-            NewComponentWindowController controller = loader.getController();
-            controller.setStage(newComponentStage);
+        Scene scene = new Scene(root);
+        newComponentStage.setScene(scene);
+        newComponentStage.initOwner(parent.getScene().getWindow());
+        newComponentStage.setResizable(false);
+        newComponentStage.initModality(Modality.WINDOW_MODAL);
 
-            Scene scene = new Scene(root);
-            newComponentStage.setScene(scene);
-            newComponentStage.initOwner(parent.getScene().getWindow());
-            newComponentStage.setResizable(false);
-            newComponentStage.initModality(Modality.WINDOW_MODAL);
-            newComponentStage.showAndWait();
 
-            Component newComponent = controller.getNewComponent();
-            if (newComponent != null) {
-                this.selectedComponent = newComponent;
-                architecture.addComponent(newComponent);
-                updateComponentList();
-                showComponentDetail(selectedComponent);
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading internal resource: newcomponentwindow/newComponentWindow.fxml");
+        if(modify) {
+            controller.setNewComponent(selectedComponent);
+            controller.initializeFields();
+
         }
+        newComponentStage.showAndWait();
 
+        Component newComponent = controller.getNewComponent();
+        if (newComponent != null) {
+            this.selectedComponent = newComponent;
+            architecture.addComponent(newComponent);
+            updateComponentList();
+            showComponentDetail(selectedComponent);
+        }
     }
 
     private void updateComponentList() {
@@ -339,7 +358,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         if (selectedComponent != null) {
             String sta = systemTargetAvailabilityTextField.getText().trim();
             String stc = systemTargetCostTextField.getText().trim();
-            if (!sta.equals("") && sta.matches(doubleRegex) && !stc.equals("") && stc.matches(doubleRegex)) {
+            if (!sta.equals("") && sta.matches(ninetynineRegex) && !stc.equals("") && stc.matches(doubleRegex)) {
                 double fra = ComponentMetrics.FitnessRatioAvailability(Double.valueOf(sta), selectedComponent.getAvailability());
                 double frc = ComponentMetrics.FitnessRatioCost(Double.valueOf(stc), selectedComponent.getCost());
                 fitnessRatioAvailabilityLabel.setText(df.format(fra));
@@ -455,7 +474,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private void calculateArchitectureMetrics() {
         String sta = systemTargetAvailabilityTextField.getText().trim();
         String stc = systemTargetCostTextField.getText().trim();
-        if (!sta.equals("") && sta.matches(doubleRegex) && !stc.equals("") && stc.matches(doubleRegex)) {
+        if (!sta.equals("") && sta.matches(ninetynineRegex) && !stc.equals("") && stc.matches(doubleRegex)) {
             architectureMetricsErrorLabel.setText("");
             double gas = ArchitectureMetrics.GlobalAvailabilitySystem(architecture, Double.valueOf(sta));
             double gcs = ArchitectureMetrics.GlobalCostSystem(architecture, Double.valueOf(stc));
@@ -494,4 +513,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     public void setArchitecture(Architecture architecture) {
         this.architecture = architecture;
     }
+
+
 }
