@@ -21,7 +21,8 @@ import static it.polimi.adaptanalyzertool.metrics.ServicesMetrics.*;
  */
 public final class AdaptabilityMetrics {
 
-    private AdaptabilityMetrics(){}
+    private AdaptabilityMetrics() {
+    }
 
     /**
      * The Level of system adaptability (LSA) measures the number of components used to make up the system with respect

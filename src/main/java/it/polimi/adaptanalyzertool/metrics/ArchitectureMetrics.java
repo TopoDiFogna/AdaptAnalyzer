@@ -18,7 +18,8 @@ import java.util.ArrayList;
  */
 public final class ArchitectureMetrics {
 
-    private ArchitectureMetrics(){}
+    private ArchitectureMetrics() {
+    }
 
     /**
      * Defines the availability of the components that are in the architecture as probability that are all active in

@@ -51,7 +51,7 @@ public class Architecture {
      *
      * @param name       The name for this architecture.
      * @param components The HashMap containing the components.
-     * @param workflow  The HashMap containing the workflow associated with this architecture.
+     * @param workflow   The HashMap containing the workflow associated with this architecture.
      */
     public Architecture(String name, HashMap<String, Component> components, HashMap<String, Workflow> workflow) {
         this.name = name;

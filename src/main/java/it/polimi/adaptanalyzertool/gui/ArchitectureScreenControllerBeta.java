@@ -226,7 +226,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         newComponentStage.initModality(Modality.WINDOW_MODAL);
 
 
-        if(modify) {
+        if (modify) {
             controller.setNewComponent(selectedComponent);
             controller.initializeFields();
 

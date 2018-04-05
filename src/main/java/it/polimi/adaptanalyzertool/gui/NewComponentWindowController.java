@@ -33,11 +33,11 @@ public class NewComponentWindowController extends NewModalWindowController {
 
     private Component newComponent;
 
-    void initializeFields(){
-        if(newComponent != null){
+    void initializeFields() {
+        if (newComponent != null) {
             componentTextField.setText(newComponent.getName());
             componentCostTextField.setText(String.valueOf(newComponent.getCost()));
-            componentAvailabilityTextField.setText(String .valueOf(newComponent.getAvailability()));
+            componentAvailabilityTextField.setText(String.valueOf(newComponent.getAvailability()));
             usedCheckBox.setSelected(newComponent.isUsed());
             componentColorPicker.setValue(newComponent.getColor());
         }
@@ -49,7 +49,7 @@ public class NewComponentWindowController extends NewModalWindowController {
         String newComponentName = componentTextField.getText().trim();
         if (!"".equals(newComponentName)) {
             if (validateComponentInput()) {
-                if(newComponent == null) {
+                if (newComponent == null) {
                     newComponent = new Component(newComponentName,
                             Double.parseDouble(componentCostTextField.getText().trim()),
                             Double.parseDouble(componentAvailabilityTextField.getText().trim()),
@@ -86,12 +86,11 @@ public class NewComponentWindowController extends NewModalWindowController {
         }
     }
 
-    void setNewComponent(Component newComponent) {
-        this.newComponent = newComponent;
-    }
-
-
     Component getNewComponent() {
         return newComponent;
+    }
+
+    void setNewComponent(Component newComponent) {
+        this.newComponent = newComponent;
     }
 }
