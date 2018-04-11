@@ -442,8 +442,13 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 }
                 double wrt = ComponentMetrics.WeightResidenceTime(architecture, selectedComponent);
                 weightResidenceTimeLabel.setText(df.format(wrt));
-//                double ia = ComponentMetrics.InAction(architecture, ,selectedComponent);
-//                inActionLabel.setText(df.format(ia)); TODO inAction
+                if (selectedWorkflow != null) {
+                    double ia = ComponentMetrics.InAction(architecture, selectedWorkflow, selectedComponent);
+                    inActionLabel.setText(df.format(ia));
+                }
+                else {
+                    componentMetricsErrorLabel.setText("No workflow selected");
+                }
             } else {
                 componentMetricsErrorLabel.setText("Check input for mistakes");
             }
