@@ -26,7 +26,8 @@
                             <VBox fx:id="componentsVBox"/>
                         </ScrollPane>
                         <Button mnemonicParsing="false" onMouseClicked="#createNewComponent" text="Add Component"/>
-                        <Button mnemonicParsing="false" onMouseClicked="#modifyComponent" text="Modify Component"/>
+                        <Button fx:id="modifyComponentButton" disable="true" mnemonicParsing="false"
+                                onMouseClicked="#modifyComponent" text="Modify Component"/>
                     </VBox>
                     <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                         <Label text="Component Details"/>

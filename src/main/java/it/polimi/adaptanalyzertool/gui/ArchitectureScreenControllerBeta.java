@@ -58,6 +58,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private VBox componentsVBox;
     private ContextMenu componentContextMenu;
+    @FXML
+    private Button modifyComponentButton;
     /*
         Selected Component details
      */
@@ -178,6 +180,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             updateComponentList();
             clearComponentMetrics();
             clearComponentDetail();
+            updateServicesList();
+            modifyComponentButton.setDisable(true);
         });
         componentContextMenu.getItems().add(componentRemoveMenuItem);
 
@@ -238,7 +242,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         if (modify) {
             controller.setNewComponent(selectedComponent);
             controller.initializeFields();
-
         }
         newComponentStage.showAndWait();
 
@@ -277,6 +280,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                         componentContextMenu.show(componentHBox, event.getScreenX(), event.getScreenY());
                         break;
                 }
+                modifyComponentButton.setDisable(false);
             });
 
             componentsVBox.getChildren().add(componentHBox);
@@ -395,34 +399,39 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     private void updateServicesList() {
-        HashMap<String, AbstractService> componentServices = new HashMap<>();
-        componentServices.putAll(selectedComponent.getProvidedServices());
-        componentServices.putAll(selectedComponent.getRequiredServices());
-        servicesVBox.getChildren().clear();
-        for (AbstractService service : componentServices.values()) {
-            HBox servicesHBox = new HBox(3);
-            Label serviceLabel = new Label();
-            if (service instanceof ProvidedService) {
-                serviceLabel.setText("(Provided) " + service.getName());
-            } else if (service instanceof RequiredService) {
-                serviceLabel.setText("(Required) " + service.getName());
-            }
-            servicesHBox.getChildren().add(serviceLabel);
-            servicesHBox.setFocusTraversable(true);
-            servicesHBox.setId("serviceHBox");
-            servicesVBox.getChildren().add(servicesHBox);
-            servicesHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                MouseButton mb = event.getButton();
-                servicesHBox.requestFocus();
-                this.selectedService = service;
-                switch (mb) {
-                    case PRIMARY:
-                        showServiceDetail(selectedService);
-                        break;
-                    case SECONDARY:
-                        serviceContextMenu.show(servicesHBox, event.getScreenX(), event.getScreenY());
+        if(selectedComponent != null) {
+            HashMap<String, AbstractService> componentServices = new HashMap<>();
+            componentServices.putAll(selectedComponent.getProvidedServices());
+            componentServices.putAll(selectedComponent.getRequiredServices());
+            servicesVBox.getChildren().clear();
+            for (AbstractService service : componentServices.values()) {
+                HBox servicesHBox = new HBox(3);
+                Label serviceLabel = new Label();
+                if (service instanceof ProvidedService) {
+                    serviceLabel.setText("(Provided) " + service.getName());
+                } else if (service instanceof RequiredService) {
+                    serviceLabel.setText("(Required) " + service.getName());
                 }
-            });
+                servicesHBox.getChildren().add(serviceLabel);
+                servicesHBox.setFocusTraversable(true);
+                servicesHBox.setId("serviceHBox");
+                servicesVBox.getChildren().add(servicesHBox);
+                servicesHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                    MouseButton mb = event.getButton();
+                    servicesHBox.requestFocus();
+                    this.selectedService = service;
+                    switch (mb) {
+                        case PRIMARY:
+                            showServiceDetail(selectedService);
+                            break;
+                        case SECONDARY:
+                            serviceContextMenu.show(servicesHBox, event.getScreenX(), event.getScreenY());
+                            break;
+                    }
+                });
+            }
+        } else {
+            servicesVBox.getChildren().clear();
         }
     }
 
