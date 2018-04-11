@@ -1,12 +1,19 @@
 package it.polimi.adaptanalyzertool.model;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 public class Path {
 
     private String name;
     private double executionProbability;
     private LinkedList<Message> messagesList;
+
+    public Path(String name, double executionProbability) {
+        this.name = name;
+        this.executionProbability = executionProbability;
+        messagesList = new LinkedList<>();
+    }
 
     public Path(String name, double executionProbability, Message startingMessage) {
         this.name = name;
@@ -45,5 +52,26 @@ public class Path {
 
     public void removeMessage(int index) {
         messagesList.remove(index);
+    }
+
+    public Message getFirstMessage() {
+        Message firstMessage = null;
+        try {
+            firstMessage = messagesList.getFirst();
+        } catch (NoSuchElementException e) {
+            /* do nothing */
+        }
+        return firstMessage;
+    }
+
+    public Message getLastMessage() {
+        Message lastMessage = null;
+        try {
+            lastMessage = messagesList.getLast();
+        } catch (NoSuchElementException e) {
+            /* do nothing */
+        }
+
+        return lastMessage;
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="it.polimi.adaptanalyzertool.gui.NewWorkflowWindowController">
+    <center>
+        <HBox alignment="BASELINE_CENTER" spacing="5">
+            <Label text="Workflow Name:"/>
+            <TextField fx:id="workflowNameTextField" onKeyReleased="#enterPressed" promptText="Workflow name"/>
+        </HBox>
+    </center>
+    <bottom>
+        <VBox alignment="CENTER">
+            <Button onMouseClicked="#newWorkflowSubmitted" text="Submit"/>
+            <Label id="errorLabel" fx:id="errorLabel"/>
+            <BorderPane.margin>
+                <Insets top="5.0"/>
+            </BorderPane.margin>
+        </VBox>
+    </bottom>
+
+</BorderPane>

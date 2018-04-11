@@ -236,11 +236,58 @@
                     </VBox>
                 </HBox>
             </Tab>
+            <Tab text="Workflows">
+                <HBox>
+                    <VBox alignment="TOP_CENTER" spacing="10.0">
+                        <Label text="Workflows List"/>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308"
+                                    maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="100.0"
+                                    prefWidth="200.0">
+                            <VBox fx:id="workflowsVBox"/>
+                        </ScrollPane>
+                        <Button mnemonicParsing="false" onMouseClicked="#createNewWorkflow" text="Add Workflow"/>
+                        <Label layoutX="72.0" layoutY="10.0" text="Path List"/>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="10.0" layoutY="37.0"
+                                    maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                    minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
+                            <VBox fx:id="pathsVBox"/>
+                        </ScrollPane>
+                        <Button fx:id="addPathButton" disable="true" mnemonicParsing="false"
+                                onMouseClicked="#createNewPath" text="Add Path"/>
+                    </VBox>
+                    <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                        <Label text="Path Details"/>
+                        <GridPane alignment="TOP_CENTER">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="10.0" prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <Label text="Execution Probability:" GridPane.halignment="CENTER"/>
+                            <Label fx:id="pathExecutionProbabilityLabel" layoutX="111.0" layoutY="17.0" text="NaN"
+                                   GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
+                        </GridPane>
+                        <TitledPane alignment="TOP_CENTER" animated="false" collapsible="false" text="Messages Scheme">
+                            <VBox.margin>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
+                            </VBox.margin>
+                            <VBox prefHeight="300.0"/>
+                        </TitledPane>
+                        <Button fx:id="addMessageButton" disable="true" mnemonicParsing="false"
+                                onMouseClicked="#createAndAddNewMessage" text="Add Message"/>
+                    </VBox>
+                    <padding>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                    </padding>
+                </HBox>
+            </Tab>
         </TabPane>
     </center>
     <bottom>
-        <TitledPane alignment="TOP_CENTER" collapsible="false" text="Architecture Metrics"
-                    BorderPane.alignment="CENTER">
+        <TitledPane alignment="TOP_CENTER" text="Architecture Metrics" BorderPane.alignment="CENTER">
             <VBox alignment="TOP_CENTER" fillWidth="false" spacing="5.0">
                 <HBox spacing="5.0">
                     <VBox alignment="TOP_CENTER">

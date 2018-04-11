@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.121"
+            fx:controller="it.polimi.adaptanalyzertool.gui.NewMessageWindowController">
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="10.0">
+            <HBox spacing="5.0">
+                <VBox alignment="TOP_CENTER">
+                    <Label text="Starting Component"/>
+                    <ChoiceBox fx:id="startingComponentChoiceBox" prefWidth="100.0"/>
+                </VBox>
+                <Label text="--&gt;">
+                    <HBox.margin>
+                        <Insets top="20.0"/>
+                    </HBox.margin>
+                </Label>
+                <VBox alignment="TOP_CENTER">
+                    <Label text="Ending Component"/>
+                    <ChoiceBox fx:id="endingComponentChoiceBox" prefWidth="100.0"/>
+                </VBox>
+            </HBox>
+            <CheckBox fx:id="isReturningCheckBox" mnemonicParsing="false" text="Is a return message?"/>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox alignment="TOP_CENTER">
+            <Button mnemonicParsing="false" onMouseClicked="#saveMessage" text="Save"/>
+            <Label fx:id="errorLabel"/>
+            <BorderPane.margin>
+                <Insets top="10.0"/>
+            </BorderPane.margin>
+        </VBox>
+    </bottom>
+</BorderPane>

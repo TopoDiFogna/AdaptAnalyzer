@@ -16,7 +16,7 @@ public class Architecture {
 
     private String name;
     private HashMap<String, Component> components;
-    private HashMap<String, Workflow> workflow;
+    private HashMap<String, Workflow> workflows;
 
     /**
      * Creates a new architecture with no components.
@@ -51,12 +51,12 @@ public class Architecture {
      *
      * @param name       The name for this architecture.
      * @param components The HashMap containing the components.
-     * @param workflow   The HashMap containing the workflow associated with this architecture.
+     * @param workflows  The HashMap containing the workflows associated with this architecture.
      */
-    public Architecture(String name, HashMap<String, Component> components, HashMap<String, Workflow> workflow) {
+    public Architecture(String name, HashMap<String, Component> components, HashMap<String, Workflow> workflows) {
         this.name = name;
         this.components = components;
-        this.workflow = workflow;
+        this.workflows = workflows;
     }
 
     /**
@@ -122,37 +122,37 @@ public class Architecture {
     }
 
     /**
-     * Return the workflow associated with this architecture.
+     * Return the workflows associated with this architecture.
      *
-     * @return the workflow associated with this architecture.
+     * @return the workflows associated with this architecture.
      * @see Workflow
      */
-    public HashMap<String, Workflow> getWorkflow() {
-        return workflow;
+    public HashMap<String, Workflow> getWorkflows() {
+        return workflows;
     }
 
     /**
-     * Adds a workflow to the list of workflow associated with this architecture.
+     * Adds a workflows to the list of workflows associated with this architecture.
      *
-     * @param workflow the workflow to be added.
+     * @param workflow the workflows to be added.
      */
     public void addWorkflow(Workflow workflow) {
-        this.workflow.put(workflow.getName(), workflow);
+        this.workflows.put(workflow.getName(), workflow);
     }
 
     /**
-     * Removes a workflow from the list of workflow associated with this architecture.
+     * Removes a workflows from the list of workflows associated with this architecture.
      *
-     * @param workflow the workflow to remove from the list.
+     * @param workflow the workflows to remove from the list.
      */
     public void removeWorkflow(Workflow workflow) {
-        this.workflow.remove(workflow.getName(), workflow);
+        this.workflows.remove(workflow.getName(), workflow);
     }
 
     /**
-     * Removes all workflow from the current architecture.
+     * Removes all workflows from the current architecture.
      */
     public void removeAllWorkflow() {
-        workflow.clear();
+        workflows.clear();
     }
 }
