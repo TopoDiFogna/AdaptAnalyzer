@@ -4,12 +4,15 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="BASELINE_CENTER" spacing="15.0"
-      stylesheets="@welcomeScreen.css" xmlns="http://javafx.com/javafx/8.0.121"
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" spacing="30.0" xmlns="http://javafx.com/javafx/8.0.121"
       fx:controller="it.polimi.adaptanalyzertool.gui.WelcomeScreenController">
-    <Label id="mainTitle" text="Adaptability Analyzer Tool"/>
+    <Label id="mainTitle" text="Adaptability Analyzer Tool">
+        <font>
+            <Font name="System Bold" size="64.0"/>
+        </font>
+    </Label>
     <ImageView preserveRatio="true" smooth="false">
         <Image url="@../../../../../images/logo.png"/>
     </ImageView>
-    <Label/>
 </VBox>
