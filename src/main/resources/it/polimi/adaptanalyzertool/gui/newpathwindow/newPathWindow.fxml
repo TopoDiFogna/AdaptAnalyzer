@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.121"
+            fx:controller="it.polimi.adaptanalyzertool.gui.NewPathWindowController">
+    <center>
+        <GridPane minWidth="250.0" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <Label text="Path Name:"/>
+            <TextField fx:id="pathNameTextField" onKeyReleased="#enterPressed" promptText="Path name"
+                       GridPane.columnIndex="1"/>
+            <Label text="Execution Probability:" GridPane.rowIndex="1"/>
+            <TextField fx:id="executionProbabilityTextField" onKeyReleased="#enterPressed"
+                       promptText="Execution Probability" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        </GridPane>
+    </center>
+    <bottom>
+        <VBox alignment="CENTER">
+            <Button onMouseClicked="#newWorkflowSubmitted" text="Submit"/>
+            <Label id="errorLabel" fx:id="errorLabel"/>
+            <BorderPane.margin>
+                <Insets top="5.0"/>
+            </BorderPane.margin>
+        </VBox>
+    </bottom>
+</BorderPane>

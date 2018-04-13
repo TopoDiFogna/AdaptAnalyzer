@@ -1,5 +1,6 @@
 package it.polimi.adaptanalyzertool.gui;
 
+import it.polimi.adaptanalyzertool.gui.error.ErrorWindow;
 import it.polimi.adaptanalyzertool.gui.utility.ChildScreenController;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
 import it.polimi.adaptanalyzertool.metrics.AdaptabilityMetrics;
@@ -15,10 +16,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -133,6 +135,29 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private Label serviceMetricsErrorLabel;
     /*
+        Workflow List
+     */
+    @FXML
+    private VBox workflowsVBox;
+    private ContextMenu workflowContextMenu;
+    /*
+        Paths
+     */
+    @FXML
+    private Button addPathButton;
+    @FXML
+    private VBox pathsVBox;
+    private ContextMenu pathContextMenu;
+    @FXML
+    private Label pathExecutionProbabilityLabel;
+    @FXML
+    private Button addMessageButton;
+    /*
+        Messages Scheme
+     */
+    @FXML
+    private GridPane messagesGridPane;
+    /*
         Architecture Metrics
      */
     @FXML
@@ -156,6 +181,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private HashMap<String, Component> architectureComponents;
     private Component selectedComponent;
     private AbstractService selectedService;
+    private Workflow selectedWorkflow;
+    private Path selectedPath;
     private ScreenController parent;
 
     @FXML
@@ -194,13 +221,46 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             updateServicesList();
         });
         serviceContextMenu.getItems().add(serviceRemoveMenuItem);
+
+        workflowContextMenu = new ContextMenu();
+        MenuItem workflowRemoveMenuItem = new MenuItem("Remove");
+        workflowRemoveMenuItem.setOnAction(event -> {
+            architecture.removeWorkflow(selectedWorkflow);
+            selectedWorkflow = null;
+            updatePathList();
+            clearPathDetails();
+            addPathButton.setDisable(true);
+        });
+        workflowContextMenu.getItems().add(workflowRemoveMenuItem);
+
+        pathContextMenu = new ContextMenu();
+        MenuItem pathRemoveMenuItem = new MenuItem("Remove");
+        pathRemoveMenuItem.setOnAction(event -> {
+            selectedWorkflow.removePath(selectedPath);
+            clearPathDetails();
+            selectedPath = null;
+            updatePathList();
+            addMessageButton.setDisable(true);
+        });
+        pathContextMenu.getItems().add(pathRemoveMenuItem);
     }
 
     void setUpScreen() {
         architectureComponents = architecture.getComponents();
         architectureName.setText("Architecture name: " + architecture.getName());
         tabPane.getSelectionModel().select(componentsTab);
+        selectedComponent = null;
+        selectedService = null;
+        selectedWorkflow = null;
+        selectedPath = null;
+        clearComponentDetail();
+        clearServiceDetails();
+        clearPathDetails();
+        showComponentServicesButton.setDisable(true);
         updateComponentList();
+        updateServicesList();
+        updateWorkflowList();
+        updatePathList();
     }
 
     @FXML
@@ -388,8 +448,12 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 }
                 double wrt = ComponentMetrics.WeightResidenceTime(architecture, selectedComponent);
                 weightResidenceTimeLabel.setText(df.format(wrt));
-//                double ia = ComponentMetrics.InAction(architecture, ,selectedComponent);
-//                inActionLabel.setText(df.format(ia)); TODO inAction
+                if (selectedWorkflow != null) {
+                    double ia = ComponentMetrics.InAction(architecture, selectedWorkflow, selectedComponent);
+                    inActionLabel.setText(df.format(ia));
+                } else {
+                    componentMetricsErrorLabel.setText("No workflow selected");
+                }
             } else {
                 componentMetricsErrorLabel.setText("Check input for mistakes");
             }
@@ -399,7 +463,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     private void updateServicesList() {
-        if(selectedComponent != null) {
+        if (selectedComponent != null) {
             HashMap<String, AbstractService> componentServices = new HashMap<>();
             componentServices.putAll(selectedComponent.getProvidedServices());
             componentServices.putAll(selectedComponent.getRequiredServices());
@@ -518,6 +582,253 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         meanRelativeAdaptabilityLabel.setText(df.format(raas));
         levelSystemAdaptabilityLabel.setText(df.format(lsa));
     }
+
+    @FXML
+    private void createNewWorkflow() {
+        Stage stage = new Stage();
+        stage.setTitle("New Workflow");
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("newworkflowwindow/newWorkflowWindow.fxml"));
+
+        try {
+            Parent root = loader.load();
+            NewWorkflowWindowController controller = loader.getController();
+            controller.setStage(stage);
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initOwner(parent.getScene().getWindow());
+            stage.setResizable(false);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+
+            Workflow newWorkflow = controller.getWorkflow();
+            if (newWorkflow != null) {
+                this.selectedWorkflow = newWorkflow;
+                architecture.addWorkflow(selectedWorkflow);
+                addPathButton.setDisable(false);
+                updateWorkflowList();
+                updatePathList();
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: newworkflowwindow/newWorkflowWindow.fxml");
+        }
+    }
+
+    private void updateWorkflowList() {
+        workflowsVBox.getChildren().clear();
+        for (Workflow workflow : architecture.getWorkflows().values()) {
+            HBox workflowsHBox = new HBox(3);
+            Label workflowLabel = new Label(workflow.getName());
+            workflowsHBox.getChildren().add(workflowLabel);
+            workflowsHBox.setFocusTraversable(true);
+            workflowsHBox.setId("workflowHBox");
+            workflowsVBox.getChildren().add(workflowsHBox);
+            workflowsHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                MouseButton mb = event.getButton();
+                workflowsHBox.requestFocus();
+                switch (mb) {
+                    case PRIMARY:
+                        if (this.selectedWorkflow != workflow) {
+                            this.selectedWorkflow = workflow;
+                            updatePathList();
+                        }
+                        break;
+                    case SECONDARY:
+                        this.selectedWorkflow = workflow;
+                        workflowContextMenu.show(workflowsHBox, event.getScreenX(), event.getScreenY());
+                        break;
+                }
+                addPathButton.setDisable(false);
+            });
+        }
+    }
+
+    @FXML
+    private void createNewPath() {
+        Stage stage = new Stage();
+        stage.setTitle("New Path");
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("newpathwindow/newPathWindow.fxml"));
+
+        try {
+            Parent root = loader.load();
+            NewPathWindowController controller = loader.getController();
+            controller.setStage(stage);
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initOwner(parent.getScene().getWindow());
+            stage.setResizable(false);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+
+            Path newPath = controller.getPath();
+            if (newPath != null) {
+                this.selectedPath = newPath;
+                selectedWorkflow.addPath(selectedPath);
+                clearPathDetails();
+                updatePathList();
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: newpathwindow/newPathWindow.fxml");
+        }
+    }
+
+    private void updatePathList() {
+        if (selectedWorkflow != null) {
+            pathsVBox.getChildren().clear();
+            for (Path path : selectedWorkflow.getPathHashMap().values()) {
+                HBox pathHBox = new HBox(3);
+                Label pathLabel = new Label(path.getName());
+                pathHBox.setFocusTraversable(true);
+                pathHBox.setId("pathHBox");
+                pathHBox.getChildren().add(pathLabel);
+                pathsVBox.getChildren().add(pathHBox);
+                pathHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                    MouseButton mb = event.getButton();
+                    pathHBox.requestFocus();
+                    this.selectedPath = path;
+                    switch (mb) {
+                        case PRIMARY:
+                            showPathDetails(selectedPath);
+                            break;
+                        case SECONDARY:
+                            pathContextMenu.show(pathHBox, event.getScreenX(), event.getScreenY());
+                            break;
+                    }
+                });
+                addMessageButton.setDisable(false);
+            }
+        } else {
+            pathsVBox.getChildren().clear();
+        }
+    }
+
+
+    private void showPathDetails(Path path) {
+        Tooltip removeTooltip = new Tooltip("Click to remove this message");
+        pathExecutionProbabilityLabel.setText(String.valueOf(path.getExecutionProbability()));
+        messagesGridPane.getChildren().clear();
+        int gridPaneRows = 0;
+        int gridPaneCols = 0;
+        for (Message message : selectedPath.getMessagesList()) {
+            Label startingComponentLabel = new Label(message.getStartingComponentName());
+            startingComponentLabel.setFont(Font.font(null, FontWeight.BOLD, 18));
+            Label endingComponentLabel = new Label(message.getEndingComponentName());
+            endingComponentLabel.setFont(Font.font(null, FontWeight.BOLD, 18));
+            Label backArrowLabel = new Label("<--");
+            backArrowLabel.setTooltip(removeTooltip);
+            backArrowLabel.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+            backArrowLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                selectedPath.removeMessage((Message) backArrowLabel.getUserData());
+                showPathDetails(selectedPath);
+            });
+            backArrowLabel.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> backArrowLabel.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(2), null))));
+            backArrowLabel.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> backArrowLabel.setBackground(new Background(new BackgroundFill(null, null, null))));
+            Label arrowLabel = new Label("-->");
+            arrowLabel.setTooltip(removeTooltip);
+            arrowLabel.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+            arrowLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                selectedPath.removeMessage((Message) arrowLabel.getUserData());
+                showPathDetails(selectedPath);
+            });
+            arrowLabel.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> arrowLabel.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(2), null))));
+            arrowLabel.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> arrowLabel.setBackground(new Background(new BackgroundFill(null, null, null))));
+            arrowLabel.setUserData(message);
+            backArrowLabel.setUserData(message);
+            if (message.isReturning()) {
+                if (gridPaneCols < 2) {
+                    ErrorWindow errorWindow = new ErrorWindow();
+                    errorWindow.showErrorMessage("You cannot enter more return messages in this row!", parent.getScene().getWindow());
+                    selectedPath.getMessagesList().removeLast();
+                    return;
+                }
+                if (!selectedPath.getMessagesList().get(selectedPath.getMessagesList().indexOf(message) - 1).isReturning()) {
+                    gridPaneRows++;
+                    messagesGridPane.add(startingComponentLabel, gridPaneCols, gridPaneRows);
+                    gridPaneCols--;
+                    messagesGridPane.add(backArrowLabel, gridPaneCols, gridPaneRows);
+                    gridPaneCols--;
+                    messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+                } else {
+                    gridPaneCols--;
+                    messagesGridPane.add(backArrowLabel, gridPaneCols, gridPaneRows);
+                    gridPaneCols--;
+                    messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+                }
+            } else if (messagesGridPane.getChildren().isEmpty()) {
+                messagesGridPane.add(startingComponentLabel, gridPaneCols, gridPaneRows);
+                gridPaneCols++;
+                messagesGridPane.add(arrowLabel, gridPaneCols, gridPaneRows);
+                gridPaneCols++;
+                messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+            } else {
+                if (selectedPath.getMessagesList().get(selectedPath.getMessagesList().indexOf(message) - 1).isReturning()) {
+                    gridPaneRows++;
+                    messagesGridPane.add(startingComponentLabel, gridPaneCols, gridPaneRows);
+                    gridPaneCols++;
+                    messagesGridPane.add(arrowLabel, gridPaneCols, gridPaneRows);
+                    gridPaneCols++;
+                    messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+                } else {
+                    gridPaneCols++;
+                    messagesGridPane.add(arrowLabel, gridPaneCols, gridPaneRows);
+                    gridPaneCols++;
+                    messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+                }
+            }
+        }
+    }
+
+    private void clearPathDetails() {
+        pathExecutionProbabilityLabel.setText("NaN");
+        messagesGridPane.getChildren().clear(); // Should be enough
+    }
+
+    @FXML
+    private void createAndAddNewMessage() {
+        Stage stage = new Stage();
+        stage.setTitle("New Message");
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("newmessagewindow/newMessageWindow.fxml"));
+
+        try {
+            Parent root = loader.load();
+            NewMessageWindowController controller = loader.getController();
+            controller.setStage(stage);
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initOwner(parent.getScene().getWindow());
+            stage.setResizable(false);
+            stage.initModality(Modality.WINDOW_MODAL);
+            controller.setAvailableComponents(architecture.getComponents().keySet());
+            stage.showAndWait();
+
+            Message newMessage = controller.getMessage();
+            if (newMessage != null) {
+                Message lastMessage = selectedPath.getLastMessage();
+                if (lastMessage != null) {
+                    if (lastMessage.getEndingComponentName().equals(newMessage.getStartingComponentName())) {
+                        selectedPath.addMessage(newMessage);
+                    } else {
+                        System.err.print("Error adding message " + newMessage.getStartingComponentName() + " ->" + newMessage.getEndingComponentName());
+                    }
+
+                } else {
+                    selectedPath.addMessage(newMessage);
+                }
+                showPathDetails(selectedPath);
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading internal resource: newmessagewindow/newMessageWindow.fxml");
+        }
+    }
+
 
     @Override
     public void setParentScreen(ScreenController screen) {

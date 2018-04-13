@@ -8,21 +8,12 @@ public class Message {
 
     private String startingComponentName;
     private String endingComponentName;
+    private boolean isReturning;
 
-    private String name;
-
-    public Message(String name) {
-        this(name, null, null);
-    }
-
-    public Message(String name, String startingComponent, String endingComponent) {
-        this.name = name;
+    public Message(String startingComponent, String endingComponent, boolean isReturning) {
         this.startingComponentName = startingComponent;
         this.endingComponentName = endingComponent;
-    }
-
-    public String getName() {
-        return name;
+        this.isReturning = isReturning;
     }
 
     public String getStartingComponentName() {
@@ -40,5 +31,9 @@ public class Message {
 
     public void setEndingComponentName(String endingComponentName) {
         this.endingComponentName = endingComponentName;
+    }
+
+    public boolean isReturning() {
+        return isReturning;
     }
 }

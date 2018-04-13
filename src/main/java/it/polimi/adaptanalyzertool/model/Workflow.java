@@ -9,6 +9,7 @@ public class Workflow {
 
     public Workflow(String name) {
         this.name = name;
+        pathHashMap = new HashMap<>();
     }
 
     public String getName() {
