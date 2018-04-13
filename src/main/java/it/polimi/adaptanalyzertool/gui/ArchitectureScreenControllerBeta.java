@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -151,6 +152,11 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private Button addMessageButton;
     /*
+        Messages Scheme
+     */
+    @FXML
+    private GridPane messagesGridPane;
+    /*
         Architecture Metrics
      */
     @FXML
@@ -174,7 +180,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private HashMap<String, Component> architectureComponents;
     private Component selectedComponent;
     private AbstractService selectedService;
-    private HashMap<String, Workflow> architectureWorkflows;
     private Workflow selectedWorkflow;
     private Path selectedPath;
     private ScreenController parent;
@@ -445,8 +450,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 if (selectedWorkflow != null) {
                     double ia = ComponentMetrics.InAction(architecture, selectedWorkflow, selectedComponent);
                     inActionLabel.setText(df.format(ia));
-                }
-                else {
+                } else {
                     componentMetricsErrorLabel.setText("No workflow selected");
                 }
             } else {
@@ -612,9 +616,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     private void updateWorkflowList() {
-        architectureWorkflows = architecture.getWorkflows();
         workflowsVBox.getChildren().clear();
-        for (Workflow workflow : architectureWorkflows.values()) {
+        for (Workflow workflow : architecture.getWorkflows().values()) {
             HBox workflowsHBox = new HBox(3);
             Label workflowLabel = new Label(workflow.getName());
             workflowsHBox.getChildren().add(workflowLabel);
@@ -665,6 +668,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             if (newPath != null) {
                 this.selectedPath = newPath;
                 selectedWorkflow.addPath(selectedPath);
+                clearPathDetails();
                 updatePathList();
             }
         } catch (IOException e) {
@@ -674,7 +678,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void updatePathList() {
         if (selectedWorkflow != null) {
-            HashMap<String, Path> messagesList = selectedWorkflow.getPathHashMap();
             pathsVBox.getChildren().clear();
             for (Path path : selectedWorkflow.getPathHashMap().values()) {
                 HBox pathHBox = new HBox(3);
@@ -706,12 +709,53 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void showPathDetails(Path path) {
         pathExecutionProbabilityLabel.setText(String.valueOf(path.getExecutionProbability()));
-        //TODO
+        messagesGridPane.getChildren().clear();
+        int gridPaneRows = 0;
+        int gridPaneCols = 0;
+        for (Message message : selectedPath.getMessagesList()) {
+            Label startingComponentLabel = new Label(message.getStartingComponentName());
+            Label endingComponentLabel = new Label(message.getEndingComponentName());
+            if (message.isReturning()) {
+                if (!selectedPath.getMessagesList().get(selectedPath.getMessagesList().indexOf(message) - 1).isReturning()) {
+                    gridPaneRows++;
+                    messagesGridPane.add(startingComponentLabel, gridPaneCols, gridPaneRows);
+                    gridPaneCols--;
+                    messagesGridPane.add(new Label("<-"), gridPaneCols, gridPaneRows);
+                    gridPaneCols--;
+                    messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+                } else {
+                    gridPaneCols--;
+                    messagesGridPane.add(new Label("<-"), gridPaneCols, gridPaneRows);
+                    gridPaneCols--;
+                    messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+                }
+            } else if (messagesGridPane.getChildren().isEmpty()) {
+                messagesGridPane.add(startingComponentLabel, gridPaneCols, gridPaneRows);
+                gridPaneCols++;
+                messagesGridPane.add(new Label("->"), gridPaneCols, gridPaneRows);
+                gridPaneCols++;
+                messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+            } else {
+                if (selectedPath.getMessagesList().get(selectedPath.getMessagesList().indexOf(message) - 1).isReturning()) {
+                    gridPaneRows++;
+                    messagesGridPane.add(startingComponentLabel, gridPaneCols, gridPaneRows);
+                    gridPaneCols++;
+                    messagesGridPane.add(new Label("->"), gridPaneCols, gridPaneRows);
+                    gridPaneCols++;
+                    messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+                } else {
+                    gridPaneCols++;
+                    messagesGridPane.add(new Label("->"), gridPaneCols, gridPaneRows);
+                    gridPaneCols++;
+                    messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
+                }
+            }
+        }
     }
 
     private void clearPathDetails() {
         pathExecutionProbabilityLabel.setText("NaN");
-        //TODO
+        messagesGridPane.getChildren().clear(); // Should be enough
     }
 
     @FXML
@@ -737,12 +781,21 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
             Message newMessage = controller.getMessage();
             if (newMessage != null) {
-                selectedPath.addMessage(newMessage);
+                Message lastMessage = selectedPath.getLastMessage();
+                if (lastMessage != null) {
+                    if (lastMessage.getEndingComponentName().equals(newMessage.getStartingComponentName())) { //TODO returning
+                        selectedPath.addMessage(newMessage);
+                    } else {
+                        System.err.print("Error adding message " + newMessage.getStartingComponentName() + " ->" + newMessage.getEndingComponentName());
+                    }
+
+                } else {
+                    selectedPath.addMessage(newMessage);
+                }
                 showPathDetails(selectedPath);
             }
         } catch (IOException e) {
             System.err.println("Error loading internal resource: newmessagewindow/newMessageWindow.fxml");
-            e.printStackTrace();
         }
     }
 

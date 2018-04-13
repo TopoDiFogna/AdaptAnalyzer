@@ -32,4 +32,8 @@ public class Message {
     public void setEndingComponentName(String endingComponentName) {
         this.endingComponentName = endingComponentName;
     }
+
+    public boolean isReturning() {
+        return isReturning;
+    }
 }
