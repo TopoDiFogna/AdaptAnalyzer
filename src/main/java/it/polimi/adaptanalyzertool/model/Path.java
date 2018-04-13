@@ -42,10 +42,6 @@ public class Path {
         messagesList.add(message);
     }
 
-    public void removeLastMessage() {
-        messagesList.removeLast();
-    }
-
     public void removeMessage(Message message) {
         messagesList.remove(message);
     }

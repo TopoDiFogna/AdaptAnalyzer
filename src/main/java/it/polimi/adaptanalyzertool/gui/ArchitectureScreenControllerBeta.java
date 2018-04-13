@@ -1,5 +1,6 @@
 package it.polimi.adaptanalyzertool.gui;
 
+import it.polimi.adaptanalyzertool.gui.error.ErrorWindow;
 import it.polimi.adaptanalyzertool.gui.utility.ChildScreenController;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
 import it.polimi.adaptanalyzertool.metrics.AdaptabilityMetrics;
@@ -15,11 +16,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -708,31 +709,60 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
 
     private void showPathDetails(Path path) {
+        Tooltip removeTooltip = new Tooltip("Click to remove this message");
         pathExecutionProbabilityLabel.setText(String.valueOf(path.getExecutionProbability()));
         messagesGridPane.getChildren().clear();
         int gridPaneRows = 0;
         int gridPaneCols = 0;
         for (Message message : selectedPath.getMessagesList()) {
             Label startingComponentLabel = new Label(message.getStartingComponentName());
+            startingComponentLabel.setFont(Font.font(null, FontWeight.BOLD, 18));
             Label endingComponentLabel = new Label(message.getEndingComponentName());
+            endingComponentLabel.setFont(Font.font(null, FontWeight.BOLD, 18));
+            Label backArrowLabel = new Label("<--");
+            backArrowLabel.setTooltip(removeTooltip);
+            backArrowLabel.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+            backArrowLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                selectedPath.removeMessage((Message) backArrowLabel.getUserData());
+                showPathDetails(selectedPath);
+            });
+            backArrowLabel.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> backArrowLabel.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(2), null))));
+            backArrowLabel.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> backArrowLabel.setBackground(new Background(new BackgroundFill(null, null, null))));
+            Label arrowLabel = new Label("-->");
+            arrowLabel.setTooltip(removeTooltip);
+            arrowLabel.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+            arrowLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                selectedPath.removeMessage((Message) arrowLabel.getUserData());
+                showPathDetails(selectedPath);
+            });
+            arrowLabel.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> arrowLabel.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(2), null))));
+            arrowLabel.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> arrowLabel.setBackground(new Background(new BackgroundFill(null, null, null))));
+            arrowLabel.setUserData(message);
+            backArrowLabel.setUserData(message);
             if (message.isReturning()) {
+                if (gridPaneCols < 2) {
+                    ErrorWindow errorWindow = new ErrorWindow();
+                    errorWindow.showErrorMessage("You cannot enter more return messages in this row!", parent.getScene().getWindow());
+                    selectedPath.getMessagesList().removeLast();
+                    return;
+                }
                 if (!selectedPath.getMessagesList().get(selectedPath.getMessagesList().indexOf(message) - 1).isReturning()) {
                     gridPaneRows++;
                     messagesGridPane.add(startingComponentLabel, gridPaneCols, gridPaneRows);
                     gridPaneCols--;
-                    messagesGridPane.add(new Label("<-"), gridPaneCols, gridPaneRows);
+                    messagesGridPane.add(backArrowLabel, gridPaneCols, gridPaneRows);
                     gridPaneCols--;
                     messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
                 } else {
                     gridPaneCols--;
-                    messagesGridPane.add(new Label("<-"), gridPaneCols, gridPaneRows);
+                    messagesGridPane.add(backArrowLabel, gridPaneCols, gridPaneRows);
                     gridPaneCols--;
                     messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
                 }
             } else if (messagesGridPane.getChildren().isEmpty()) {
                 messagesGridPane.add(startingComponentLabel, gridPaneCols, gridPaneRows);
                 gridPaneCols++;
-                messagesGridPane.add(new Label("->"), gridPaneCols, gridPaneRows);
+                messagesGridPane.add(arrowLabel, gridPaneCols, gridPaneRows);
                 gridPaneCols++;
                 messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
             } else {
@@ -740,12 +770,12 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                     gridPaneRows++;
                     messagesGridPane.add(startingComponentLabel, gridPaneCols, gridPaneRows);
                     gridPaneCols++;
-                    messagesGridPane.add(new Label("->"), gridPaneCols, gridPaneRows);
+                    messagesGridPane.add(arrowLabel, gridPaneCols, gridPaneRows);
                     gridPaneCols++;
                     messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
                 } else {
                     gridPaneCols++;
-                    messagesGridPane.add(new Label("->"), gridPaneCols, gridPaneRows);
+                    messagesGridPane.add(arrowLabel, gridPaneCols, gridPaneRows);
                     gridPaneCols++;
                     messagesGridPane.add(endingComponentLabel, gridPaneCols, gridPaneRows);
                 }
@@ -783,7 +813,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             if (newMessage != null) {
                 Message lastMessage = selectedPath.getLastMessage();
                 if (lastMessage != null) {
-                    if (lastMessage.getEndingComponentName().equals(newMessage.getStartingComponentName())) { //TODO returning
+                    if (lastMessage.getEndingComponentName().equals(newMessage.getStartingComponentName())) {
                         selectedPath.addMessage(newMessage);
                     } else {
                         System.err.print("Error adding message " + newMessage.getStartingComponentName() + " ->" + newMessage.getEndingComponentName());
