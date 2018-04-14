@@ -723,7 +723,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             backArrowLabel.setTooltip(removeTooltip);
             backArrowLabel.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
             backArrowLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                selectedPath.removeMessage((Message) backArrowLabel.getUserData());
+                selectedPath.removeMessageAndFollowers((Message) backArrowLabel.getUserData());
                 showPathDetails(selectedPath);
             });
             backArrowLabel.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> backArrowLabel.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(2), null))));
@@ -732,7 +732,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             arrowLabel.setTooltip(removeTooltip);
             arrowLabel.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
             arrowLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                selectedPath.removeMessage((Message) arrowLabel.getUserData());
+                selectedPath.removeMessageAndFollowers((Message) arrowLabel.getUserData());
                 showPathDetails(selectedPath);
             });
             arrowLabel.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> arrowLabel.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(2), null))));

@@ -1,6 +1,7 @@
 package it.polimi.adaptanalyzertool.model;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 public class Path {
@@ -69,5 +70,18 @@ public class Path {
         }
 
         return lastMessage;
+    }
+
+    public void removeMessageAndFollowers(int index){
+        ListIterator<Message> listIterator = messagesList.listIterator(index);
+        while(listIterator.hasNext()) {
+            listIterator.next();
+            listIterator.remove();
+        }
+    }
+
+    public void removeMessageAndFollowers(Message message){
+        int index = messagesList.indexOf(message);
+        removeMessageAndFollowers(index);
     }
 }
