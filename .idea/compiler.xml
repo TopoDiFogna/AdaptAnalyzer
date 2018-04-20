@@ -12,8 +12,8 @@
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
     <bytecodeTargetLevel>
-      <module name="AdaptAnalyzer_main" target="1.9" />
-      <module name="AdaptAnalyzer_test" target="1.9" />
+      <module name="AdaptAnalyzer_main" target="1.10" />
+      <module name="AdaptAnalyzer_test" target="1.10" />
     </bytecodeTargetLevel>
   </component>
 </project>
