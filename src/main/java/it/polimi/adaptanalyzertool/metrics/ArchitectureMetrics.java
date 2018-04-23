@@ -2,8 +2,11 @@ package it.polimi.adaptanalyzertool.metrics;
 
 import it.polimi.adaptanalyzertool.model.Architecture;
 import it.polimi.adaptanalyzertool.model.Component;
+import it.polimi.adaptanalyzertool.model.Workflow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * This class contains all the metrics for the architectures.
@@ -67,6 +70,24 @@ public final class ArchitectureMetrics {
             gcs += ComponentMetrics.FitnessRatioCost(systemTargetCost, component.getCost());
         }
         return gcs;
+    }
+
+    public static double TotalStaticAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups) {
+        //TODO
+        return 0;
+    }
+
+    public static double TotalDynamicAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups, Workflow workflow) {
+        //TODO
+        return 0;
+    }
+
+    public static double TotalCost(Architecture architecture) {
+        double totalCost = 0;
+        for (Component component : architecture.getComponents().values()) {
+            totalCost += component.getCost();
+        }
+        return totalCost;
     }
 
     /**

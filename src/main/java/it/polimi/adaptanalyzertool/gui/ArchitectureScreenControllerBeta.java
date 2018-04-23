@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * <p>
@@ -178,7 +179,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Label architectureMetricsErrorLabel;
 
     private Architecture architecture;
-    private HashMap<String, Component> architectureComponents;
+    private HashMap<String, HashSet<Component>> componentsGroups;
     private Component selectedComponent;
     private AbstractService selectedService;
     private Workflow selectedWorkflow;
@@ -190,7 +191,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         //Adds listener to the component choice box to update the services displayed
         componentChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                selectedComponent = architectureComponents.get(newValue);
+                selectedComponent = architecture.getComponents().get(newValue);
                 updateServicesList();
             }
         });
@@ -246,7 +247,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     void setUpScreen() {
-        architectureComponents = architecture.getComponents();
         architectureName.setText("Architecture name: " + architecture.getName());
         tabPane.getSelectionModel().select(componentsTab);
         selectedComponent = null;
@@ -315,9 +315,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     private void updateComponentList() {
-        architectureComponents = architecture.getComponents();
         componentsVBox.getChildren().clear();
-        for (Component component : architectureComponents.values()) {
+        for (Component component : architecture.getComponents().values()) {
             Rectangle componentColor = new Rectangle(17, 17, component.getColor());
             componentColor.setStroke(Color.BLACK);
             Label componentName = new Label(component.getName());
@@ -382,8 +381,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void onChangedTab() {
-        componentChoiceBox.setItems(FXCollections.observableArrayList(architectureComponents.keySet()));
-        if (!architectureComponents.values().isEmpty() && selectedComponent != null) {
+        componentChoiceBox.setItems(FXCollections.observableArrayList(architecture.getComponents().keySet()));
+        if (!architecture.getComponents().values().isEmpty() && selectedComponent != null) {
             componentChoiceBox.setValue(selectedComponent.getName());
             this.serviceAddButton.setDisable(false);
         }
@@ -497,6 +496,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         } else {
             servicesVBox.getChildren().clear();
         }
+        updateComponentGroups();
     }
 
     private void showServiceDetail(AbstractService service) {
@@ -806,7 +806,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             stage.initOwner(parent.getScene().getWindow());
             stage.setResizable(false);
             stage.initModality(Modality.WINDOW_MODAL);
-            controller.setAvailableComponents(architecture.getComponents().keySet());
+            controller.setAvailableComponents(componentsGroups.keySet());
             stage.showAndWait();
 
             Message newMessage = controller.getMessage();
@@ -853,5 +853,30 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         this.architecture = architecture;
     }
 
+    public HashMap<String, HashSet<Component>> getComponentsGroups() {
+        return componentsGroups;
+    }
 
+    private void updateComponentGroups() {
+        componentsGroups = new HashMap<>();
+        for (Component component : architecture.getComponents().values()) {
+            boolean found = false;
+            for (HashSet<Component> componentHashSet : componentsGroups.values()) {
+                for (Component componentInHashSet : componentHashSet) {
+                    if (component.getProvidedServices().equals(componentInHashSet.getProvidedServices()) &&
+                            component.getRequiredServices().equals(componentInHashSet.getRequiredServices()) &&
+                            !found) {
+                        componentHashSet.add(component);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found) {
+                HashSet<Component> newHashSet = new HashSet<>();
+                newHashSet.add(component);
+                componentsGroups.put(component.getName(), newHashSet);
+            }
+        }
+    }
 }

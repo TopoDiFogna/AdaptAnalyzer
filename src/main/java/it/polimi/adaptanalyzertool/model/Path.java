@@ -72,15 +72,15 @@ public class Path {
         return lastMessage;
     }
 
-    public void removeMessageAndFollowers(int index){
+    public void removeMessageAndFollowers(int index) {
         ListIterator<Message> listIterator = messagesList.listIterator(index);
-        while(listIterator.hasNext()) {
+        while (listIterator.hasNext()) {
             listIterator.next();
             listIterator.remove();
         }
     }
 
-    public void removeMessageAndFollowers(Message message){
+    public void removeMessageAndFollowers(Message message) {
         int index = messagesList.indexOf(message);
         removeMessageAndFollowers(index);
     }
