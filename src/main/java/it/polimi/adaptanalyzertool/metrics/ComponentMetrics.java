@@ -102,12 +102,12 @@ public final class ComponentMetrics {
     public static double WeightResidenceTime(Architecture architecture, Component component) {
         double totalTime = 0;
         double componentTime = 0;
-        for (Component architectureComponent : architecture.getComponents().values()) {
-            for (ProvidedService providedService : architectureComponent.getProvidedServices().values()) {
+        for (Component architectureComponent : architecture.getComponents()) {
+            for (ProvidedService providedService : architectureComponent.getProvidedServices()) {
                 totalTime += NumberOfExecutions(architecture, providedService) * providedService.getExecutionTime();
             }
         }
-        for (ProvidedService providedService : component.getProvidedServices().values()) {
+        for (ProvidedService providedService : component.getProvidedServices()) {
             componentTime += NumberOfExecutions(architecture, providedService) * providedService.getExecutionTime();
         }
         return componentTime / totalTime;
@@ -135,9 +135,9 @@ public final class ComponentMetrics {
             int selectedComponentExes = 0;
             double selectedComponentExecTime = 0;
             for (Message message : path.getMessagesList()) {
-                Component currComponent = architecture.getComponents().get(message.getStartingComponentName());
+                Component currComponent = architecture.getSingleComponent(message.getStartingComponentName());
                 double maxExecTime = 0;
-                for (ProvidedService service : currComponent.getProvidedServices().values()) {
+                for (ProvidedService service : currComponent.getProvidedServices()) {
                     if (service.getExecutionTime() > maxExecTime) {
                         maxExecTime = service.getExecutionTime();
                         if (currComponent == component) {

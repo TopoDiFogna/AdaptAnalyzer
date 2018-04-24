@@ -46,7 +46,7 @@ public final class ArchitectureMetrics {
      */
     public static double GlobalAvailabilitySystem(Architecture architecture, double systemTargetAvailability) {
         double gas = 1;
-        for (Component component : architecture.getComponents().values()) {
+        for (Component component : architecture.getComponents()) {
             gas *= ComponentMetrics.FitnessRatioAvailability(systemTargetAvailability, component.getAvailability());
         }
         return gas;
@@ -65,7 +65,7 @@ public final class ArchitectureMetrics {
      */
     public static double GlobalCostSystem(Architecture architecture, double systemTargetCost) {
         double gcs = 0;
-        for (Component component : architecture.getComponents().values()) {
+        for (Component component : architecture.getComponents()) {
             gcs += ComponentMetrics.FitnessRatioCost(systemTargetCost, component.getCost());
         }
         return gcs;
@@ -124,7 +124,7 @@ public final class ArchitectureMetrics {
 
     public static double TotalCost(Architecture architecture) {
         double totalCost = 0;
-        for (Component component : architecture.getComponents().values()) {
+        for (Component component : architecture.getComponents()) {
             totalCost += component.getCost();
         }
         return totalCost;

@@ -5,7 +5,7 @@ import it.polimi.adaptanalyzertool.model.Architecture;
 import it.polimi.adaptanalyzertool.model.Component;
 import it.polimi.adaptanalyzertool.model.ProvidedService;
 
-import java.util.HashMap;
+import java.util.HashSet;
 
 import static it.polimi.adaptanalyzertool.metrics.ServicesMetrics.*;
 
@@ -33,13 +33,13 @@ public final class AdaptabilityMetrics {
      * adaptable architecture would use.
      */
     public static double LevelSystemAdaptability(Architecture architecture) {
-        HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
+        HashSet<ProvidedService> servicesHashSet = collectProvidedServices(architecture);
         int aas = 0;
         double n = 0;
-        for (ProvidedService providedService : servicesHashMap.values()) {
+        for (ProvidedService providedService : servicesHashSet) {
             aas += AbsoluteAdaptability(architecture, providedService);
         }
-        for (Component component : architecture.getComponents().values()) {
+        for (Component component : architecture.getComponents()) {
             if (!component.getProvidedServices().isEmpty()) {
                 n += 1;
             }
@@ -54,10 +54,10 @@ public final class AdaptabilityMetrics {
      * @return the mean number of used component per service.
      */
     public static double MeanAbsoluteAdaptability(Architecture architecture) {
-        HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
+        HashSet<ProvidedService> servicesHashMap = collectProvidedServices(architecture);
         double numberOfProvidedServices = servicesHashMap.size();
         int aas = 0;
-        for (ProvidedService providedService : servicesHashMap.values()) {
+        for (ProvidedService providedService : servicesHashMap) {
             aas += AbsoluteAdaptability(architecture, providedService);
         }
         return aas / numberOfProvidedServices;
@@ -71,10 +71,10 @@ public final class AdaptabilityMetrics {
      * @see ServicesMetrics#RelativeAdaptability(Architecture, AbstractService)
      */
     public static double MeanRelativeAdaptability(Architecture architecture) {
-        HashMap<String, ProvidedService> servicesHashMap = collectProvidedServices(architecture);
+        HashSet<ProvidedService> servicesHashMap = collectProvidedServices(architecture);
         double numberOfProvidedServices = servicesHashMap.size();
         int ras = 0;
-        for (ProvidedService providedService : servicesHashMap.values()) {
+        for (ProvidedService providedService : servicesHashMap) {
             ras += RelativeAdaptability(architecture, providedService);
         }
         return ras / numberOfProvidedServices;

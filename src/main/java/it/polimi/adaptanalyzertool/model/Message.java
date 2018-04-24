@@ -21,16 +21,8 @@ public class Message {
         return startingComponentName;
     }
 
-    public void setStartingComponentName(String startingComponentName) {
-        this.startingComponentName = startingComponentName;
-    }
-
     public String getEndingComponentName() {
         return endingComponentName;
-    }
-
-    public void setEndingComponentName(String endingComponentName) {
-        this.endingComponentName = endingComponentName;
     }
 
     public boolean isReturning() {

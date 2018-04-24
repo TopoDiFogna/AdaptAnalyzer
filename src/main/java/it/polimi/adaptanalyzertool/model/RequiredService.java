@@ -38,29 +38,11 @@ public class RequiredService extends AbstractService {
     }
 
     /**
-     * Changes the probability that this service will be used.
-     *
-     * @param usedProbability the new probability to be used.
-     */
-    public void setUsedProbability(double usedProbability) {
-        this.usedProbability = usedProbability;
-    }
-
-    /**
      * Gets how many times this service will be run per call.
      *
      * @return how many times this service will be run per call.
      */
     public int getNumberOfExecutionsPerCall() {
         return numberOfExecutionsPerCall;
-    }
-
-    /**
-     * Changes how many times this service will be run.
-     *
-     * @param numberOfExecutionsPerCall the new number of times this service will be run.
-     */
-    public void setNumberOfExecutionsPerCall(int numberOfExecutionsPerCall) {
-        this.numberOfExecutionsPerCall = numberOfExecutionsPerCall;
     }
 }

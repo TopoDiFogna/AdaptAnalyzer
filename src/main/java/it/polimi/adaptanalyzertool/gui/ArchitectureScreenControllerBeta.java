@@ -191,7 +191,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         //Adds listener to the component choice box to update the services displayed
         componentChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                selectedComponent = architecture.getComponents().get(newValue);
+                selectedComponent = architecture.getSingleComponent(newValue);
                 updateServicesList();
             }
         });
@@ -316,7 +316,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void updateComponentList() {
         componentsVBox.getChildren().clear();
-        for (Component component : architecture.getComponents().values()) {
+        for (Component component : architecture.getComponents()) {
             Rectangle componentColor = new Rectangle(17, 17, component.getColor());
             componentColor.setStroke(Color.BLACK);
             Label componentName = new Label(component.getName());
@@ -381,8 +381,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void onChangedTab() {
-        componentChoiceBox.setItems(FXCollections.observableArrayList(architecture.getComponents().keySet()));
-        if (!architecture.getComponents().values().isEmpty() && selectedComponent != null) {
+        componentChoiceBox.setItems(FXCollections.observableArrayList(architecture.getComponentsNames()));
+        if (!architecture.getComponents().isEmpty() && selectedComponent != null) {
             componentChoiceBox.setValue(selectedComponent.getName());
             this.serviceAddButton.setDisable(false);
         }
@@ -463,11 +463,11 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void updateServicesList() {
         if (selectedComponent != null) {
-            HashMap<String, AbstractService> componentServices = new HashMap<>();
-            componentServices.putAll(selectedComponent.getProvidedServices());
-            componentServices.putAll(selectedComponent.getRequiredServices());
+            HashSet<AbstractService> componentServices = new HashSet<>();
+            componentServices.addAll(selectedComponent.getProvidedServices());
+            componentServices.addAll(selectedComponent.getRequiredServices());
             servicesVBox.getChildren().clear();
-            for (AbstractService service : componentServices.values()) {
+            for (AbstractService service : componentServices) {
                 HBox servicesHBox = new HBox(3);
                 Label serviceLabel = new Label();
                 if (service instanceof ProvidedService) {
@@ -619,7 +619,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void updateWorkflowList() {
         workflowsVBox.getChildren().clear();
-        for (Workflow workflow : architecture.getWorkflows().values()) {
+        for (Workflow workflow : architecture.getWorkflows()) {
             HBox workflowsHBox = new HBox(3);
             Label workflowLabel = new Label(workflow.getName());
             workflowsHBox.getChildren().add(workflowLabel);
@@ -860,7 +860,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void updateComponentGroups() {
         componentsGroups = new HashMap<>();
-        for (Component component : architecture.getComponents().values()) {
+        for (Component component : architecture.getComponents()) {
             boolean found = false;
             for (HashSet<Component> componentHashSet : componentsGroups.values()) {
                 for (Component componentInHashSet : componentHashSet) {

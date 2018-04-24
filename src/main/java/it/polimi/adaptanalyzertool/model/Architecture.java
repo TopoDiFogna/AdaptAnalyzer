@@ -1,6 +1,8 @@
 package it.polimi.adaptanalyzertool.model;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Base class for the architecture object which defines the components used by the architecture.
@@ -69,25 +71,13 @@ public class Architecture {
     }
 
     /**
-     * Changes the name of the architecture.
-     * <p>
-     * Note that the architecture and its components remains unchanged.
-     * </p>
-     *
-     * @param name the new name for the architecture.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Gets all the components associated with the current architecture.
      *
      * @return an <code>HashMap</code> containing all the components related to this architecture.
      * @see Component
      */
-    public HashMap<String, Component> getComponents() {
-        return components;
+    public Collection<Component> getComponents() {
+        return components.values();
     }
 
     /**
@@ -127,8 +117,16 @@ public class Architecture {
      * @return the workflows associated with this architecture.
      * @see Workflow
      */
-    public HashMap<String, Workflow> getWorkflows() {
-        return workflows;
+    public Collection<Workflow> getWorkflows() {
+        return workflows.values();
+    }
+
+    public Component getSingleComponent(String name) {
+        return components.get(name);
+    }
+
+    public Set<String> getComponentsNames() {
+        return components.keySet();
     }
 
     /**

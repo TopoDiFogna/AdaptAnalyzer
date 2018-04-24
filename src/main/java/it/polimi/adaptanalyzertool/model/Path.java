@@ -31,24 +31,12 @@ public class Path {
         return executionProbability;
     }
 
-    public void setExecutionProbability(double executionProbability) {
-        this.executionProbability = executionProbability;
-    }
-
     public LinkedList<Message> getMessagesList() {
         return messagesList;
     }
 
     public void addMessage(Message message) {
         messagesList.add(message);
-    }
-
-    public void removeMessage(Message message) {
-        messagesList.remove(message);
-    }
-
-    public void removeMessage(int index) {
-        messagesList.remove(index);
     }
 
     public Message getFirstMessage() {

@@ -2,7 +2,7 @@ package it.polimi.adaptanalyzertool.metrics;
 
 import it.polimi.adaptanalyzertool.model.*;
 
-import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * This class contains all the metrics for the Services.
@@ -33,14 +33,14 @@ public final class ServicesMetrics {
         String serviceName = service.getName();
         double result = 0;
         boolean found = false;
-        for (Component component : architecture.getComponents().values()) {
-            if (component.getRequiredServices().containsKey(serviceName)) {
+        for (Component component : architecture.getComponents()) {
+            if (component.getRequiredServicesNames().contains(serviceName)) {
                 found = true;
-                RequiredService requiredService = component.getRequiredServices().get(serviceName);
+                RequiredService requiredService = component.getSingleRequiredService(serviceName);
                 double execProbability = requiredService.getUsedProbability();
                 double executions = requiredService.getNumberOfExecutionsPerCall();
                 double noOfExecs = 1;
-                for (ProvidedService ps : component.getProvidedServices().values()) {
+                for (ProvidedService ps : component.getProvidedServices()) {
                     noOfExecs = NumberOfExecutions(architecture, ps);
                 }
                 result += execProbability * executions * noOfExecs;
@@ -63,7 +63,7 @@ public final class ServicesMetrics {
      */
     public static double ProbabilityToBeRunning(Architecture architecture, AbstractService service) {
         double totalExecutionTimes = 0;
-        for (AbstractService abstractService : collectServicesFromArchitecture(architecture).values()) {
+        for (AbstractService abstractService : collectServicesFromArchitecture(architecture)) {
             totalExecutionTimes += NumberOfExecutions(architecture, abstractService);
         }
         return NumberOfExecutions(architecture, service) / totalExecutionTimes;
@@ -78,8 +78,8 @@ public final class ServicesMetrics {
      */
     public static int AbsoluteAdaptability(Architecture architecture, AbstractService service) {
         int usedProvidedTimes = 0;
-        for (Component component : architecture.getComponents().values()) {
-            if (component.getProvidedServices().containsKey(service.getName()) && component.isUsed()) {
+        for (Component component : architecture.getComponents()) {
+            if (component.getProvidedServicesNames().contains(service.getName()) && component.isUsed()) {
                 usedProvidedTimes += 1;
             }
         }
@@ -97,8 +97,8 @@ public final class ServicesMetrics {
     public static double RelativeAdaptability(Architecture architecture, AbstractService service) {
         int usedProvidedTimes = AbsoluteAdaptability(architecture, service);
         double providedTimes = 0;
-        for (Component component : architecture.getComponents().values()) {
-            if (component.getProvidedServices().containsKey(service.getName())) {
+        for (Component component : architecture.getComponents()) {
+            if (component.getProvidedServicesNames().contains(service.getName())) {
                 providedTimes += 1;
             }
         }
@@ -111,20 +111,20 @@ public final class ServicesMetrics {
      * @param architecture the architecture where to collect services.
      * @return HashMap containing all the services found in the given architecture.
      */
-    private static HashMap<String, AbstractService> collectServicesFromArchitecture(Architecture architecture) {
-        HashMap<String, AbstractService> servicesHashMap = new HashMap<>();
-        for (Component component : architecture.getComponents().values()) {
-            servicesHashMap.putAll(component.getRequiredServices());
-            servicesHashMap.putAll(component.getProvidedServices());
+    private static HashSet<AbstractService> collectServicesFromArchitecture(Architecture architecture) {
+        HashSet<AbstractService> servicesHashSet = new HashSet<>();
+        for (Component component : architecture.getComponents()) {
+            servicesHashSet.addAll(component.getRequiredServices());
+            servicesHashSet.addAll(component.getProvidedServices());
         }
-        return servicesHashMap;
+        return servicesHashSet;
     }
 
-    static HashMap<String, ProvidedService> collectProvidedServices(Architecture architecture) {
-        HashMap<String, ProvidedService> servicesHashMap = new HashMap<>();
-        for (Component component : architecture.getComponents().values()) {
-            servicesHashMap.putAll(component.getProvidedServices());
+    static HashSet<ProvidedService> collectProvidedServices(Architecture architecture) {
+        HashSet<ProvidedService> servicesHashSet = new HashSet<>();
+        for (Component component : architecture.getComponents()) {
+            servicesHashSet.addAll(component.getProvidedServices());
         }
-        return servicesHashMap;
+        return servicesHashSet;
     }
 }

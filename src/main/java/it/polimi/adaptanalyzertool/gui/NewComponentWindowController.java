@@ -9,7 +9,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import java.util.HashMap;
+import java.util.Collection;
 
 /**
  * <p>
@@ -66,15 +66,20 @@ public class NewComponentWindowController extends NewModalWindowController {
                             componentColorPicker.getValue().getRed(), componentColorPicker.getValue().getGreen(),
                             componentColorPicker.getValue().getBlue(), componentColorPicker.getValue().getOpacity());
                 } else {
-                    HashMap<String, ProvidedService> providedServiceHashMap = newComponent.getProvidedServices();
-                    HashMap<String, RequiredService> requiredServices = newComponent.getRequiredServices();
+                    Collection<ProvidedService> providedServices = newComponent.getProvidedServices();
+                    Collection<RequiredService> requiredServices = newComponent.getRequiredServices();
                     newComponent = new Component(newComponentName,
                             Double.parseDouble(componentCostTextField.getText().trim()),
                             Double.parseDouble(componentAvailabilityTextField.getText().trim()),
                             usedCheckBox.isSelected(),
                             componentColorPicker.getValue().getRed(), componentColorPicker.getValue().getGreen(),
-                            componentColorPicker.getValue().getBlue(), componentColorPicker.getValue().getOpacity(),
-                            providedServiceHashMap, requiredServices);
+                            componentColorPicker.getValue().getBlue(), componentColorPicker.getValue().getOpacity());
+                    for (ProvidedService ps : providedServices) {
+                        newComponent.addProvidedService(ps);
+                    }
+                    for (RequiredService rs : requiredServices) {
+                        newComponent.addRequiredService(rs);
+                    }
                 }
                 stage.close();
 

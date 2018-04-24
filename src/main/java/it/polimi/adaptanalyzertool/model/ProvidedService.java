@@ -33,13 +33,4 @@ public class ProvidedService extends AbstractService {
     public double getExecutionTime() {
         return executionTime;
     }
-
-    /**
-     * Changes the execution time this service requires to complete.
-     *
-     * @param executionTime the new execution time to be used.
-     */
-    public void setExecutionTime(double executionTime) {
-        this.executionTime = executionTime;
-    }
 }

@@ -58,16 +58,16 @@ public class GraphController {
         Model model = graph.getModel();
         Layout layout = new RandomLayout(graph);
 
-        for (Component component : architecture.getComponents().values()) {
+        for (Component component : architecture.getComponents()) {
             model.addCell(component.getName(), CellType.CIRCLE, component.getColor());
         }
 
         layout.addCells();
 
-        for (Component sourceComponent : architecture.getComponents().values()) {
-            for (RequiredService requiredService : sourceComponent.getRequiredServices().values()) {
-                for (Component targetComponent : architecture.getComponents().values()) {
-                    if (targetComponent.getProvidedServices().containsKey(requiredService.getName())) {
+        for (Component sourceComponent : architecture.getComponents()) {
+            for (RequiredService requiredService : sourceComponent.getRequiredServices()) {
+                for (Component targetComponent : architecture.getComponents()) {
+                    if (targetComponent.getProvidedServicesNames().contains(requiredService.getName())) {
                         model.addArrow(sourceComponent.getName(), targetComponent.getName());
                     }
                 }

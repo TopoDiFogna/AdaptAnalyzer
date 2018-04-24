@@ -2,7 +2,9 @@ package it.polimi.adaptanalyzertool.model;
 
 import javafx.scene.paint.Color;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * This class contains all the information about a component for an architecture.
@@ -191,106 +193,12 @@ public class Component {
     }
 
     /**
-     * Changes the cost for the current Component.
-     *
-     * @param cost the new cost for the Component.
-     */
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    /**
      * Gets the availability for the current Component.
      *
      * @return the availability for the current component in the range 0-1.
      */
     public double getAvailability() {
         return availability;
-    }
-
-    /**
-     * Changes the cost for the current Component.
-     *
-     * @param availability availability expressed in a range 0-1
-     */
-    public void setAvailability(double availability) {
-        this.availability = availability;
-    }
-
-    /**
-     * Gets the red component color for the current Component.
-     *
-     * @return the red component color for the current Component.
-     */
-    public double getColorRed() {
-        return colorRed;
-    }
-
-    /**
-     * Changes the red component color for the current Component.
-     *
-     * @param colorRed the new red component color for the Component.
-     * @see Color
-     */
-    public void setColorRed(double colorRed) {
-        this.colorRed = colorRed;
-    }
-
-    /**
-     * Gets the blue component color for the current Component.
-     *
-     * @return the blue component color for the current Component.
-     */
-    public double getColorBlue() {
-        return colorBlue;
-    }
-
-    /**
-     * Changes the blue component color for the current Component.
-     *
-     * @param colorBlue the new blue component color for the Component.
-     * @see Color
-     */
-    public void setColorBlue(double colorBlue) {
-        this.colorBlue = colorBlue;
-    }
-
-    /**
-     * Gets the green component color for the current Component.
-     *
-     * @return the green component color for the current Component.
-     */
-    public double getColorGreen() {
-        return colorGreen;
-    }
-
-    /**
-     * Changes the green component color for the current Component.
-     *
-     * @param colorGreen the new green component color for the Component.
-     * @see Color
-     */
-    public void setColorGreen(double colorGreen) {
-        this.colorGreen = colorGreen;
-    }
-
-    /**
-     * Gets the opacity component color for the current Component.
-     *
-     * @return the opacity component color for the current Component.
-     */
-    public double getColorOpacity() {
-        return colorOpacity;
-    }
-
-    /**
-     * Changes the opacity component color for the current Component.
-     *
-     * @param colorOpacity the new opacity component color for the Component.
-     * @see Color
-     */
-    public void setColorOpacity(double colorOpacity) {
-        this.colorOpacity = colorOpacity;
     }
 
     /**
@@ -325,38 +233,20 @@ public class Component {
     }
 
     /**
-     * Changes the color for the current component.
-     *
-     * @param colorRed   red color component.
-     * @param colorBlue  blue color component.
-     * @param colorGreen green color component.
-     */
-    public void setColor(double colorRed, double colorBlue, double colorGreen) {
-        setColor(colorRed, colorBlue, colorGreen, 1.0);
-    }
-
-    /**
-     * Changes the color for the current component.
-     *
-     * @param colorRed     red color component.
-     * @param colorBlue    blue color component.
-     * @param colorGreen   green color component.
-     * @param colorOpacity opacity for the new color.
-     */
-    public void setColor(double colorRed, double colorBlue, double colorGreen, double colorOpacity) {
-        this.colorRed = colorRed;
-        this.colorBlue = colorBlue;
-        this.colorGreen = colorGreen;
-        this.colorOpacity = colorOpacity;
-    }
-
-    /**
      * Gets the services provided by the current Component.
      *
      * @return a <code>HashMap</code> containing the services provided by the current component.
      */
-    public HashMap<String, ProvidedService> getProvidedServices() {
-        return providedServices;
+    public Collection<ProvidedService> getProvidedServices() {
+        return providedServices.values();
+    }
+
+    public ProvidedService getSingleProvidedService(String name) {
+        return providedServices.get(name);
+    }
+
+    public Set<String> getProvidedServicesNames() {
+        return providedServices.keySet();
     }
 
     /**
@@ -391,8 +281,16 @@ public class Component {
      *
      * @return a <code>HashMap</code> containing the services required by the current component.
      */
-    public HashMap<String, RequiredService> getRequiredServices() {
-        return requiredServices;
+    public Collection<RequiredService> getRequiredServices() {
+        return requiredServices.values();
+    }
+
+    public RequiredService getSingleRequiredService(String name) {
+        return requiredServices.get(name);
+    }
+
+    public Set<String> getRequiredServicesNames() {
+        return requiredServices.keySet();
     }
 
     /**
