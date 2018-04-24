@@ -39,7 +39,6 @@ public abstract class AbstractService {
      * Since every service is identified by its name equals has to be overridden to honour this.
      *
      * @param obj the other object to compare.
-     *
      * @return <code>true</code> if the other object is not null <u>and</u> it has the same class and name;
      * <code>false</code> otherwise.
      */

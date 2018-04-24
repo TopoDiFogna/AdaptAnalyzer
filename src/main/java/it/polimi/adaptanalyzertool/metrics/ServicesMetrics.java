@@ -27,7 +27,6 @@ public final class ServicesMetrics {
      *
      * @param architecture the architecture where the service is.
      * @param service      the service that has to be used to calculate its executions.
-     *
      * @return the number of execution of the given service.
      */
     public static double NumberOfExecutions(Architecture architecture, AbstractService service) {
@@ -60,7 +59,6 @@ public final class ServicesMetrics {
      * @param architecture the architecture where the service is.
      * @param service      the service that has to be used to calculate its probability to be running, can be a
      *                     ProvidedService or a RequiredService.
-     *
      * @return the probability of a service to be running in a given moment.
      */
     public static double ProbabilityToBeRunning(Architecture architecture, AbstractService service) {
@@ -76,7 +74,6 @@ public final class ServicesMetrics {
      *
      * @param architecture the architecture where the service is.
      * @param service      the service that is offered by the components.
-     *
      * @return the number of used components that provide the required service.
      */
     public static int AbsoluteAdaptability(Architecture architecture, AbstractService service) {
@@ -95,7 +92,6 @@ public final class ServicesMetrics {
      *
      * @param architecture the architecture where the service is.
      * @param service      the service that is offered by the components.
-     *
      * @return the percentage of used component for the required service.
      */
     public static double RelativeAdaptability(Architecture architecture, AbstractService service) {
@@ -113,7 +109,6 @@ public final class ServicesMetrics {
      * Collects all the services in a given architecture and returns them.
      *
      * @param architecture the architecture where to collect services.
-     *
      * @return HashMap containing all the services found in the given architecture.
      */
     private static HashMap<String, AbstractService> collectServicesFromArchitecture(Architecture architecture) {

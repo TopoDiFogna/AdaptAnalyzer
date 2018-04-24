@@ -7,6 +7,7 @@ import it.polimi.adaptanalyzertool.model.Workflow;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * This class contains all the metrics for the architectures.
@@ -40,7 +41,6 @@ public final class ArchitectureMetrics {
      *
      * @param architecture             the architecture to be analyzed.
      * @param systemTargetAvailability the system target availability required.
-     *
      * @return the Global Availability of the System.
      * @see ComponentMetrics#FitnessRatioAvailability(double, double) FitnessRatioAvailability(double, double)
      */
@@ -60,7 +60,6 @@ public final class ArchitectureMetrics {
      *
      * @param architecture     the architecture to be analyzed.
      * @param systemTargetCost the system target cost.
-     *
      * @return the global Cost of the system.
      * @see ComponentMetrics#FitnessRatioCost(double, double) FitnessRatioCost(double, double)
      */
@@ -73,13 +72,54 @@ public final class ArchitectureMetrics {
     }
 
     public static double TotalStaticAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups) {
-        //TODO
+        HashMap<String, Double> availabilityHashMap = new HashMap<>();
+        for (String groupName : architectureComponentGroups.keySet()) {
+            availabilityHashMap.put(groupName, null);
+        }
+        while (!completelyCalculated(availabilityHashMap)) {
+            for (Map.Entry<String, HashSet<Component>> setEntry : architectureComponentGroups.entrySet()) {
+                if (availabilityHashMap.get(setEntry.getKey()) == null) {
+                    availabilityHashMap.put(setEntry.getKey(), tryCalculateGroupAvailability(setEntry.getKey(), architectureComponentGroups, availabilityHashMap));
+                }
+            }
+        }
         return 0;
+        //TODO
+    }
+
+    private static Double tryCalculateGroupAvailability(String groupName, HashMap<String, HashSet<Component>> architectureComponentGroups, HashMap<String, Double> availabilityHashMap) {
+        if (architectureComponentGroups.get(groupName).iterator().next().getRequiredServices().isEmpty()) {
+            return calculateTerminalAvailability(architectureComponentGroups.get(groupName));
+        } else {
+
+            return null;
+        }
+    }
+
+    private static double calculateTerminalAvailability(HashSet<Component> componentGroup) {
+        if (componentGroup.size() == 1) {
+            return componentGroup.iterator().next().getAvailability();
+        } else {
+            double availabilityMul = 1;
+            for (Component component : componentGroup) {
+                availabilityMul *= 1 - component.getAvailability();
+            }
+            return 1 - availabilityMul;
+        }
     }
 
     public static double TotalDynamicAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups, Workflow workflow) {
         //TODO
         return 0;
+    }
+
+    private static boolean completelyCalculated(HashMap<String, Double> availabilityHashmaMap) {
+        for (Double value : availabilityHashmaMap.values()) {
+            if (value == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static double TotalCost(Architecture architecture) {
@@ -95,7 +135,6 @@ public final class ArchitectureMetrics {
      *
      * @param architecture     the architecture to be analyzed.
      * @param systemTargetCost the target cost.
-     *
      * @return <code>true</code> if the architecture is suitable, <code>false</code> otherwise.
      */
     public static boolean suitableForCost(Architecture architecture, double systemTargetCost) {
@@ -107,7 +146,6 @@ public final class ArchitectureMetrics {
      *
      * @param architecture             the architecture to be analyzed.
      * @param systemTargetAvailability the target cost.
-     *
      * @return <code>true</code> if the architecture is suitable, <code>false</code> otherwise.
      */
     public static boolean suitableForAvailability(Architecture architecture, double systemTargetAvailability) {
@@ -119,7 +157,6 @@ public final class ArchitectureMetrics {
      *
      * @param architectures            the architectures that need to be tested.
      * @param systemTargetAvailability the target availability.
-     *
      * @return an <code>ArrayList</code> containing a possible subset, even empty, of architectures that are suitable
      * with the target availability.
      */
@@ -139,7 +176,6 @@ public final class ArchitectureMetrics {
      *
      * @param architectures    the architectures that need to be tested.
      * @param systemTargetCost the target cost.
-     *
      * @return an <code>ArrayList</code> containing a possible subset, even empty, of architectures that are suitable
      * with the target cost.
      */

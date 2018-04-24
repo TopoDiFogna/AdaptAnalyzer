@@ -32,7 +32,6 @@ public final class ComponentMetrics {
      *
      * @param targetSystemAvailability the desired availability for the system
      * @param componentAvailability    the component availability
-     *
      * @return the Fitness Ratio w.r.t. Availability of a component.
      */
     public static double FitnessRatioAvailability(double targetSystemAvailability, double componentAvailability) {
@@ -47,7 +46,6 @@ public final class ComponentMetrics {
      * </p>
      *
      * @param fra the Fitness Ratio w.r.t. Availability.
-     *
      * @return the Boolean suitability w.r.t. Availability.
      * @see #FitnessRatioAvailability(double, double)
      */
@@ -69,7 +67,6 @@ public final class ComponentMetrics {
      *
      * @param systemTargetCost the system target cost.
      * @param componentCost    the component cost.
-     *
      * @return the Fitness ratio w.r.t. Cost of a component
      */
     public static double FitnessRatioCost(double systemTargetCost, double componentCost) {
@@ -84,7 +81,6 @@ public final class ComponentMetrics {
      * </p>
      *
      * @param frc the Fitness Ratio w.r.t. Cost.
-     *
      * @return the Boolean suitability w.r.t. Cost.
      * @see #FitnessRatioCost(double, double)
      */
@@ -101,7 +97,6 @@ public final class ComponentMetrics {
      * @param architecture the architecture where the service is.
      * @param component    the service that has to be used to calculate its weight residence time, can be a
      *                     ProvidedService or a RequiredService.
-     *
      * @return the weight residence time of a given service.
      */
     public static double WeightResidenceTime(Architecture architecture, Component component) {
@@ -129,7 +124,6 @@ public final class ComponentMetrics {
      * @param architecture the architecture where the component resides.
      * @param workflow     the workflow associated with this architecture.
      * @param component    the selected component to calculate the probability on.
-     *
      * @return the probability to find a component active given a workflow for the architecture.
      * @see Workflow
      */

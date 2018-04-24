@@ -554,6 +554,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void calculateArchitectureMetrics() {
+        System.out.println(ArchitectureMetrics.TotalStaticAvailability(componentsGroups));
         String sta = systemTargetAvailabilityTextField.getText().trim();
         String stc = systemTargetCostTextField.getText().trim();
         if (!sta.equals("") && sta.matches(NINETYNINE_REGEX) && !stc.equals("") && stc.matches(DOUBLE_REGEX)) {
