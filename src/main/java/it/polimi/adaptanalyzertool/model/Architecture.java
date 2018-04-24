@@ -1,7 +1,7 @@
 package it.polimi.adaptanalyzertool.model;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -76,8 +76,16 @@ public class Architecture {
      * @return an <code>HashMap</code> containing all the components related to this architecture.
      * @see Component
      */
-    public Collection<Component> getComponents() {
-        return components.values();
+    public Set<Component> getComponents() {
+        return new HashSet<>(components.values());
+    }
+
+    public Component getSingleComponent(String name) {
+        return components.get(name);
+    }
+
+    public Set<String> getComponentsNames() {
+        return components.keySet();
     }
 
     /**
@@ -117,16 +125,8 @@ public class Architecture {
      * @return the workflows associated with this architecture.
      * @see Workflow
      */
-    public Collection<Workflow> getWorkflows() {
-        return workflows.values();
-    }
-
-    public Component getSingleComponent(String name) {
-        return components.get(name);
-    }
-
-    public Set<String> getComponentsNames() {
-        return components.keySet();
+    public Set<Workflow> getWorkflows() {
+        return new HashSet<>(workflows.values());
     }
 
     /**

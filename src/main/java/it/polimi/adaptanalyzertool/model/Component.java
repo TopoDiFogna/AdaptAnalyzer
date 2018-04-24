@@ -2,8 +2,8 @@ package it.polimi.adaptanalyzertool.model;
 
 import javafx.scene.paint.Color;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -237,8 +237,8 @@ public class Component {
      *
      * @return a <code>HashMap</code> containing the services provided by the current component.
      */
-    public Collection<ProvidedService> getProvidedServices() {
-        return providedServices.values();
+    public Set<ProvidedService> getProvidedServices() {
+        return new HashSet<>(providedServices.values());
     }
 
     public ProvidedService getSingleProvidedService(String name) {
@@ -281,8 +281,8 @@ public class Component {
      *
      * @return a <code>HashMap</code> containing the services required by the current component.
      */
-    public Collection<RequiredService> getRequiredServices() {
-        return requiredServices.values();
+    public Set<RequiredService> getRequiredServices() {
+        return new HashSet<>(requiredServices.values());
     }
 
     public RequiredService getSingleRequiredService(String name) {

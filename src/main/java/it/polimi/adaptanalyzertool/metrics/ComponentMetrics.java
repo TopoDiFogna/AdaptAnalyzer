@@ -129,7 +129,7 @@ public final class ComponentMetrics {
      */
     public static double InAction(Architecture architecture, Workflow workflow, Component component) {
         double inAction = 0;
-        for (Path path : workflow.getPathHashMap().values()) {
+        for (Path path : workflow.getPaths()) {
             double pathProb = path.getExecutionProbability();
             double totExecTime = 0;
             int selectedComponentExes = 0;

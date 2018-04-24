@@ -681,7 +681,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private void updatePathList() {
         if (selectedWorkflow != null) {
             pathsVBox.getChildren().clear();
-            for (Path path : selectedWorkflow.getPathHashMap().values()) {
+            for (Path path : selectedWorkflow.getPaths()) {
                 HBox pathHBox = new HBox(3);
                 Label pathLabel = new Label(path.getName());
                 pathHBox.setFocusTraversable(true);

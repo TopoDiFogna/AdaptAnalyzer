@@ -1,6 +1,8 @@
 package it.polimi.adaptanalyzertool.model;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Workflow {
 
@@ -16,8 +18,12 @@ public class Workflow {
         return name;
     }
 
-    public HashMap<String, Path> getPathHashMap() {
-        return pathHashMap;
+    public Set<Path> getPaths() {
+        return new HashSet<>(pathHashMap.values());
+    }
+
+    public Path getSinglePath(String name) {
+        return pathHashMap.get(name);
     }
 
     public void addPath(Path path) {
