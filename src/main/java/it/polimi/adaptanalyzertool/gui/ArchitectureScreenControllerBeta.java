@@ -179,7 +179,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Label architectureMetricsErrorLabel;
 
     private Architecture architecture;
-    private HashMap<String, HashSet<Component>> componentsGroups;
+    private HashMap<String, ComponentGroup> componentsGroups;
     private Component selectedComponent;
     private AbstractService selectedService;
     private Workflow selectedWorkflow;
@@ -854,7 +854,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         this.architecture = architecture;
     }
 
-    public HashMap<String, HashSet<Component>> getComponentsGroups() {
+    public HashMap<String, ComponentGroup> getComponentsGroups() {
         return componentsGroups;
     }
 
@@ -862,21 +862,21 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         componentsGroups = new HashMap<>();
         for (Component component : architecture.getComponents()) {
             boolean found = false;
-            for (HashSet<Component> componentHashSet : componentsGroups.values()) {
-                for (Component componentInHashSet : componentHashSet) {
+            for (ComponentGroup componentGroup : componentsGroups.values()) {
+                for (Component componentInHashSet : componentGroup.getComponents()) {
                     if (component.getProvidedServices().equals(componentInHashSet.getProvidedServices()) &&
                             component.getRequiredServices().equals(componentInHashSet.getRequiredServices()) &&
                             !found) {
-                        componentHashSet.add(component);
+                        componentGroup.addComponent(component);
                         found = true;
                         break;
                     }
                 }
             }
             if (!found) {
-                HashSet<Component> newHashSet = new HashSet<>();
-                newHashSet.add(component);
-                componentsGroups.put(component.getName(), newHashSet);
+                ComponentGroup componentGroup = new ComponentGroup(component.getName());
+                componentGroup.addComponent(component);
+                componentsGroups.put(component.getName(), componentGroup);
             }
         }
     }

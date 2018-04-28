@@ -1,13 +1,8 @@
 package it.polimi.adaptanalyzertool.metrics;
 
-import it.polimi.adaptanalyzertool.model.Architecture;
-import it.polimi.adaptanalyzertool.model.Component;
-import it.polimi.adaptanalyzertool.model.Workflow;
+import it.polimi.adaptanalyzertool.model.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class contains all the metrics for the architectures.
@@ -71,15 +66,19 @@ public final class ArchitectureMetrics {
         return gcs;
     }
 
-    public static double TotalStaticAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups) {
+    public static double TotalStaticAvailability(HashMap<String, ComponentGroup> architectureComponentGroups) {
         HashMap<String, Double> availabilityHashMap = new HashMap<>();
         for (String groupName : architectureComponentGroups.keySet()) {
             availabilityHashMap.put(groupName, null);
         }
         while (!completelyCalculated(availabilityHashMap)) {
-            for (Map.Entry<String, HashSet<Component>> setEntry : architectureComponentGroups.entrySet()) {
+            for (Map.Entry<String, ComponentGroup> setEntry : architectureComponentGroups.entrySet()) {
                 if (availabilityHashMap.get(setEntry.getKey()) == null) {
-                    availabilityHashMap.put(setEntry.getKey(), tryCalculateGroupAvailability(setEntry.getKey(), architectureComponentGroups, availabilityHashMap));
+                    if (setEntry.getValue().getRequiredServices().isEmpty()) {
+                        availabilityHashMap.put(setEntry.getKey(), calculateTerminalAvailability(setEntry.getValue()));
+                    } else {
+
+                    }
                 }
             }
         }
@@ -87,21 +86,19 @@ public final class ArchitectureMetrics {
         //TODO
     }
 
-    private static Double tryCalculateGroupAvailability(String groupName, HashMap<String, HashSet<Component>> architectureComponentGroups, HashMap<String, Double> availabilityHashMap) {
-        if (architectureComponentGroups.get(groupName).iterator().next().getRequiredServices().isEmpty()) {
-            return calculateTerminalAvailability(architectureComponentGroups.get(groupName));
-        } else {
+    private static boolean availabilityCanBeCalculated(ComponentGroup componentGroup, HashMap<String, Double> availabilityHashMap) {
+        componentGroup.getRequiredServices();
 
-            return null;
-        }
+        return false;
     }
 
-    private static double calculateTerminalAvailability(HashSet<Component> componentGroup) {
-        if (componentGroup.size() == 1) {
-            return componentGroup.iterator().next().getAvailability();
+    private static double calculateTerminalAvailability(ComponentGroup componentGroup) {
+        Set<Component> components = componentGroup.getComponents();
+        if (components.size() == 1) {
+            return components.iterator().next().getAvailability();
         } else {
             double availabilityMul = 1;
-            for (Component component : componentGroup) {
+            for (Component component : components) {
                 availabilityMul *= 1 - component.getAvailability();
             }
             return 1 - availabilityMul;
