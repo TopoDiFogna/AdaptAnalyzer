@@ -36,6 +36,7 @@ public final class ArchitectureMetrics {
      *
      * @param architecture             the architecture to be analyzed.
      * @param systemTargetAvailability the system target availability required.
+     *
      * @return the Global Availability of the System.
      * @see ComponentMetrics#FitnessRatioAvailability(double, double) FitnessRatioAvailability(double, double)
      */
@@ -55,6 +56,7 @@ public final class ArchitectureMetrics {
      *
      * @param architecture     the architecture to be analyzed.
      * @param systemTargetCost the system target cost.
+     *
      * @return the global Cost of the system.
      * @see ComponentMetrics#FitnessRatioCost(double, double) FitnessRatioCost(double, double)
      */
@@ -67,32 +69,63 @@ public final class ArchitectureMetrics {
     }
 
     public static double TotalStaticAvailability(HashMap<String, ComponentGroup> architectureComponentGroups) {
+        double totalAvailability = -1f;
         HashMap<String, Double> availabilityHashMap = new HashMap<>();
         for (String groupName : architectureComponentGroups.keySet()) {
             availabilityHashMap.put(groupName, null);
         }
         while (!completelyCalculated(availabilityHashMap)) {
             for (Map.Entry<String, ComponentGroup> setEntry : architectureComponentGroups.entrySet()) {
-                if (availabilityHashMap.get(setEntry.getKey()) == null) {
-                    if (setEntry.getValue().getRequiredServices().isEmpty()) {
-                        availabilityHashMap.put(setEntry.getKey(), calculateTerminalAvailability(setEntry.getValue()));
+                String key = setEntry.getKey();
+                ComponentGroup value = setEntry.getValue();
+                if (availabilityHashMap.get(key) == null) {
+                    if (value.getRequiredServices().isEmpty()) {
+                        //Terminal Group
+                        double availability = calculateGroupAvailability(value);
+                        availabilityHashMap.put(key, availability);
+                        totalAvailability = availability;
                     } else {
-
+                        //Non terminal group, so we calculate availability recursively
+                        if (canBeCalculated(value, availabilityHashMap, architectureComponentGroups)) {
+                            double groupAvailability = calculateGroupAvailability(value);
+                            for (ComponentGroup cg : value.getRequiredGroups()) {
+                                groupAvailability *= availabilityHashMap.get(cg.getName());
+                            }
+                            availabilityHashMap.put(value.getName(), groupAvailability);
+                            totalAvailability = groupAvailability;
+                        }
                     }
                 }
             }
         }
-        return 0;
-        //TODO
+        return totalAvailability;
     }
 
-    private static boolean availabilityCanBeCalculated(ComponentGroup componentGroup, HashMap<String, Double> availabilityHashMap) {
-        componentGroup.getRequiredServices();
-
-        return false;
+    private static boolean canBeCalculated(ComponentGroup componentGroup, HashMap<String, Double> availabilityHashMap, HashMap<String, ComponentGroup> architectureComponentGroups) {
+        for (ComponentGroup cg : componentGroup.getRequiredGroups()) {
+            if (availabilityHashMap.get(cg.getName()) == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    private static double calculateTerminalAvailability(ComponentGroup componentGroup) {
+    private static boolean requiredServicesMatchProvidedSerivces(Set<RequiredService> set1, Set<ProvidedService> set2) {
+        if (set1.size() != set2.size()) {
+            return false;
+        }
+        HashSet<String> requiredServicesNames = new HashSet<>();
+        HashSet<String> providedServicesNames = new HashSet<>();
+        for (RequiredService rs : set1) {
+            requiredServicesNames.add(rs.getName());
+        }
+        for (ProvidedService ps : set2) {
+            providedServicesNames.add(ps.getName());
+        }
+        return requiredServicesNames.containsAll(providedServicesNames);
+    }
+
+    private static double calculateGroupAvailability(ComponentGroup componentGroup) {
         Set<Component> components = componentGroup.getComponents();
         if (components.size() == 1) {
             return components.iterator().next().getAvailability();
@@ -105,11 +138,6 @@ public final class ArchitectureMetrics {
         }
     }
 
-    public static double TotalDynamicAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups, Workflow workflow) {
-        //TODO
-        return 0;
-    }
-
     private static boolean completelyCalculated(HashMap<String, Double> availabilityHashmaMap) {
         for (Double value : availabilityHashmaMap.values()) {
             if (value == null) {
@@ -119,6 +147,23 @@ public final class ArchitectureMetrics {
         return true;
     }
 
+    public static double TotalDynamicAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups, Workflow workflow) {
+        //TODO
+        return 0;
+    }
+
+    /**
+     * <p>
+     * Calculates the total cost for the specified architecture.
+     * </p>
+     * <p>
+     * The architecture cost is the sum of the cost of every component that are in the architecture.
+     * </p>
+     *
+     * @param architecture the architecture to be analyzed.
+     *
+     * @return the total cost for the specified architecture.
+     */
     public static double TotalCost(Architecture architecture) {
         double totalCost = 0;
         for (Component component : architecture.getComponents()) {
@@ -132,9 +177,10 @@ public final class ArchitectureMetrics {
      *
      * @param architecture     the architecture to be analyzed.
      * @param systemTargetCost the target cost.
+     *
      * @return <code>true</code> if the architecture is suitable, <code>false</code> otherwise.
      */
-    public static boolean suitableForCost(Architecture architecture, double systemTargetCost) {
+    public static boolean SuitableForCost(Architecture architecture, double systemTargetCost) {
         return GlobalCostSystem(architecture, systemTargetCost) >= 1;
     }
 
@@ -143,9 +189,10 @@ public final class ArchitectureMetrics {
      *
      * @param architecture             the architecture to be analyzed.
      * @param systemTargetAvailability the target cost.
+     *
      * @return <code>true</code> if the architecture is suitable, <code>false</code> otherwise.
      */
-    public static boolean suitableForAvailability(Architecture architecture, double systemTargetAvailability) {
+    public static boolean SuitableForAvailability(Architecture architecture, double systemTargetAvailability) {
         return GlobalAvailabilitySystem(architecture, systemTargetAvailability) >= 1;
     }
 
@@ -154,6 +201,7 @@ public final class ArchitectureMetrics {
      *
      * @param architectures            the architectures that need to be tested.
      * @param systemTargetAvailability the target availability.
+     *
      * @return an <code>ArrayList</code> containing a possible subset, even empty, of architectures that are suitable
      * with the target availability.
      */
@@ -161,7 +209,7 @@ public final class ArchitectureMetrics {
                                                                              double systemTargetAvailability) {
         ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
         for (Architecture architecture : architectures) {
-            if (suitableForAvailability(architecture, systemTargetAvailability)) {
+            if (SuitableForAvailability(architecture, systemTargetAvailability)) {
                 eligibleArchitectures.add(architecture);
             }
         }
@@ -173,6 +221,7 @@ public final class ArchitectureMetrics {
      *
      * @param architectures    the architectures that need to be tested.
      * @param systemTargetCost the target cost.
+     *
      * @return an <code>ArrayList</code> containing a possible subset, even empty, of architectures that are suitable
      * with the target cost.
      */
@@ -180,7 +229,7 @@ public final class ArchitectureMetrics {
                                                                      double systemTargetCost) {
         ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
         for (Architecture architecture : architectures) {
-            if (suitableForCost(architecture, systemTargetCost)) {
+            if (SuitableForCost(architecture, systemTargetCost)) {
                 eligibleArchitectures.add(architecture);
             }
         }

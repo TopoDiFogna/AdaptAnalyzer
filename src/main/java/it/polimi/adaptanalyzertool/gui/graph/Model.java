@@ -33,6 +33,7 @@ public class Model {
      * @param id        a unique id for the cell.
      * @param type      the type of cell.
      * @param fillColor the color of the cell.
+     *
      * @see CellType CellType for the supported types
      */
     public void addCell(String id, CellType type, Color fillColor) {

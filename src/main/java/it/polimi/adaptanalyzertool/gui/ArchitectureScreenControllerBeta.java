@@ -29,6 +29,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <p>
@@ -170,6 +171,10 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private Label globalCostSuitabilityLabel;
     @FXML
+    private Label totalAvailabilityLabel;
+    @FXML
+    private Label totalCostLabel;
+    @FXML
     private Label meanAbsoluteAdaptabilityLabel;
     @FXML
     private Label meanRelativeAdaptabilityLabel;
@@ -193,6 +198,19 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             if (newValue != null) {
                 selectedComponent = architecture.getSingleComponent(newValue);
                 updateServicesList();
+            }
+        });
+
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.getText().equals("Services")) {
+                componentChoiceBox.setItems(FXCollections.observableArrayList(architecture.getComponentsNames()));
+                if (!architecture.getComponents().isEmpty() && selectedComponent != null) {
+                    componentChoiceBox.setValue(selectedComponent.getName());
+                    this.serviceAddButton.setDisable(false);
+                }
+            }
+            if (newValue.getText().equals("Workflows")) {
+                updateComponentGroups();
             }
         });
 
@@ -380,15 +398,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     @FXML
-    private void onChangedTab() {
-        componentChoiceBox.setItems(FXCollections.observableArrayList(architecture.getComponentsNames()));
-        if (!architecture.getComponents().isEmpty() && selectedComponent != null) {
-            componentChoiceBox.setValue(selectedComponent.getName());
-            this.serviceAddButton.setDisable(false);
-        }
-    }
-
-    @FXML
     private void createNewService() {
         Stage newServiceStage = new Stage();
         newServiceStage.setTitle("New Service");
@@ -496,7 +505,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         } else {
             servicesVBox.getChildren().clear();
         }
-        updateComponentGroups();
     }
 
     private void showServiceDetail(AbstractService service) {
@@ -554,7 +562,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void calculateArchitectureMetrics() {
-        System.out.println(ArchitectureMetrics.TotalStaticAvailability(componentsGroups));
+        updateComponentGroups();
         String sta = systemTargetAvailabilityTextField.getText().trim();
         String stc = systemTargetCostTextField.getText().trim();
         if (!sta.equals("") && sta.matches(NINETYNINE_REGEX) && !stc.equals("") && stc.matches(DOUBLE_REGEX)) {
@@ -562,13 +570,13 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             double gas = ArchitectureMetrics.GlobalAvailabilitySystem(architecture, Double.valueOf(sta));
             double gcs = ArchitectureMetrics.GlobalCostSystem(architecture, Double.valueOf(stc));
             globalAvailabilityLabel.setText(df.format(gas));
-            if (ArchitectureMetrics.suitableForAvailability(architecture, Double.valueOf(sta))) {
+            if (ArchitectureMetrics.SuitableForAvailability(architecture, Double.valueOf(sta))) {
                 globalAvailabilitySuitabilityLabel.setText("Suitable");
             } else {
                 globalAvailabilitySuitabilityLabel.setText("Not Suitable");
             }
             globalCostLabel.setText(df.format(gcs));
-            if (ArchitectureMetrics.suitableForCost(architecture, Double.valueOf(stc))) {
+            if (ArchitectureMetrics.SuitableForCost(architecture, Double.valueOf(stc))) {
                 globalCostSuitabilityLabel.setText("Suitable");
             } else {
                 globalCostSuitabilityLabel.setText("Not Suitable");
@@ -576,12 +584,16 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         } else {
             architectureMetricsErrorLabel.setText("Check input for mistakes");
         }
+        double totalCost = ArchitectureMetrics.TotalCost(architecture);
+        double totalAvailability = ArchitectureMetrics.TotalStaticAvailability(componentsGroups);
         double maas = AdaptabilityMetrics.MeanAbsoluteAdaptability(architecture);
         double raas = AdaptabilityMetrics.MeanRelativeAdaptability(architecture);
         double lsa = AdaptabilityMetrics.LevelSystemAdaptability(architecture);
         meanAbsoluteAdaptabilityLabel.setText(df.format(maas));
         meanRelativeAdaptabilityLabel.setText(df.format(raas));
         levelSystemAdaptabilityLabel.setText(df.format(lsa));
+        totalAvailabilityLabel.setText(df.format(totalAvailability));
+        totalCostLabel.setText(df.format(totalCost));
     }
 
     @FXML
@@ -854,23 +866,16 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         this.architecture = architecture;
     }
 
-    public HashMap<String, ComponentGroup> getComponentsGroups() {
-        return componentsGroups;
-    }
-
     private void updateComponentGroups() {
         componentsGroups = new HashMap<>();
         for (Component component : architecture.getComponents()) {
             boolean found = false;
             for (ComponentGroup componentGroup : componentsGroups.values()) {
-                for (Component componentInHashSet : componentGroup.getComponents()) {
-                    if (component.getProvidedServices().equals(componentInHashSet.getProvidedServices()) &&
-                            component.getRequiredServices().equals(componentInHashSet.getRequiredServices()) &&
-                            !found) {
-                        componentGroup.addComponent(component);
-                        found = true;
-                        break;
-                    }
+                if (component.getRequiredServices().equals(componentGroup.getRequiredServices()) &&
+                        component.getProvidedServices().equals(componentGroup.getProvidedServices()) &&
+                        !found) {
+                    componentGroup.addComponent(component);
+                    found = true;
                 }
             }
             if (!found) {
@@ -878,6 +883,17 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 componentGroup.addComponent(component);
                 componentsGroups.put(component.getName(), componentGroup);
             }
+        }
+        for (ComponentGroup cg1 : componentsGroups.values()) {
+            Set<String> requiredServicesNames = cg1.getRequiredServicesNames();
+            for (ComponentGroup cg2 : componentsGroups.values()) {
+                for (String ps : cg2.getProvidedServicesNames()) {
+                    if (requiredServicesNames.contains(ps)) {
+                        cg1.addRequiredGroup(cg2);
+                    }
+                }
+            }
+
         }
     }
 }
