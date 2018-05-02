@@ -138,8 +138,8 @@ public final class ArchitectureMetrics {
         }
     }
 
-    private static boolean completelyCalculated(HashMap<String, Double> availabilityHashmaMap) {
-        for (Double value : availabilityHashmaMap.values()) {
+    private static boolean completelyCalculated(HashMap<String, Double> availabilityHashMap) {
+        for (Double value : availabilityHashMap.values()) {
             if (value == null) {
                 return false;
             }

@@ -7,7 +7,7 @@ import it.polimi.adaptanalyzertool.gui.graph.Layout;
 import java.util.Random;
 
 /**
- * <p>This class is in chard to diplay the cells in a random way inside the window.</p>
+ * <p>This class is in chard to display the cells in a random way inside the window.</p>
  *
  * @author Paolo Paterna
  * @version 0.1
