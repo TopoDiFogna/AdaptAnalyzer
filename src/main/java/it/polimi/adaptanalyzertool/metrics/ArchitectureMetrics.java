@@ -68,6 +68,19 @@ public final class ArchitectureMetrics {
         return gcs;
     }
 
+    /**
+     * <p>
+     * This methods calculate the Availability of an architecture without considering actual workflows of the
+     * architecture.
+     * </p>
+     * <p>
+     * It considers all components as used and considers a call to the main service to use always all the components.
+     * </p>
+     *
+     * @param architectureComponentGroups the groups that the components form when they are replicated.
+     *
+     * @return the total availability of the architecture without considering any workflow.
+     */
     public static double TotalStaticAvailability(HashMap<String, ComponentGroup> architectureComponentGroups) {
         double totalAvailability = -1f;
         HashMap<String, Double> availabilityHashMap = new HashMap<>();
@@ -86,7 +99,7 @@ public final class ArchitectureMetrics {
                         totalAvailability = availability;
                     } else {
                         //Non terminal group, so we calculate availability recursively
-                        if (canBeCalculated(value, availabilityHashMap, architectureComponentGroups)) {
+                        if (canBeCalculated(value, availabilityHashMap)) {
                             double groupAvailability = calculateGroupAvailability(value);
                             for (ComponentGroup cg : value.getRequiredGroups()) {
                                 groupAvailability *= availabilityHashMap.get(cg.getName());
@@ -101,28 +114,13 @@ public final class ArchitectureMetrics {
         return totalAvailability;
     }
 
-    private static boolean canBeCalculated(ComponentGroup componentGroup, HashMap<String, Double> availabilityHashMap, HashMap<String, ComponentGroup> architectureComponentGroups) {
+    private static boolean canBeCalculated(ComponentGroup componentGroup, HashMap<String, Double> availabilityHashMap) {
         for (ComponentGroup cg : componentGroup.getRequiredGroups()) {
             if (availabilityHashMap.get(cg.getName()) == null) {
                 return false;
             }
         }
         return true;
-    }
-
-    private static boolean requiredServicesMatchProvidedSerivces(Set<RequiredService> set1, Set<ProvidedService> set2) {
-        if (set1.size() != set2.size()) {
-            return false;
-        }
-        HashSet<String> requiredServicesNames = new HashSet<>();
-        HashSet<String> providedServicesNames = new HashSet<>();
-        for (RequiredService rs : set1) {
-            requiredServicesNames.add(rs.getName());
-        }
-        for (ProvidedService ps : set2) {
-            providedServicesNames.add(ps.getName());
-        }
-        return requiredServicesNames.containsAll(providedServicesNames);
     }
 
     private static double calculateGroupAvailability(ComponentGroup componentGroup) {
@@ -147,7 +145,10 @@ public final class ArchitectureMetrics {
         return true;
     }
 
-    public static double TotalDynamicAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups, Workflow workflow) {
+    public static double TotalDynamicAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups,
+                                                  Workflow workflow) {
+        Set<Path> paths = workflow.getPaths();
+
         //TODO
         return 0;
     }
