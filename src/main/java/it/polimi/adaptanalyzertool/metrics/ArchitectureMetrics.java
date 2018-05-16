@@ -1,6 +1,8 @@
 package it.polimi.adaptanalyzertool.metrics;
 
-import it.polimi.adaptanalyzertool.model.*;
+import it.polimi.adaptanalyzertool.model.Architecture;
+import it.polimi.adaptanalyzertool.model.Component;
+import it.polimi.adaptanalyzertool.model.ComponentGroup;
 
 import java.util.*;
 
@@ -16,6 +18,8 @@ import java.util.*;
  * @see it.polimi.adaptanalyzertool.model.Architecture Architecture
  */
 public final class ArchitectureMetrics {
+
+    private static long callCounts;//TODO remove this
 
     private ArchitectureMetrics() {
     }
@@ -145,13 +149,13 @@ public final class ArchitectureMetrics {
         return true;
     }
 
-    public static double TotalDynamicAvailability(HashMap<String, HashSet<Component>> architectureComponentGroups,
-                                                  Workflow workflow) {
-        Set<Path> paths = workflow.getPaths();
-
-        //TODO
-        return 0;
-    }
+//    public static double TotalDynamicAvailability(HashMap<String, ComponentGroup> architectureComponentGroups,
+//                                                  Workflow workflow) {
+//        Set<Path> paths = workflow.getPaths();
+//
+//        //TODO
+//        return 0;
+//    }
 
     /**
      * <p>
@@ -195,6 +199,68 @@ public final class ArchitectureMetrics {
      */
     public static boolean SuitableForAvailability(Architecture architecture, double systemTargetAvailability) {
         return GlobalAvailabilitySystem(architecture, systemTargetAvailability) >= 1;
+    }
+
+    public static void CheckAllArchitectures(HashMap<String, ComponentGroup> architectureComponentGroups) {
+        ComponentGroup mainFunctionalityGroup = findMainFunctionality(architectureComponentGroups);
+        Set<Component> currentList = new HashSet<>();
+        Set<Component> componentsTreated = new HashSet<>();
+        Set<Component> candidatesToInclude = new HashSet<>(mainFunctionalityGroup.getComponents());
+        callCounts = 0;
+        long time = System.nanoTime();
+        recursiveCalculator(architectureComponentGroups.values(), currentList, componentsTreated, candidatesToInclude);
+        System.out.println("Time: " + (System.nanoTime() - time) / 1000000000);
+    }
+
+
+    private static void recursiveCalculator(Collection<ComponentGroup> architectureComponentGroups, Set<Component> currentList, Set<Component> componentsTreated, Set<Component> candidatesToInclude) {
+        if (candidatesToInclude.isEmpty()) {
+            return;
+        }
+        callCounts++;
+        if (callCounts % 100000 == 0) {
+            System.out.println(callCounts);
+        }
+        Set<Component> currentListClone = new HashSet<>(currentList);
+        Set<Component> candidatesToIncludeClone = new HashSet<>(candidatesToInclude);
+        for (Component addedComponent : candidatesToInclude) {
+            currentListClone.add(addedComponent);
+            componentsTreated.add(addedComponent);
+            candidatesToIncludeClone.remove(addedComponent);
+            for (ComponentGroup cg : architectureComponentGroups) {
+                if (cg.getComponents().contains(addedComponent)) {
+                    for (ComponentGroup requiredCG : cg.getRequiredGroups()) {
+                        for (Component requiredComponent : requiredCG.getComponents()) {
+                            if (!componentsTreated.contains(requiredComponent)) {
+                                candidatesToIncludeClone.addAll(requiredCG.getComponents());
+                            }
+                        }
+                    }
+                }
+            }
+//            Architecture ar = new Architecture(""+ callCounts);
+//            ar.addComponents(currentList);
+//            AdaptabilityMetrics.LevelSystemAdaptability(ar);
+            System.out.println("" + callCounts);
+            recursiveCalculator(architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
+        }
+    }
+
+    private static ComponentGroup findMainFunctionality(HashMap<String, ComponentGroup> architectureComponentGroups) {
+        ComponentGroup testedGroup = null;
+        for (ComponentGroup group1 : architectureComponentGroups.values()) {
+            testedGroup = group1;
+            for (ComponentGroup group2 : architectureComponentGroups.values()) {
+                if (group2.getRequiredGroups().contains(group1)) {
+                    testedGroup = null;
+                    break;
+                }
+            }
+            if (testedGroup != null) {
+                break;
+            }
+        }
+        return testedGroup;
     }
 
     /**

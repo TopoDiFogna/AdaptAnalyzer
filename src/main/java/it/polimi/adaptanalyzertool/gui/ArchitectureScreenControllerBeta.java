@@ -279,6 +279,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         updateServicesList();
         updateWorkflowList();
         updatePathList();
+        updateComponentGroups();
     }
 
     @FXML
@@ -895,5 +896,9 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             }
 
         }
+    }
+
+    public void testFunction(MouseEvent mouseEvent) { //TODO REMOVE THIS TEST FUNCTION AND BUTTON
+        ArchitectureMetrics.CheckAllArchitectures(componentsGroups);
     }
 }

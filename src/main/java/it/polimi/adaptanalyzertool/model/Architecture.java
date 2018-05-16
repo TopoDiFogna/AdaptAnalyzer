@@ -100,6 +100,12 @@ public class Architecture {
         components.put(component.getName(), component);
     }
 
+    public void addComponents(Set<Component> components) {
+        for (Component component : components) {
+            this.components.put(component.getName(), component);
+        }
+    }
+
     /**
      * Removes a component from the current architecture.
      *
