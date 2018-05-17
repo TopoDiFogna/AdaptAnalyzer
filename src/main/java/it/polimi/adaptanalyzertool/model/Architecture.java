@@ -80,10 +80,22 @@ public class Architecture {
         return new HashSet<>(components.values());
     }
 
+    /**
+     * Searches for a component in this architecture. It returns null if the component is not found.
+     *
+     * @param name the name of the component that has to be searched for.
+     *
+     * @return the component object if found, <code>null</code> otherwise.
+     */
     public Component getSingleComponent(String name) {
         return components.get(name);
     }
 
+    /**
+     * Returns a set of names that corresponds to all the component names.
+     *
+     * @return a set of string that corresponds to all the component names.
+     */
     public Set<String> getComponentsNames() {
         return components.keySet();
     }
@@ -100,6 +112,16 @@ public class Architecture {
         components.put(component.getName(), component);
     }
 
+    /**
+     * <p>
+     * Adds a set of components to this architecture.
+     * </p>
+     * <p>
+     * It uses the {@link #addComponent(Component)} in a cycle to do so.
+     * </p>
+     *
+     * @param components a set of components to be added to the architecture.
+     */
     public void addComponents(Set<Component> components) {
         for (Component component : components) {
             this.components.put(component.getName(), component);

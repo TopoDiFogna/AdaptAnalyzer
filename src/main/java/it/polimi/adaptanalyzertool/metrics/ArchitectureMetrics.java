@@ -201,29 +201,37 @@ public final class ArchitectureMetrics {
         return GlobalAvailabilitySystem(architecture, systemTargetAvailability) >= 1;
     }
 
+    /**
+     * Creates all possible Architecture with the specified components.
+     *
+     * @param architectureComponentGroups the component groups created within the architecture.
+     */
     public static void CheckAllArchitectures(HashMap<String, ComponentGroup> architectureComponentGroups) {
         ComponentGroup mainFunctionalityGroup = findMainFunctionality(architectureComponentGroups);
         Set<Component> currentList = new HashSet<>();
         Set<Component> componentsTreated = new HashSet<>();
         Set<Component> candidatesToInclude = new HashSet<>(mainFunctionalityGroup.getComponents());
+
         callCounts = 0;
-        long time = System.nanoTime();
-        recursiveCalculator(architectureComponentGroups.values(), currentList, componentsTreated, candidatesToInclude);
-        System.out.println("Time: " + (System.nanoTime() - time) / 1000000000);
+
+        HashMap<String, Architecture> test = new HashMap<>();
+        recursiveCalculator(test, architectureComponentGroups.values(), currentList, componentsTreated, candidatesToInclude);
     }
 
 
-    private static void recursiveCalculator(Collection<ComponentGroup> architectureComponentGroups, Set<Component> currentList, Set<Component> componentsTreated, Set<Component> candidatesToInclude) {
+    private static void recursiveCalculator(HashMap<String, Architecture> archis, Collection<ComponentGroup> architectureComponentGroups, Set<Component> currentList, Set<Component> componentsTreated, Set<Component> candidatesToInclude) {
+        callCounts++;
+
         if (candidatesToInclude.isEmpty()) {
             return;
         }
-        callCounts++;
         if (callCounts % 100000 == 0) {
             System.out.println(callCounts);
         }
-        Set<Component> currentListClone = new HashSet<>(currentList);
+
         Set<Component> candidatesToIncludeClone = new HashSet<>(candidatesToInclude);
         for (Component addedComponent : candidatesToInclude) {
+            Set<Component> currentListClone = new HashSet<>(currentList);
             currentListClone.add(addedComponent);
             componentsTreated.add(addedComponent);
             candidatesToIncludeClone.remove(addedComponent);
@@ -238,11 +246,10 @@ public final class ArchitectureMetrics {
                     }
                 }
             }
-//            Architecture ar = new Architecture(""+ callCounts);
-//            ar.addComponents(currentList);
-//            AdaptabilityMetrics.LevelSystemAdaptability(ar);
-            System.out.println("" + callCounts);
-            recursiveCalculator(architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
+//            Architecture ar = new Architecture("" + callCounts);
+//            ar.addComponents(currentListClone);
+
+            recursiveCalculator(archis, architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
         }
     }
 

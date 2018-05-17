@@ -246,10 +246,22 @@ public class Component {
         return new HashSet<>(providedServices.values());
     }
 
+    /**
+     * Searches for a provided service in this component. It returns null if the provided service is not found.
+     *
+     * @param name the name of the provided service that has to be searched for.
+     *
+     * @return the provided service object if found, <code>null</code> otherwise.
+     */
     public ProvidedService getSingleProvidedService(String name) {
         return providedServices.get(name);
     }
 
+    /**
+     * Returns a set of names that corresponds to all the provided service names.
+     *
+     * @return a set of string that corresponds to all the provided service names.
+     */
     public Set<String> getProvidedServicesNames() {
         return providedServices.keySet();
     }
@@ -290,10 +302,22 @@ public class Component {
         return new HashSet<>(requiredServices.values());
     }
 
+    /**
+     * Searches for a required service in this component. It returns null if the required service is not found.
+     *
+     * @param name the name of the required service that has to be searched for.
+     *
+     * @return the required service object if found, <code>null</code> otherwise.
+     */
     public RequiredService getSingleRequiredService(String name) {
         return requiredServices.get(name);
     }
 
+    /**
+     * Returns a set of names that corresponds to all the required service names.
+     *
+     * @return a set of string that corresponds to all the required service names.
+     */
     public Set<String> getRequiredServicesNames() {
         return requiredServices.keySet();
     }
