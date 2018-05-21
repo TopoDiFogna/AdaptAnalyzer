@@ -3,10 +3,7 @@ package it.polimi.adaptanalyzertool.gui;
 import it.polimi.adaptanalyzertool.gui.error.ErrorWindow;
 import it.polimi.adaptanalyzertool.gui.utility.ChildScreenController;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
-import it.polimi.adaptanalyzertool.metrics.AdaptabilityMetrics;
-import it.polimi.adaptanalyzertool.metrics.ArchitectureMetrics;
-import it.polimi.adaptanalyzertool.metrics.ComponentMetrics;
-import it.polimi.adaptanalyzertool.metrics.ServicesMetrics;
+import it.polimi.adaptanalyzertool.metrics.*;
 import it.polimi.adaptanalyzertool.model.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -29,7 +26,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * <p>
@@ -185,6 +181,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private Architecture architecture;
     private HashMap<String, ComponentGroup> componentsGroups;
+    private QualityHolder qualityHolder;
     private Component selectedComponent;
     private AbstractService selectedService;
     private Workflow selectedWorkflow;
@@ -210,7 +207,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 }
             }
             if (newValue.getText().equals("Workflows")) {
-                updateComponentGroups();
+                componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
             }
         });
 
@@ -279,7 +276,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         updateServicesList();
         updateWorkflowList();
         updatePathList();
-        updateComponentGroups();
+        componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
     }
 
     @FXML
@@ -563,7 +560,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void calculateArchitectureMetrics() {
-        updateComponentGroups();
+        componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
+        qualityHolder = ArchitectureMetrics.CheckAllArchitectures(componentsGroups);
         String sta = systemTargetAvailabilityTextField.getText().trim();
         String stc = systemTargetCostTextField.getText().trim();
         if (!sta.equals("") && sta.matches(NINETYNINE_REGEX) && !stc.equals("") && stc.matches(DOUBLE_REGEX)) {
@@ -865,40 +863,5 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
      */
     public void setArchitecture(Architecture architecture) {
         this.architecture = architecture;
-    }
-
-    private void updateComponentGroups() {
-        componentsGroups = new HashMap<>();
-        for (Component component : architecture.getComponents()) {
-            boolean found = false;
-            for (ComponentGroup componentGroup : componentsGroups.values()) {
-                if (component.getRequiredServices().equals(componentGroup.getRequiredServices()) &&
-                        component.getProvidedServices().equals(componentGroup.getProvidedServices()) &&
-                        !found) {
-                    componentGroup.addComponent(component);
-                    found = true;
-                }
-            }
-            if (!found) {
-                ComponentGroup componentGroup = new ComponentGroup(component.getName());
-                componentGroup.addComponent(component);
-                componentsGroups.put(component.getName(), componentGroup);
-            }
-        }
-        for (ComponentGroup cg1 : componentsGroups.values()) {
-            Set<String> requiredServicesNames = cg1.getRequiredServicesNames();
-            for (ComponentGroup cg2 : componentsGroups.values()) {
-                for (String ps : cg2.getProvidedServicesNames()) {
-                    if (requiredServicesNames.contains(ps)) {
-                        cg1.addRequiredGroup(cg2);
-                    }
-                }
-            }
-
-        }
-    }
-
-    public void testFunction(MouseEvent mouseEvent) { //TODO REMOVE THIS TEST FUNCTION AND BUTTON
-        ArchitectureMetrics.CheckAllArchitectures(componentsGroups);
     }
 }

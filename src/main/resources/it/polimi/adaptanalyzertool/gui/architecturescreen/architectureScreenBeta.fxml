@@ -352,8 +352,8 @@
                     </GridPane>
                 </HBox>
                 <Button mnemonicParsing="false" onMouseClicked="#calculateArchitectureMetrics" text="Calculate!"/>
-                <Button layoutX="299.0" layoutY="162.0" mnemonicParsing="false" onMouseClicked="#testFunction"
-                        text="Test"/>
+                <!--<Button layoutX="299.0" layoutY="162.0" mnemonicParsing="false" onMouseClicked="#testFunction"-->
+                <!--text="Test"/>-->
             </VBox>
         </TitledPane>
     </bottom>

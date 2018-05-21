@@ -19,7 +19,7 @@ import java.util.*;
  */
 public final class ArchitectureMetrics {
 
-    private static long callCounts;//TODO remove this
+    private static long recursiveCallCounts;
 
     private ArchitectureMetrics() {
     }
@@ -205,28 +205,31 @@ public final class ArchitectureMetrics {
      * Creates all possible Architecture with the specified components.
      *
      * @param architectureComponentGroups the component groups created within the architecture.
+     *
+     * @return a {@link QualityHolder} object containing all the min/max value for every quality and the respective
+     * architecture.
      */
-    public static void CheckAllArchitectures(HashMap<String, ComponentGroup> architectureComponentGroups) {
+    public static QualityHolder CheckAllArchitectures(HashMap<String, ComponentGroup> architectureComponentGroups) {
         ComponentGroup mainFunctionalityGroup = findMainFunctionality(architectureComponentGroups);
         Set<Component> currentList = new HashSet<>();
         Set<Component> componentsTreated = new HashSet<>();
         Set<Component> candidatesToInclude = new HashSet<>(mainFunctionalityGroup.getComponents());
 
-        callCounts = 0;
-
-        HashMap<String, Architecture> test = new HashMap<>();
-        recursiveCalculator(test, architectureComponentGroups.values(), currentList, componentsTreated, candidatesToInclude);
+        recursiveCallCounts = 0;
+        QualityHolder qh = new QualityHolder();
+        recursiveCalculator(qh, architectureComponentGroups, currentList, componentsTreated, candidatesToInclude);
+        System.out.println(recursiveCallCounts);
+        return qh;
     }
 
 
-    private static void recursiveCalculator(HashMap<String, Architecture> archis, Collection<ComponentGroup> architectureComponentGroups, Set<Component> currentList, Set<Component> componentsTreated, Set<Component> candidatesToInclude) {
-        callCounts++;
-
+    private static void recursiveCalculator(QualityHolder qh, HashMap<String, ComponentGroup> architectureComponentGroups, Set<Component> currentList, Set<Component> componentsTreated, Set<Component> candidatesToInclude) {
+        recursiveCallCounts++;
+        if (recursiveCallCounts % 10000 == 0) {
+            System.out.println(recursiveCallCounts);
+        }
         if (candidatesToInclude.isEmpty()) {
             return;
-        }
-        if (callCounts % 100000 == 0) {
-            System.out.println(callCounts);
         }
 
         Set<Component> candidatesToIncludeClone = new HashSet<>(candidatesToInclude);
@@ -235,7 +238,7 @@ public final class ArchitectureMetrics {
             currentListClone.add(addedComponent);
             componentsTreated.add(addedComponent);
             candidatesToIncludeClone.remove(addedComponent);
-            for (ComponentGroup cg : architectureComponentGroups) {
+            for (ComponentGroup cg : architectureComponentGroups.values()) {
                 if (cg.getComponents().contains(addedComponent)) {
                     for (ComponentGroup requiredCG : cg.getRequiredGroups()) {
                         for (Component requiredComponent : requiredCG.getComponents()) {
@@ -246,10 +249,13 @@ public final class ArchitectureMetrics {
                     }
                 }
             }
-//            Architecture ar = new Architecture("" + callCounts);
-//            ar.addComponents(currentListClone);
-
-            recursiveCalculator(archis, architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
+            Architecture ar = new Architecture("" + recursiveCallCounts);
+            ar.addComponents(currentListClone);
+            double availability = TotalStaticAvailability(getComponentGroups(ar));
+            double cost = TotalCost(ar);
+            qh.modifyAvailabilityIfNecessary(ar, availability);
+            qh.modifyCostIfNecessary(ar, cost);
+            recursiveCalculator(qh, architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
         }
     }
 
@@ -268,6 +274,37 @@ public final class ArchitectureMetrics {
             }
         }
         return testedGroup;
+    }
+
+    public static HashMap<String, ComponentGroup> getComponentGroups(Architecture architecture) {
+        HashMap<String, ComponentGroup> componentsGroups = new HashMap<>();
+        for (Component component : architecture.getComponents()) {
+            boolean found = false;
+            for (ComponentGroup componentGroup : componentsGroups.values()) {
+                if (component.getRequiredServices().equals(componentGroup.getRequiredServices()) &&
+                        component.getProvidedServices().equals(componentGroup.getProvidedServices()) &&
+                        !found) {
+                    componentGroup.addComponent(component);
+                    found = true;
+                }
+            }
+            if (!found) {
+                ComponentGroup componentGroup = new ComponentGroup(component.getName());
+                componentGroup.addComponent(component);
+                componentsGroups.put(component.getName(), componentGroup);
+            }
+        }
+        for (ComponentGroup cg1 : componentsGroups.values()) {
+            Set<String> requiredServicesNames = cg1.getRequiredServicesNames();
+            for (ComponentGroup cg2 : componentsGroups.values()) {
+                for (String ps : cg2.getProvidedServicesNames()) {
+                    if (requiredServicesNames.contains(ps)) {
+                        cg1.addRequiredGroup(cg2);
+                    }
+                }
+            }
+        }
+        return componentsGroups;
     }
 
     /**
