@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@architectureScreen.css"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" minWidth="1024.0" stylesheets="@architectureScreen.css"
             xmlns="http://javafx.com/javafx/8.0.121"
             fx:controller="it.polimi.adaptanalyzertool.gui.ArchitectureScreenControllerBeta">
     <center>
@@ -29,7 +29,7 @@
                         <Button fx:id="modifyComponentButton" disable="true" mnemonicParsing="false"
                                 onMouseClicked="#modifyComponent" text="Modify Component"/>
                     </VBox>
-                    <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                    <VBox alignment="TOP_CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
                         <Label text="Component Details"/>
                         <GridPane alignment="TOP_CENTER" VBox.vgrow="NEVER">
                             <columnConstraints>
@@ -37,11 +37,11 @@
                                 <ColumnConstraints hgrow="NEVER" minWidth="150.0" prefWidth="150.0"/>
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                             </rowConstraints>
                             <Label text="Name:" GridPane.halignment="CENTER"/>
                             <Label fx:id="componentNameLabel" text="NaN" GridPane.columnIndex="1"
@@ -77,7 +77,7 @@
                                 onMouseClicked="#showComponentServices" text="Show component services"/>
                         <TitledPane alignment="TOP_CENTER" animated="false" collapsible="false"
                                     text="Component Metrics">
-                            <VBox alignment="TOP_CENTER" fillWidth="false" spacing="10.0">
+                            <VBox alignment="TOP_CENTER" fillWidth="false" spacing="5.0">
                                 <GridPane>
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0"
@@ -88,13 +88,10 @@
                                                            prefWidth="100.0"/>
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
-                                                        vgrow="SOMETIMES"/>
-                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
-                                                        vgrow="SOMETIMES"/>
-                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
-                                                        vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                                     </rowConstraints>
                                     <Label text="Fitness Ratio w.r.t. Availability:" GridPane.halignment="CENTER"/>
                                     <Label fx:id="fitnessRatioAvailabilityLabel" text="NaN" GridPane.columnIndex="1"
@@ -164,11 +161,11 @@
                                                    prefWidth="115.0"/>
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                             </rowConstraints>
                             <Label text="Name:" GridPane.halignment="CENTER"/>
                             <Label fx:id="serviceNameLabel" text="NaN" GridPane.columnIndex="1"
@@ -194,7 +191,7 @@
                             <VBox.margin>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                             </VBox.margin>
-                            <VBox alignment="TOP_CENTER" fillWidth="false">
+                            <VBox alignment="TOP_CENTER" fillWidth="false" spacing="5.0">
                                 <GridPane>
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0"
@@ -203,14 +200,10 @@
                                                            prefWidth="90.0"/>
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
-                                                        vgrow="SOMETIMES"/>
-                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
-                                                        vgrow="SOMETIMES"/>
-                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
-                                                        vgrow="SOMETIMES"/>
-                                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0"
-                                                        vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                                     </rowConstraints>
                                     <Label text="Number of Executions:" GridPane.halignment="CENTER"/>
                                     <Label fx:id="numberOfExecutionsLabel" text="NaN" GridPane.columnIndex="1"
@@ -263,7 +256,7 @@
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="10.0" prefWidth="100.0"/>
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                             </rowConstraints>
                             <Label text="Execution Probability:" GridPane.halignment="CENTER"/>
                             <Label fx:id="pathExecutionProbabilityLabel" layoutX="111.0" layoutY="17.0" text="NaN"
@@ -300,10 +293,10 @@
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0"/>
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                             </rowConstraints>
                             <Label text="Global Availability:" GridPane.halignment="CENTER"/>
                             <Label fx:id="globalAvailabilityLabel" text="NaN" GridPane.columnIndex="1"
@@ -335,9 +328,9 @@
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0"/>
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                         </rowConstraints>
                         <Label text="Mean of absolute adaptability:" GridPane.halignment="CENTER"/>
                         <Label fx:id="meanAbsoluteAdaptabilityLabel" text="NaN" GridPane.columnIndex="1"
@@ -352,8 +345,6 @@
                     </GridPane>
                 </HBox>
                 <Button mnemonicParsing="false" onMouseClicked="#calculateArchitectureMetrics" text="Calculate!"/>
-                <!--<Button layoutX="299.0" layoutY="162.0" mnemonicParsing="false" onMouseClicked="#testFunction"-->
-                <!--text="Test"/>-->
             </VBox>
         </TitledPane>
     </bottom>
