@@ -181,7 +181,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private Architecture architecture;
     private HashMap<String, ComponentGroup> componentsGroups;
-    private QualityHolder qualityHolder;
+    private HashMap<Double, QualityHolder> adaptabilityQualityHashMap;
     private Component selectedComponent;
     private AbstractService selectedService;
     private Workflow selectedWorkflow;
@@ -561,7 +561,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private void calculateArchitectureMetrics() {
         componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
-        qualityHolder = ArchitectureMetrics.CheckAllArchitectures(componentsGroups);
+        adaptabilityQualityHashMap = ArchitectureMetrics.CheckAllArchitectures(architecture);
         String sta = systemTargetAvailabilityTextField.getText().trim();
         String stc = systemTargetCostTextField.getText().trim();
         if (!sta.equals("") && sta.matches(NINETYNINE_REGEX) && !stc.equals("") && stc.matches(DOUBLE_REGEX)) {
@@ -584,7 +584,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             architectureMetricsErrorLabel.setText("Check input for mistakes");
         }
         double totalCost = ArchitectureMetrics.TotalCost(architecture);
-        double totalAvailability = ArchitectureMetrics.TotalStaticAvailability(componentsGroups);
+        double totalAvailability = ArchitectureMetrics.TotalStaticAvailability(componentsGroups);//TODO
         double maas = AdaptabilityMetrics.MeanAbsoluteAdaptability(architecture);
         double raas = AdaptabilityMetrics.MeanRelativeAdaptability(architecture);
         double lsa = AdaptabilityMetrics.LevelSystemAdaptability(architecture);
@@ -695,9 +695,11 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             for (Path path : selectedWorkflow.getPaths()) {
                 HBox pathHBox = new HBox(3);
                 Label pathLabel = new Label(path.getName());
+                Label pathProbabilityLabel = new Label("(Probability: " + String.valueOf(path.getExecutionProbability()) + ")");
                 pathHBox.setFocusTraversable(true);
                 pathHBox.setId("pathHBox");
-                pathHBox.getChildren().add(pathLabel);
+                pathHBox.setSpacing(5);
+                pathHBox.getChildren().addAll(pathLabel, pathProbabilityLabel);
                 pathsVBox.getChildren().add(pathHBox);
                 pathHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     MouseButton mb = event.getButton();

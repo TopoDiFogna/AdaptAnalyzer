@@ -29,36 +29,45 @@ public class Architecture {
      * @param name The name for this architecture.
      */
     public Architecture(String name) {
-        this(name, new HashMap<>(), new HashMap<>());
-    }
-
-    /**
-     * Creates a new architecture with the specified set of components.
-     * <p>
-     * More components can be added later by using {@link Architecture#addComponent addComponent}.
-     * </p>
-     *
-     * @param name       The name for this architecture.
-     * @param components The HashMap containing the components.
-     */
-    public Architecture(String name, HashMap<String, Component> components) {
-        this(name, components, new HashMap<>());
-    }
-
-    /**
-     * Creates a new architecture with the specified set of components.
-     * <p>
-     * More components can be added later by using {@link Architecture#addComponent addComponent}.
-     * </p>
-     *
-     * @param name       The name for this architecture.
-     * @param components The HashMap containing the components.
-     * @param workflows  The HashMap containing the workflows associated with this architecture.
-     */
-    public Architecture(String name, HashMap<String, Component> components, HashMap<String, Workflow> workflows) {
         this.name = name;
-        this.components = components;
-        this.workflows = workflows;
+        this.components = new HashMap<>();
+        this.workflows = new HashMap<>();
+    }
+
+    /**
+     * Creates a new architecture with the specified set of components.
+     * <p>
+     * More components can be added later by using {@link Architecture#addComponent addComponent}.
+     * </p>
+     *
+     * @param name       The name for this architecture.
+     * @param components The Set containing the components.
+     */
+    public Architecture(String name, Set<Component> components) {
+        this(name);
+        for (Component component : components){
+            this.components.put(component.getName(), component);
+        }
+    }
+
+    /**
+     * Creates a new architecture with the specified set of components.
+     * <p>
+     * More components can be added later by using {@link Architecture#addComponent addComponent}.
+     * </p>
+     *
+     * @param name       The name for this architecture.
+     * @param components The Set containing the components.
+     * @param workflows  The Set containing the workflows associated with this architecture.
+     */
+    public Architecture(String name, Set<Component> components, Set<Workflow> workflows) {
+        this.name = name;
+        for (Component component : components){
+            this.components.put(component.getName(), component);
+        }
+        for (Workflow workflow : workflows){
+            this.workflows.put(workflow.getName(), workflow);
+        }
     }
 
     /**
@@ -180,5 +189,15 @@ public class Architecture {
      */
     public void removeAllWorkflow() {
         workflows.clear();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder("Architecture name= " + name + "\n\tComponents: ");
+        for (Component c : components.values()){
+            if (c.isUsed())
+            s.append(c.getName()).append(" ");
+        }
+        return s.toString();
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.adaptanalyzertool.metrics;
 
+import it.polimi.adaptanalyzertool.model.AbstractService;
 import it.polimi.adaptanalyzertool.model.Architecture;
 import it.polimi.adaptanalyzertool.model.Component;
 import it.polimi.adaptanalyzertool.model.ComponentGroup;
@@ -85,6 +86,7 @@ public final class ArchitectureMetrics {
      *
      * @return the total availability of the architecture without considering any workflow.
      */
+    @Deprecated
     public static double TotalStaticAvailability(HashMap<String, ComponentGroup> architectureComponentGroups) {
         double totalAvailability = -1f;
         HashMap<String, Double> availabilityHashMap = new HashMap<>();
@@ -204,60 +206,131 @@ public final class ArchitectureMetrics {
     /**
      * Creates all possible Architecture with the specified components.
      *
-     * @param architectureComponentGroups the component groups created within the architecture.
+     * @param architecture the base architecture containing all components.
      *
      * @return a {@link QualityHolder} object containing all the min/max value for every quality and the respective
      * architecture.
      */
-    public static QualityHolder CheckAllArchitectures(HashMap<String, ComponentGroup> architectureComponentGroups) {
+    public static HashMap<Double, QualityHolder> CheckAllArchitectures(Architecture architecture) {
+        HashMap<String, ComponentGroup> architectureComponentGroups = getComponentGroups(architecture);
         ComponentGroup mainFunctionalityGroup = findMainFunctionality(architectureComponentGroups);
-        Set<Component> currentList = new HashSet<>();
+        List<Component> currentList = new ArrayList<>();
         Set<Component> componentsTreated = new HashSet<>();
-        Set<Component> candidatesToInclude = new HashSet<>(mainFunctionalityGroup.getComponents());
+        List<Component> candidatesToInclude = new ArrayList<>(mainFunctionalityGroup.getComponents());
 
         recursiveCallCounts = 0;
-        QualityHolder qh = new QualityHolder();
-        recursiveCalculator(qh, architectureComponentGroups, currentList, componentsTreated, candidatesToInclude);
+        HashMap<Double, QualityHolder> adaptabilityQualityHashMap = new HashMap<>();
+
+        recursiveCalculator(adaptabilityQualityHashMap, architecture, architectureComponentGroups, currentList, componentsTreated, candidatesToInclude);
         System.out.println(recursiveCallCounts);
-        return qh;
+        return adaptabilityQualityHashMap;
     }
 
+    private static void recursiveCalculator(HashMap<Double, QualityHolder> qualityHolderHashMap,
+                                            Architecture fullArchitecture,
+                                            HashMap<String, ComponentGroup> architectureComponentGroups,
+                                            List<Component> currentList,
+                                            Set<Component> componentsTreated,
+                                            List<Component> candidatesToInclude) {
 
-    private static void recursiveCalculator(QualityHolder qh, HashMap<String, ComponentGroup> architectureComponentGroups, Set<Component> currentList, Set<Component> componentsTreated, Set<Component> candidatesToInclude) {
-        recursiveCallCounts++;
+        long count = recursiveCallCounts++;
+        System.out.println("Call " + count);
         if (recursiveCallCounts % 10000 == 0) {
             System.out.println(recursiveCallCounts);
         }
         if (candidatesToInclude.isEmpty()) {
+            System.out.println("End of Call " + count);
             return;
         }
 
-        Set<Component> candidatesToIncludeClone = new HashSet<>(candidatesToInclude);
-        for (Component addedComponent : candidatesToInclude) {
-            Set<Component> currentListClone = new HashSet<>(currentList);
+        List<Component> candidatesToIncludeClone = new ArrayList<>(candidatesToInclude);
+        for(Component addedComponent : candidatesToInclude){
+
+            for (Component component : fullArchitecture.getComponents()){
+                component.setUsed(false);
+            }
+
+            List<Component> currentListClone = new ArrayList<>(currentList);
             currentListClone.add(addedComponent);
             componentsTreated.add(addedComponent);
             candidatesToIncludeClone.remove(addedComponent);
-            for (ComponentGroup cg : architectureComponentGroups.values()) {
-                if (cg.getComponents().contains(addedComponent)) {
-                    for (ComponentGroup requiredCG : cg.getRequiredGroups()) {
-                        for (Component requiredComponent : requiredCG.getComponents()) {
-                            if (!componentsTreated.contains(requiredComponent)) {
-                                candidatesToIncludeClone.addAll(requiredCG.getComponents());
-                            }
+            for (AbstractService requiredService : addedComponent.getRequiredServices()){
+                for(Component c : fullArchitecture.getComponents()) {
+                    for (AbstractService s : c.getProvidedServices()) {
+                        if (s.getName().equals(requiredService.getName()) && !componentsTreated.contains(c)) {
+                            candidatesToIncludeClone.add(0, c);
                         }
                     }
                 }
             }
-            Architecture ar = new Architecture("" + recursiveCallCounts);
-            ar.addComponents(currentListClone);
-            double availability = TotalStaticAvailability(getComponentGroups(ar));
-            double cost = TotalCost(ar);
-            qh.modifyAvailabilityIfNecessary(ar, availability);
-            qh.modifyCostIfNecessary(ar, cost);
-            recursiveCalculator(qh, architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
+            Architecture ar = new Architecture("" + recursiveCallCounts, fullArchitecture.getComponents());
+            for (Component component : ar.getComponents()){
+                if (currentListClone.contains(component)){
+                    component.setUsed(true);
+                }
+            }
+            System.out.println(ar.toString());
+            recursiveCalculator(qualityHolderHashMap, fullArchitecture, architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
+            System.out.println("End of Call " + count);
         }
     }
+
+
+//    private static void recursiveCalculator(HashMap<Double, QualityHolder> qualityHolderHashMap,
+//                                            Architecture fullArchitecture,
+//                                            HashMap<String, ComponentGroup> architectureComponentGroups,
+//                                            Set<Component> currentList,
+//                                            Set<Component> componentsTreated,
+//                                            Set<Component> candidatesToInclude) {
+//        recursiveCallCounts++;
+//        if (recursiveCallCounts % 10000 == 0) {
+//            System.out.println(recursiveCallCounts);
+//        }
+//        if (candidatesToInclude.isEmpty()) {
+//            return;
+//        }
+//
+//        Set<Component> candidatesToIncludeClone = new HashSet<>(candidatesToInclude);
+//        for (Component addedComponent : candidatesToInclude) {
+//            Set<Component> currentListClone = new HashSet<>(currentList);
+//            currentListClone.add(addedComponent);
+//            componentsTreated.add(addedComponent);
+//            candidatesToIncludeClone.remove(addedComponent);
+//            for (ComponentGroup cg : architectureComponentGroups.values()) {
+//                if (cg.getComponents().contains(addedComponent)) {
+//                    for (ComponentGroup requiredCG : cg.getRequiredGroups()) {
+//                        for (Component requiredComponent : requiredCG.getComponents()) {
+//                            if (!componentsTreated.contains(requiredComponent)) {
+//                                candidatesToIncludeClone.addAll(requiredCG.getComponents());
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            Architecture ar = new Architecture("" + recursiveCallCounts, fullArchitecture.getComponents());
+//            for (Component component : ar.getComponents()){
+//                if (currentList.contains(component)){
+//                    component.setUsed(true);
+//                }
+//            }
+//            double adaptability = AdaptabilityMetrics.LevelSystemAdaptability(ar);
+//            double cost = 0;
+//            for (Component component : ar.getComponents()){
+//                if (component.isUsed()){
+//                    cost += component.getCost();
+//                }
+//            }
+//            if (qualityHolderHashMap.get(adaptability) != null){
+//                qualityHolderHashMap.get(adaptability).modifyCostIfNecessary(ar, cost);
+//            } else {
+//                QualityHolder qh = new QualityHolder();
+//                qh.modifyCostIfNecessary(ar, cost);
+//                qualityHolderHashMap.put(adaptability, qh);
+//            }
+//            System.out.println(ar.toString());
+//            recursiveCalculator(qualityHolderHashMap, fullArchitecture, architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
+//        }
+//    }
 
     private static ComponentGroup findMainFunctionality(HashMap<String, ComponentGroup> architectureComponentGroups) {
         ComponentGroup testedGroup = null;
