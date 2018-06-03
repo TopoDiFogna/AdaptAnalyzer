@@ -45,4 +45,10 @@ public class RequiredService extends AbstractService {
     public int getNumberOfExecutionsPerCall() {
         return numberOfExecutionsPerCall;
     }
+
+    @Override
+    public String toString() {
+        return "Service " + this.getName() +
+                "\n\ttype= Required";
+    }
 }

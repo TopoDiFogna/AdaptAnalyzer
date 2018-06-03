@@ -220,117 +220,78 @@ public final class ArchitectureMetrics {
 
         recursiveCallCounts = 0;
         HashMap<Double, QualityHolder> adaptabilityQualityHashMap = new HashMap<>();
+        Architecture newArch = architecture.clone(architecture.getName());
+        for (Component component : newArch.getComponents()) {
+            component.setUsed(false);
+        }
 
-        recursiveCalculator(adaptabilityQualityHashMap, architecture, architectureComponentGroups, currentList, componentsTreated, candidatesToInclude);
-        System.out.println(recursiveCallCounts);
+        recursiveCalculator(adaptabilityQualityHashMap, newArch, currentList, componentsTreated, candidatesToInclude);
+
         return adaptabilityQualityHashMap;
     }
 
     private static void recursiveCalculator(HashMap<Double, QualityHolder> qualityHolderHashMap,
                                             Architecture fullArchitecture,
-                                            HashMap<String, ComponentGroup> architectureComponentGroups,
                                             List<Component> currentList,
                                             Set<Component> componentsTreated,
                                             List<Component> candidatesToInclude) {
+        recursiveCallCounts++;
 
-        long count = recursiveCallCounts++;
-        System.out.println("Call " + count);
-        if (recursiveCallCounts % 10000 == 0) {
-            System.out.println(recursiveCallCounts);
-        }
         if (candidatesToInclude.isEmpty()) {
-            System.out.println("End of Call " + count);
             return;
         }
 
         List<Component> candidatesToIncludeClone = new ArrayList<>(candidatesToInclude);
-        for(Component addedComponent : candidatesToInclude){
+        for (Component addedComponent : candidatesToInclude) {
 
-            for (Component component : fullArchitecture.getComponents()){
-                component.setUsed(false);
-            }
-
+            List<Component> testList = new ArrayList<>(candidatesToIncludeClone);
             List<Component> currentListClone = new ArrayList<>(currentList);
+
             currentListClone.add(addedComponent);
             componentsTreated.add(addedComponent);
             candidatesToIncludeClone.remove(addedComponent);
-            for (AbstractService requiredService : addedComponent.getRequiredServices()){
-                for(Component c : fullArchitecture.getComponents()) {
+            testList.remove(addedComponent);
+            for (AbstractService requiredService : addedComponent.getRequiredServices()) {
+                for (Component c : fullArchitecture.getComponents()) {
                     for (AbstractService s : c.getProvidedServices()) {
                         if (s.getName().equals(requiredService.getName()) && !componentsTreated.contains(c)) {
-                            candidatesToIncludeClone.add(0, c);
+                            testList.add(0, c);
                         }
                     }
                 }
             }
-            Architecture ar = new Architecture("" + recursiveCallCounts, fullArchitecture.getComponents());
-            for (Component component : ar.getComponents()){
-                if (currentListClone.contains(component)){
-                    component.setUsed(true);
+
+            //Set-up the new architecture to be saved if necessary
+            Architecture ar = fullArchitecture.clone(String.valueOf(recursiveCallCounts));
+            for (Component component : ar.getComponents()) {
+                for (Component currentComponent : currentListClone) {
+                    if (component.getName().equals(currentComponent.getName())) {
+                        component.setUsed(true);
+                    }
                 }
             }
-            System.out.println(ar.toString());
-            recursiveCalculator(qualityHolderHashMap, fullArchitecture, architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
-            System.out.println("End of Call " + count);
+
+            //Perform the calculation on the new architecture
+            double adaptability = AdaptabilityMetrics.LevelSystemAdaptability(ar);
+            double cost = 0;
+            for (Component component : ar.getComponents()) {
+                if (component.isUsed()) {
+                    cost += component.getCost();
+                }
+            }
+
+            //Add the new results to the main hashmap
+            if (qualityHolderHashMap.get(adaptability) != null) {
+                qualityHolderHashMap.get(adaptability).modifyCostIfNecessary(ar, cost);
+            } else {
+                QualityHolder qh = new QualityHolder();
+                qh.modifyCostIfNecessary(ar, cost);
+                qualityHolderHashMap.put(adaptability, qh);
+            }
+
+            recursiveCalculator(qualityHolderHashMap, fullArchitecture, currentListClone, componentsTreated, testList);
         }
     }
-
-
-//    private static void recursiveCalculator(HashMap<Double, QualityHolder> qualityHolderHashMap,
-//                                            Architecture fullArchitecture,
-//                                            HashMap<String, ComponentGroup> architectureComponentGroups,
-//                                            Set<Component> currentList,
-//                                            Set<Component> componentsTreated,
-//                                            Set<Component> candidatesToInclude) {
-//        recursiveCallCounts++;
-//        if (recursiveCallCounts % 10000 == 0) {
-//            System.out.println(recursiveCallCounts);
-//        }
-//        if (candidatesToInclude.isEmpty()) {
-//            return;
-//        }
-//
-//        Set<Component> candidatesToIncludeClone = new HashSet<>(candidatesToInclude);
-//        for (Component addedComponent : candidatesToInclude) {
-//            Set<Component> currentListClone = new HashSet<>(currentList);
-//            currentListClone.add(addedComponent);
-//            componentsTreated.add(addedComponent);
-//            candidatesToIncludeClone.remove(addedComponent);
-//            for (ComponentGroup cg : architectureComponentGroups.values()) {
-//                if (cg.getComponents().contains(addedComponent)) {
-//                    for (ComponentGroup requiredCG : cg.getRequiredGroups()) {
-//                        for (Component requiredComponent : requiredCG.getComponents()) {
-//                            if (!componentsTreated.contains(requiredComponent)) {
-//                                candidatesToIncludeClone.addAll(requiredCG.getComponents());
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            Architecture ar = new Architecture("" + recursiveCallCounts, fullArchitecture.getComponents());
-//            for (Component component : ar.getComponents()){
-//                if (currentList.contains(component)){
-//                    component.setUsed(true);
-//                }
-//            }
-//            double adaptability = AdaptabilityMetrics.LevelSystemAdaptability(ar);
-//            double cost = 0;
-//            for (Component component : ar.getComponents()){
-//                if (component.isUsed()){
-//                    cost += component.getCost();
-//                }
-//            }
-//            if (qualityHolderHashMap.get(adaptability) != null){
-//                qualityHolderHashMap.get(adaptability).modifyCostIfNecessary(ar, cost);
-//            } else {
-//                QualityHolder qh = new QualityHolder();
-//                qh.modifyCostIfNecessary(ar, cost);
-//                qualityHolderHashMap.put(adaptability, qh);
-//            }
-//            System.out.println(ar.toString());
-//            recursiveCalculator(qualityHolderHashMap, fullArchitecture, architectureComponentGroups, currentListClone, componentsTreated, candidatesToIncludeClone);
-//        }
-//    }
 
     private static ComponentGroup findMainFunctionality(HashMap<String, ComponentGroup> architectureComponentGroups) {
         ComponentGroup testedGroup = null;

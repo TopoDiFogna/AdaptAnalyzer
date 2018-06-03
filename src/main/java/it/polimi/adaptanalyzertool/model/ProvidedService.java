@@ -33,4 +33,10 @@ public class ProvidedService extends AbstractService {
     public double getExecutionTime() {
         return executionTime;
     }
+
+    @Override
+    public String toString() {
+        return "Service " + this.getName() +
+                "\n\ttype= Provided";
+    }
 }

@@ -45,7 +45,7 @@ public class Architecture {
      */
     public Architecture(String name, Set<Component> components) {
         this(name);
-        for (Component component : components){
+        for (Component component : components) {
             this.components.put(component.getName(), component);
         }
     }
@@ -62,10 +62,10 @@ public class Architecture {
      */
     public Architecture(String name, Set<Component> components, Set<Workflow> workflows) {
         this.name = name;
-        for (Component component : components){
+        for (Component component : components) {
             this.components.put(component.getName(), component);
         }
-        for (Workflow workflow : workflows){
+        for (Workflow workflow : workflows) {
             this.workflows.put(workflow.getName(), workflow);
         }
     }
@@ -194,10 +194,28 @@ public class Architecture {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("Architecture name= " + name + "\n\tComponents: ");
-        for (Component c : components.values()){
-            if (c.isUsed())
-            s.append(c.getName()).append(" ");
+        for (Component c : components.values()) {
+            if (c.isUsed()) {
+                s.append(c.getName()).append(" ");
+            }
         }
         return s.toString();
+    }
+
+    /**
+     * <p>
+     * This methods clones an architecture without carrying the workflows associated to it.
+     * </p>
+     *
+     * @param name the name of the cloned component.
+     *
+     * @return a copy of this object without workflows.
+     */
+    public Architecture clone(String name) {
+        Architecture architecture = new Architecture(name);
+        for (Component c : this.getComponents()) {
+            architecture.addComponent(c.clone());
+        }
+        return architecture;
     }
 }

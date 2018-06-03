@@ -371,4 +371,23 @@ public class Component {
         removeAllProvidedServices();
         removeAllRequiredServices();
     }
+
+    @Override
+    public String toString() {
+        return "Component " + name + ": " +
+                "\n\tcost= " + cost +
+                "\n\tavailability= " + availability +
+                "\n\tused= " + used;
+    }
+
+    /**
+     * Clones the component but maintains a reference to the same services.
+     *
+     * @return a clone of this component.
+     */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public Component clone() {
+        return new Component(name, cost, availability, used, colorRed, colorGreen, colorBlue, colorOpacity, providedServices, requiredServices);
+    }
 }
