@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -27,10 +28,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * <p>
@@ -65,6 +63,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private ContextMenu componentContextMenu;
     @FXML
     private Button modifyComponentButton;
+    private HBox componentSelectedHBox;
     /*
         Selected Component details
      */
@@ -104,10 +103,11 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         Services list
      */
     @FXML
-    private ChoiceBox<String> componentChoiceBox;
+    private ComboBox<String> componentComboBox;
     @FXML
     private Button serviceAddButton;
     private ContextMenu serviceContextMenu;
+    private HBox serviceSelectedHBox;
     /*
         Selected service details
      */
@@ -143,6 +143,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private VBox workflowsVBox;
     private ContextMenu workflowContextMenu;
+    private HBox workflowSelectedHBox;
     /*
         Paths
      */
@@ -155,6 +156,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Label pathExecutionProbabilityLabel;
     @FXML
     private Button addMessageButton;
+    private HBox pathSelectedHBox;
     /*
         Messages Scheme
      */
@@ -177,6 +179,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private ComboBox<String> architectureMaxCostComboBox;
     @FXML
     private LineChart<Number, Number> adaptabilityChart;
+
+    private HBox adaptabilitySelectedHBox;
     /*
         Architecture Metrics
      */
@@ -213,18 +217,21 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private void initialize() {
         //Adds listener to the component choice box to update the services displayed
-        componentChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        componentComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            clearServiceMetrics();
+            selectedService = null;
             if (newValue != null) {
                 selectedComponent = architecture.getSingleComponent(newValue);
                 updateServicesList();
+                clearServiceDetails();
             }
         });
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.getText().equals("Services")) {
-                componentChoiceBox.setItems(FXCollections.observableArrayList(architecture.getComponentsNames()));
+                componentComboBox.setItems(FXCollections.observableArrayList(architecture.getComponentsNames()).sorted());
                 if (!architecture.getComponents().isEmpty() && selectedComponent != null) {
-                    componentChoiceBox.setValue(selectedComponent.getName());
+                    componentComboBox.setValue(selectedComponent.getName());
                     this.serviceAddButton.setDisable(false);
                 }
             }
@@ -236,7 +243,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         //Sets the rounding mode of the DecimalFormat used in metrics
         df.setRoundingMode(RoundingMode.DOWN);
 
-        //Creates the context menu used to manipulate component and services
+        //Creates the context menu used to manipulate component, services, workflows and paths
         componentContextMenu = new ContextMenu();
         MenuItem componentRemoveMenuItem = new MenuItem("Remove");
         componentRemoveMenuItem.setOnAction(event -> {
@@ -282,6 +289,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         });
         pathContextMenu.getItems().add(pathRemoveMenuItem);
 
+        //Initializes comboboxes for component in selected architecture for a given adaptability
         initializeCombobox(architectureMaxCostComboBox);
 
         initializeCombobox(architectureMinCostComboBox);
@@ -292,7 +300,18 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             if (newValue != null) {
                 selectedComponent = architecture.getSingleComponent(newValue);
                 tabPane.getSelectionModel().select(componentsTab);
-                showComponentDetail(selectedComponent);//TODO focus right hbox
+                for (Node node : componentsVBox.getChildren()) {
+                    for (Node hBoxChildren : ((HBox) node).getChildren()) {
+                        if (hBoxChildren instanceof Label && ((Label) hBoxChildren).getText().equals(selectedComponent.getName())) {
+                            if (componentSelectedHBox != null) {
+                                resetHBoxBackgroung(componentSelectedHBox);
+                            }
+                            componentSelectedHBox = (HBox) node;
+                            setHBoxBackground(componentSelectedHBox);
+                        }
+                    }
+                }
+                showComponentDetail(selectedComponent);
             }
         });
     }
@@ -304,6 +323,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         selectedService = null;
         selectedWorkflow = null;
         selectedPath = null;
+        adaptabilityQualityHashMap = null;
         clearComponentDetail();
         clearServiceDetails();
         clearPathDetails();
@@ -313,6 +333,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         updateWorkflowList();
         updatePathList();
         componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
+        updateAdaptabilityList();
+        drawChart();
     }
 
     @FXML
@@ -368,16 +390,20 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void updateComponentList() {
         componentsVBox.getChildren().clear();
-        for (Component component : architecture.getComponents()) {
+        List<Component> architectureComponents = new ArrayList<>(architecture.getComponents());
+        architectureComponents.sort(Comparator.comparing(Component::getName));
+        for (Component component : architectureComponents) {
             Rectangle componentColor = new Rectangle(17, 17, component.getColor());
             componentColor.setStroke(Color.BLACK);
             Label componentName = new Label(component.getName());
             HBox componentHBox = new HBox(3, componentColor, componentName);
-            componentHBox.setFocusTraversable(true);
-            componentHBox.setId("componentHBox");
             componentHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 MouseButton mb = event.getButton();
-                componentHBox.requestFocus();
+                if (componentSelectedHBox != null) {
+                    resetHBoxBackgroung(componentSelectedHBox);
+                }
+                componentSelectedHBox = componentHBox;
+                setHBoxBackground(componentSelectedHBox);
                 switch (mb) {
                     case PRIMARY:
                         showComponentDetail(component);
@@ -509,8 +535,10 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             HashSet<AbstractService> componentServices = new HashSet<>();
             componentServices.addAll(selectedComponent.getProvidedServices());
             componentServices.addAll(selectedComponent.getRequiredServices());
+            List<AbstractService> componentServicesList = new ArrayList<>(componentServices);
+            componentServicesList.sort(Comparator.comparing(AbstractService::getName));
             servicesVBox.getChildren().clear();
-            for (AbstractService service : componentServices) {
+            for (AbstractService service : componentServicesList) {
                 HBox servicesHBox = new HBox(3);
                 Label serviceLabel = new Label();
                 if (service instanceof ProvidedService) {
@@ -519,16 +547,19 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                     serviceLabel.setText("(Required) " + service.getName());
                 }
                 servicesHBox.getChildren().add(serviceLabel);
-                servicesHBox.setFocusTraversable(true);
-                servicesHBox.setId("serviceHBox");
                 servicesVBox.getChildren().add(servicesHBox);
                 servicesHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     MouseButton mb = event.getButton();
-                    servicesHBox.requestFocus();
+                    if (serviceSelectedHBox != null) {
+                        resetHBoxBackgroung(serviceSelectedHBox);
+                    }
+                    serviceSelectedHBox = servicesHBox;
+                    setHBoxBackground(serviceSelectedHBox);
                     this.selectedService = service;
                     switch (mb) {
                         case PRIMARY:
                             showServiceDetail(selectedService);
+                            clearServiceMetrics();
                             break;
                         case SECONDARY:
                             serviceContextMenu.show(servicesHBox, event.getScreenX(), event.getScreenY());
@@ -592,6 +623,13 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         } else {
             serviceMetricsErrorLabel.setText("Select a service first");
         }
+    }
+
+    private void clearServiceMetrics() {
+        numberOfExecutionsLabel.setText("NaN");
+        probabilityToBeRunningLabel.setText("NaN");
+        absoluteAdaptabilityLabel.setText("NaN");
+        relativeAdaptabilityLabel.setText("NaN");
     }
 
     @FXML
@@ -665,16 +703,20 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void updateWorkflowList() {
         workflowsVBox.getChildren().clear();
-        for (Workflow workflow : architecture.getWorkflows()) {
+        List<Workflow> architectureWorkflow = new ArrayList<>(architecture.getWorkflows());
+        architectureWorkflow.sort(Comparator.comparing(Workflow::getName));
+        for (Workflow workflow : architectureWorkflow) {
             HBox workflowsHBox = new HBox(3);
             Label workflowLabel = new Label(workflow.getName());
             workflowsHBox.getChildren().add(workflowLabel);
-            workflowsHBox.setFocusTraversable(true);
-            workflowsHBox.setId("workflowHBox");
             workflowsVBox.getChildren().add(workflowsHBox);
             workflowsHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 MouseButton mb = event.getButton();
-                workflowsHBox.requestFocus();
+                if (workflowSelectedHBox != null) {
+                    resetHBoxBackgroung(workflowSelectedHBox);
+                }
+                workflowSelectedHBox = workflowsHBox;
+                setHBoxBackground(workflowSelectedHBox);
                 switch (mb) {
                     case PRIMARY:
                         if (this.selectedWorkflow != workflow) {
@@ -727,18 +769,22 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private void updatePathList() {
         if (selectedWorkflow != null) {
             pathsVBox.getChildren().clear();
-            for (Path path : selectedWorkflow.getPaths()) {
+            List<Path> workflowPaths = new ArrayList<>(selectedWorkflow.getPaths());
+            workflowPaths.sort(Comparator.comparing(Path::getName));
+            for (Path path : workflowPaths) {
                 HBox pathHBox = new HBox(3);
                 Label pathLabel = new Label(path.getName());
                 Label pathProbabilityLabel = new Label("(Probability: " + String.valueOf(path.getExecutionProbability()) + ")");
-                pathHBox.setFocusTraversable(true);
-                pathHBox.setId("pathHBox");
                 pathHBox.setSpacing(5);
                 pathHBox.getChildren().addAll(pathLabel, pathProbabilityLabel);
                 pathsVBox.getChildren().add(pathHBox);
                 pathHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     MouseButton mb = event.getButton();
-                    pathHBox.requestFocus();
+                    if (pathSelectedHBox != null) {
+                        resetHBoxBackgroung(pathSelectedHBox);
+                    }
+                    pathSelectedHBox = pathHBox;
+                    setHBoxBackground(pathSelectedHBox);
                     this.selectedPath = path;
                     switch (mb) {
                         case PRIMARY:
@@ -879,7 +925,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     @FXML
-    private void calculateAdaptability() {//TODO
+    private void calculateAdaptability() {
         adaptabilityQualityHashMap = ArchitectureMetrics.CheckAllArchitectures(architecture);
         updateAdaptabilityList();
         drawChart();
@@ -891,15 +937,17 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             TreeMap<Double, QualityHolder> tm = new TreeMap<>(adaptabilityQualityHashMap);
             for (Double d : tm.keySet()) {
                 HBox adaptabilityHBox = new HBox(3);
-                Label adaptabilityLabel = new Label(String.valueOf(d));
-                adaptabilityHBox.setFocusTraversable(true);
-                adaptabilityHBox.setId("adaptabilityHBox");
+                Label adaptabilityLabel = new Label(String.valueOf(df.format(d)));
                 adaptabilityHBox.setSpacing(5);
                 adaptabilityHBox.getChildren().add(adaptabilityLabel);
                 adaptabilityVBox.getChildren().add(adaptabilityHBox);
                 adaptabilityHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     MouseButton mb = event.getButton();
-                    adaptabilityHBox.requestFocus();
+                    if (adaptabilitySelectedHBox != null) {
+                        resetHBoxBackgroung(adaptabilitySelectedHBox);
+                    }
+                    adaptabilitySelectedHBox = adaptabilityHBox;
+                    setHBoxBackground(adaptabilitySelectedHBox);
                     switch (mb) {
                         case PRIMARY:
                             systemAdaptabilityLabel.setText("System Adaptability: " + String.valueOf(d));
@@ -964,6 +1012,13 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         }
     }
 
+    private void setHBoxBackground(HBox hBox) {
+        hBox.backgroundProperty().setValue(new Background(new BackgroundFill(Color.AQUAMARINE, null, null)));
+    }
+
+    private void resetHBoxBackgroung(HBox hBox) {
+        hBox.backgroundProperty().setValue(new Background(new BackgroundFill(null, null, null)));
+    }
 
     @Override
     public void setParentScreen(ScreenController screen) {

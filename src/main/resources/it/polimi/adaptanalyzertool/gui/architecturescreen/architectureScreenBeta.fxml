@@ -140,7 +140,7 @@
                             <Insets top="5.0"/>
                         </HBox.margin>
                         <Label text="Component:"/>
-                        <ChoiceBox fx:id="componentChoiceBox" prefWidth="150.0"/>
+                        <ComboBox fx:id="componentComboBox" prefWidth="150.0"/>
                         <Label text="Services List"/>
                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308"
                                     maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="300.0"
