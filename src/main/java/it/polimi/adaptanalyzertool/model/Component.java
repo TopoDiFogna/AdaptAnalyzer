@@ -179,7 +179,7 @@ public class Component {
     /**
      * Gets the name of the current component.
      * <p>
-     * The name identifies the component and acts as a key in the <code>HashMap</code> used in the implementation.
+     * The name identifies the component and acts as a key in the {@code HashMap} used in the implementation.
      * </p>
      *
      * @return the name of the component.
@@ -209,7 +209,7 @@ public class Component {
     /**
      * Tells if this component is used in the architecture.
      *
-     * @return <code>true</code> if the component is actually used, <code>false</code> otherwise.
+     * @return {@code true} if the component is actually used, {@code false} otherwise.
      */
     public boolean isUsed() {
         return used;
@@ -218,7 +218,7 @@ public class Component {
     /**
      * Sets the component status, if it's used or no.
      *
-     * @param used <code>true</code> if the component is used, <code>false</code> otherwise.
+     * @param used {@code true} if the component is used, {@code false} otherwise.
      */
     public void setUsed(boolean used) {
         this.used = used;
@@ -240,7 +240,7 @@ public class Component {
     /**
      * Gets the services provided by the current Component.
      *
-     * @return a <code>HashMap</code> containing the services provided by the current component.
+     * @return a {@code HashMap} containing the services provided by the current component.
      */
     public Set<ProvidedService> getProvidedServices() {
         return new HashSet<>(providedServices.values());
@@ -251,7 +251,7 @@ public class Component {
      *
      * @param name the name of the provided service that has to be searched for.
      *
-     * @return the provided service object if found, <code>null</code> otherwise.
+     * @return the provided service object if found, {@code null} otherwise.
      */
     public ProvidedService getSingleProvidedService(String name) {
         return providedServices.get(name);
@@ -296,7 +296,7 @@ public class Component {
     /**
      * Gets the services required by the current Component.
      *
-     * @return a <code>HashMap</code> containing the services required by the current component.
+     * @return a {@code HashMap} containing the services required by the current component.
      */
     public Set<RequiredService> getRequiredServices() {
         return new HashSet<>(requiredServices.values());
@@ -307,7 +307,7 @@ public class Component {
      *
      * @param name the name of the required service that has to be searched for.
      *
-     * @return the required service object if found, <code>null</code> otherwise.
+     * @return the required service object if found, {@code null} otherwise.
      */
     public RequiredService getSingleRequiredService(String name) {
         return requiredServices.get(name);

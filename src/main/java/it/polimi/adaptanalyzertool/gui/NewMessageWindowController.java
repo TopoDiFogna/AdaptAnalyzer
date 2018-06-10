@@ -9,6 +9,15 @@ import javafx.scene.control.Label;
 
 import java.util.Set;
 
+/**
+ * <p>
+ * This class represents the controller for the new message window, thus contains all the functions required to
+ * handle the creation of the new message.
+ * </p>
+ *
+ * @author Paolo Paterna
+ * @version 0.1
+ */
 public class NewMessageWindowController extends NewModalWindowController {
 
     private Message message;

@@ -52,7 +52,7 @@ public class ScreenController extends StackPane {
      *
      * @param name the name of the screen to be shown.
      *
-     * @return <code>false</code> if the screen is not loaded, <code>true</code> otherwise.
+     * @return {@code false} if the screen is not loaded, {@code true} otherwise.
      */
     public boolean setScreen(String name) {
         if (loadedScreens.get(name) == null) {
@@ -72,7 +72,7 @@ public class ScreenController extends StackPane {
      *
      * @param name the screen to unload.
      *
-     * @return <code>false</code> if the screen was not loaded, <code>true</code> otherwise.
+     * @return {@code false} if the screen was not loaded, {@code true} otherwise.
      */
     public boolean unloadScreen(String name) {
         if (loadedScreens.remove(name) == null) {

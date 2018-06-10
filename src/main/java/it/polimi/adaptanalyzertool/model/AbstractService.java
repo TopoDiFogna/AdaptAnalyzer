@@ -25,7 +25,7 @@ public abstract class AbstractService {
     /**
      * Gets the service name.
      * <p>
-     * The name identifies the component and acts as a key in the <code>HashMap</code> used in the implementation.
+     * The name identifies the component and acts as a key in the {@code HashMap} used in the implementation.
      * </p>
      *
      * @return the service name.
@@ -40,8 +40,8 @@ public abstract class AbstractService {
      *
      * @param obj the other object to compare.
      *
-     * @return <code>true</code> if the other object is not null <u>and</u> it has the same class and name;
-     * <code>false</code> otherwise.
+     * @return {@code true} if the other object is not null <u>and</u> it has the same class and name;
+     * {@code false} otherwise.
      */
     @Override
     public boolean equals(Object obj) {

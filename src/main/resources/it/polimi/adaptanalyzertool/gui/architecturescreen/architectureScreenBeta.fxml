@@ -281,7 +281,7 @@
                     </padding>
                 </HBox>
             </Tab>
-            <Tab fx:id="systemAdaptabilityTab" text="Level of System Adaptability">
+            <Tab text="Level of System Adaptability">
                 <HBox>
                     <padding>
                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>

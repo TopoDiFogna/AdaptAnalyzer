@@ -47,7 +47,7 @@ public enum CenterScreens {
 
     /**
      * <p>Use this to retrieve the controller associated to the screen.</p>
-     * <p>Note that by default the controller is <code>null</code> unless set with
+     * <p>Note that by default the controller is {@code null} unless set with
      * {@link #setController(ChildScreenController)}.</p>
      * <p>Note that the controller associated is not for sure the one that is controlling the screen.</p>
      *

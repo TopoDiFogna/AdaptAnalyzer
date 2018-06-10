@@ -73,7 +73,7 @@ public class Architecture {
     /**
      * Returns the name of this architecture.
      *
-     * @return The <code>String</code> containing the name of the architecture.
+     * @return The {@code String} containing the name of the architecture.
      */
     public String getName() {
         return name;
@@ -82,7 +82,7 @@ public class Architecture {
     /**
      * Gets all the components associated with the current architecture.
      *
-     * @return an <code>HashMap</code> containing all the components related to this architecture.
+     * @return an {@code HashMap} containing all the components related to this architecture.
      * @see Component
      */
     public Set<Component> getComponents() {
@@ -94,7 +94,7 @@ public class Architecture {
      *
      * @param name the name of the component that has to be searched for.
      *
-     * @return the component object if found, <code>null</code> otherwise.
+     * @return the component object if found, {@code null} otherwise.
      */
     public Component getSingleComponent(String name) {
         return components.get(name);
@@ -115,7 +115,7 @@ public class Architecture {
      * No duplicates component can be added.
      * </p>
      *
-     * @param component The <code>Component</code> to be added
+     * @param component The {@code Component} to be added
      */
     public void addComponent(Component component) {
         components.put(component.getName(), component);

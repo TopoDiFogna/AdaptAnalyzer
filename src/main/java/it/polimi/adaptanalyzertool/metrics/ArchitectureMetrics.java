@@ -185,7 +185,7 @@ public final class ArchitectureMetrics {
      * @param architecture     the architecture to be analyzed.
      * @param systemTargetCost the target cost.
      *
-     * @return <code>true</code> if the architecture is suitable, <code>false</code> otherwise.
+     * @return {@code true} if the architecture is suitable, {@code false} otherwise.
      */
     public static boolean SuitableForCost(Architecture architecture, double systemTargetCost) {
         return GlobalCostSystem(architecture, systemTargetCost) >= 1;
@@ -197,7 +197,7 @@ public final class ArchitectureMetrics {
      * @param architecture             the architecture to be analyzed.
      * @param systemTargetAvailability the target cost.
      *
-     * @return <code>true</code> if the architecture is suitable, <code>false</code> otherwise.
+     * @return {@code true} if the architecture is suitable, {@code false} otherwise.
      */
     public static boolean SuitableForAvailability(Architecture architecture, double systemTargetAvailability) {
         return GlobalAvailabilitySystem(architecture, systemTargetAvailability) >= 1;
@@ -310,6 +310,18 @@ public final class ArchitectureMetrics {
         return testedGroup;
     }
 
+    /**
+     * <p>
+     * Creates the groups that contain the components that all provide and require the same services.
+     * </p>
+     * <p>
+     * Formally a group contains a component and all its redundant copies.
+     * </p>
+     *
+     * @param architecture the architecture that needs to be analyzed.
+     *
+     * @return a {@code HashMap} containing all the groups whose keys are the name of the main component.
+     */
     public static HashMap<String, ComponentGroup> getComponentGroups(Architecture architecture) {
         HashMap<String, ComponentGroup> componentsGroups = new HashMap<>();
         for (Component component : architecture.getComponents()) {
@@ -347,7 +359,7 @@ public final class ArchitectureMetrics {
      * @param architectures            the architectures that need to be tested.
      * @param systemTargetAvailability the target availability.
      *
-     * @return an <code>ArrayList</code> containing a possible subset, even empty, of architectures that are suitable
+     * @return an {@code ArrayList} containing a possible subset, even empty, of architectures that are suitable
      * with the target availability.
      */
     public static ArrayList<Architecture> SpacePossibilitySystemAvailability(ArrayList<Architecture> architectures,
@@ -367,7 +379,7 @@ public final class ArchitectureMetrics {
      * @param architectures    the architectures that need to be tested.
      * @param systemTargetCost the target cost.
      *
-     * @return an <code>ArrayList</code> containing a possible subset, even empty, of architectures that are suitable
+     * @return an {@code ArrayList} containing a possible subset, even empty, of architectures that are suitable
      * with the target cost.
      */
     public static ArrayList<Architecture> SpacePossibilitySystemCost(ArrayList<Architecture> architectures,
