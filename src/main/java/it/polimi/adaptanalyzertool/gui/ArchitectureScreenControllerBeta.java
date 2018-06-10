@@ -6,10 +6,13 @@ import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
 import it.polimi.adaptanalyzertool.metrics.*;
 import it.polimi.adaptanalyzertool.model.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -26,6 +29,8 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * <p>
@@ -156,6 +161,23 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private GridPane messagesGridPane;
     /*
+        Adaptability
+     */
+    @FXML
+    private Label systemAdaptabilityLabel;
+    @FXML
+    private VBox adaptabilityVBox;
+    @FXML
+    private Label minCostLabel;
+    @FXML
+    private ComboBox<String> architectureMinCostComboBox;
+    @FXML
+    private Label maxCostLabel;
+    @FXML
+    private ComboBox<String> architectureMaxCostComboBox;
+    @FXML
+    private LineChart<Number, Number> adaptabilityChart;
+    /*
         Architecture Metrics
      */
     @FXML
@@ -259,6 +281,20 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             addMessageButton.setDisable(true);
         });
         pathContextMenu.getItems().add(pathRemoveMenuItem);
+
+        initializeCombobox(architectureMaxCostComboBox);
+
+        initializeCombobox(architectureMinCostComboBox);
+    }
+
+    private void initializeCombobox(ComboBox<String> architectureCostComboBox) {
+        architectureCostComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {//TODO fire even if not changed
+            if (newValue != null) {
+                selectedComponent = architecture.getSingleComponent(newValue);
+                tabPane.getSelectionModel().select(componentsTab);
+                showComponentDetail(selectedComponent);//TODO focus right hbox
+            }
+        });
     }
 
     void setUpScreen() {
@@ -561,7 +597,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private void calculateArchitectureMetrics() {
         componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
-        adaptabilityQualityHashMap = ArchitectureMetrics.CheckAllArchitectures(architecture);
         String sta = systemTargetAvailabilityTextField.getText().trim();
         String stc = systemTargetCostTextField.getText().trim();
         if (!sta.equals("") && sta.matches(NINETYNINE_REGEX) && !stc.equals("") && stc.matches(DOUBLE_REGEX)) {
@@ -713,8 +748,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                             pathContextMenu.show(pathHBox, event.getScreenX(), event.getScreenY());
                             break;
                     }
+                    addMessageButton.setDisable(false);
                 });
-                addMessageButton.setDisable(false);
             }
         } else {
             pathsVBox.getChildren().clear();
@@ -840,6 +875,92 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             }
         } catch (IOException e) {
             System.err.println("Error loading internal resource: newmessagewindow/newMessageWindow.fxml");
+        }
+    }
+
+    @FXML
+    private void calculateAdaptability() {//TODO
+        adaptabilityQualityHashMap = ArchitectureMetrics.CheckAllArchitectures(architecture);
+        updateAdaptabilityList();
+        drawChart();
+    }
+
+    private void updateAdaptabilityList() {
+        if (adaptabilityQualityHashMap != null) {
+            adaptabilityVBox.getChildren().clear();
+            TreeMap<Double, QualityHolder> tm = new TreeMap<>(adaptabilityQualityHashMap);
+            for (Double d : tm.keySet()) {
+                HBox adaptabilityHBox = new HBox(3);
+                Label adaptabilityLabel = new Label(String.valueOf(d));
+                adaptabilityHBox.setFocusTraversable(true);
+                adaptabilityHBox.setId("adaptabilityHBox");
+                adaptabilityHBox.setSpacing(5);
+                adaptabilityHBox.getChildren().add(adaptabilityLabel);
+                adaptabilityVBox.getChildren().add(adaptabilityHBox);
+                adaptabilityHBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                    MouseButton mb = event.getButton();
+                    adaptabilityHBox.requestFocus();
+                    switch (mb) {
+                        case PRIMARY:
+                            systemAdaptabilityLabel.setText("System Adaptability: " + String.valueOf(d));
+                            showAdaptabilityDetails(d);
+                            break;
+                    }
+                });
+            }
+
+        } else {
+            adaptabilityVBox.getChildren().clear();
+        }
+    }
+
+    private void showAdaptabilityDetails(Double adaptability) {
+        architectureMinCostComboBox.getItems().clear();
+        architectureMaxCostComboBox.getItems().clear();
+
+        QualityHolder qh = adaptabilityQualityHashMap.get(adaptability);
+        minCostLabel.setText(String.valueOf(qh.getMinCost()));
+
+        ObservableList<String> architectureMinCostComponents = FXCollections.observableArrayList();
+        for (Component c : qh.getMinCostArchitecture().getComponents()) {
+            if (c.isUsed()) {
+                architectureMinCostComponents.add(c.getName());
+            }
+        }
+        architectureMinCostComponents.sort(null);
+        architectureMinCostComboBox.getItems().addAll(architectureMinCostComponents);
+
+        maxCostLabel.setText(String.valueOf(qh.getMaxCost()));
+
+        ObservableList<String> architectureMaxCostComponents = FXCollections.observableArrayList();
+        for (Component c : qh.getMaxCostArchitecture().getComponents()) {
+            if (c.isUsed()) {
+                architectureMaxCostComponents.add(c.getName());
+            }
+        }
+        architectureMaxCostComponents.sort(null);
+        architectureMaxCostComboBox.getItems().addAll(architectureMaxCostComponents);
+    }
+
+    private void drawChart() {
+        if (adaptabilityQualityHashMap != null) {
+            adaptabilityChart.getData().clear();
+
+            XYChart.Series<Number, Number> minAdaptabilitySeries = new XYChart.Series<>();
+            XYChart.Series<Number, Number> maxAdaptabilitySeries = new XYChart.Series<>();
+
+            minAdaptabilitySeries.getData().add(new XYChart.Data<>(0, 0));
+            maxAdaptabilitySeries.getData().add(new XYChart.Data<>(0, 0));
+
+            for (Map.Entry<Double, QualityHolder> entry : adaptabilityQualityHashMap.entrySet()) {
+                minAdaptabilitySeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue().getMinCost()));
+                maxAdaptabilitySeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue().getMaxCost()));
+            }
+
+            adaptabilityChart.getData().add(minAdaptabilitySeries);
+            adaptabilityChart.getData().add(maxAdaptabilitySeries);
+        } else {
+            adaptabilityChart.getData().clear();
         }
     }
 
