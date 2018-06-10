@@ -29,6 +29,7 @@ public class ScreenController extends StackPane {
      *
      * @param name   the name of the screen that has to be loaded.
      * @param layout the layout associated with the loaded screen.
+     *
      * @return the controller associated with the loaded screen.
      */
     public ChildScreenController loadScreen(String name, String layout) {
@@ -50,7 +51,8 @@ public class ScreenController extends StackPane {
      * <p>Sets the previously loaded screen in the stackpane in order to be shown.</p>
      *
      * @param name the name of the screen to be shown.
-     * @return <code>false</code> if the screen is not loaded, <code>true</code> otherwise.
+     *
+     * @return {@code false} if the screen is not loaded, {@code true} otherwise.
      */
     public boolean setScreen(String name) {
         if (loadedScreens.get(name) == null) {
@@ -69,7 +71,8 @@ public class ScreenController extends StackPane {
      * <p>Used to unload a screen from the memory.</p>
      *
      * @param name the screen to unload.
-     * @return <code>false</code> if the screen was not loaded, <code>true</code> otherwise.
+     *
+     * @return {@code false} if the screen was not loaded, {@code true} otherwise.
      */
     public boolean unloadScreen(String name) {
         if (loadedScreens.remove(name) == null) {

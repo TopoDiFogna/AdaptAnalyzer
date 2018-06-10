@@ -45,6 +45,7 @@ public class Component {
      * @param name         the name of the component.
      * @param cost         the cost of the component.
      * @param availability availability expressed in 0-1 range.
+     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -65,6 +66,7 @@ public class Component {
      * @param cost         the cost of the component.
      * @param availability availability expressed in 0-1 range.
      * @param used         if this component is used or not.
+     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -109,6 +111,7 @@ public class Component {
      * @param colorBlue    blue component color for the component in the UI.
      * @param colorGreen   green component color for the component in the UI.
      * @param colorOpacity opacity component color for the component in the UI.
+     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -132,6 +135,7 @@ public class Component {
      * @param colorGreen       green component color for the component in the UI.
      * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
+     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -154,6 +158,7 @@ public class Component {
      * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
      * @param requiredServices the services required by this component.
+     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -174,7 +179,7 @@ public class Component {
     /**
      * Gets the name of the current component.
      * <p>
-     * The name identifies the component and acts as a key in the <code>HashMap</code> used in the implementation.
+     * The name identifies the component and acts as a key in the {@code HashMap} used in the implementation.
      * </p>
      *
      * @return the name of the component.
@@ -204,7 +209,7 @@ public class Component {
     /**
      * Tells if this component is used in the architecture.
      *
-     * @return <code>true</code> if the component is actually used, <code>false</code> otherwise.
+     * @return {@code true} if the component is actually used, {@code false} otherwise.
      */
     public boolean isUsed() {
         return used;
@@ -213,7 +218,7 @@ public class Component {
     /**
      * Sets the component status, if it's used or no.
      *
-     * @param used <code>true</code> if the component is used, <code>false</code> otherwise.
+     * @param used {@code true} if the component is used, {@code false} otherwise.
      */
     public void setUsed(boolean used) {
         this.used = used;
@@ -235,16 +240,28 @@ public class Component {
     /**
      * Gets the services provided by the current Component.
      *
-     * @return a <code>HashMap</code> containing the services provided by the current component.
+     * @return a {@code HashMap} containing the services provided by the current component.
      */
     public Set<ProvidedService> getProvidedServices() {
         return new HashSet<>(providedServices.values());
     }
 
+    /**
+     * Searches for a provided service in this component. It returns null if the provided service is not found.
+     *
+     * @param name the name of the provided service that has to be searched for.
+     *
+     * @return the provided service object if found, {@code null} otherwise.
+     */
     public ProvidedService getSingleProvidedService(String name) {
         return providedServices.get(name);
     }
 
+    /**
+     * Returns a set of names that corresponds to all the provided service names.
+     *
+     * @return a set of string that corresponds to all the provided service names.
+     */
     public Set<String> getProvidedServicesNames() {
         return providedServices.keySet();
     }
@@ -279,16 +296,28 @@ public class Component {
     /**
      * Gets the services required by the current Component.
      *
-     * @return a <code>HashMap</code> containing the services required by the current component.
+     * @return a {@code HashMap} containing the services required by the current component.
      */
     public Set<RequiredService> getRequiredServices() {
         return new HashSet<>(requiredServices.values());
     }
 
+    /**
+     * Searches for a required service in this component. It returns null if the required service is not found.
+     *
+     * @param name the name of the required service that has to be searched for.
+     *
+     * @return the required service object if found, {@code null} otherwise.
+     */
     public RequiredService getSingleRequiredService(String name) {
         return requiredServices.get(name);
     }
 
+    /**
+     * Returns a set of names that corresponds to all the required service names.
+     *
+     * @return a set of string that corresponds to all the required service names.
+     */
     public Set<String> getRequiredServicesNames() {
         return requiredServices.keySet();
     }
@@ -317,6 +346,7 @@ public class Component {
      * Removes a generic service from a component.
      *
      * @param service the service to be removed, the type of service must extend {@link AbstractService}
+     *
      * @throws IllegalArgumentException if the service does not extend {@link AbstractService}
      */
     public void removeService(AbstractService service) {
@@ -340,5 +370,24 @@ public class Component {
     public void removeAllServices() {
         removeAllProvidedServices();
         removeAllRequiredServices();
+    }
+
+    @Override
+    public String toString() {
+        return "Component " + name + ": " +
+                "\n\tcost= " + cost +
+                "\n\tavailability= " + availability +
+                "\n\tused= " + used;
+    }
+
+    /**
+     * Clones the component but maintains a reference to the same services.
+     *
+     * @return a clone of this component.
+     */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public Component clone() {
+        return new Component(name, cost, availability, used, colorRed, colorGreen, colorBlue, colorOpacity, providedServices, requiredServices);
     }
 }

@@ -29,6 +29,7 @@ public final class AdaptabilityMetrics {
      * to the number of components that the most adaptable architecture would use.
      *
      * @param architecture the architecture to be analyzed.
+     *
      * @return the number of components used to make up the system with respect to the number of components that the most
      * adaptable architecture would use.
      */
@@ -51,6 +52,7 @@ public final class AdaptabilityMetrics {
      * The Mean of absolute adaptability of services (MAAS) measures the mean number of used component per service.
      *
      * @param architecture the architecture to be analyzed.
+     *
      * @return the mean number of used component per service.
      */
     public static double MeanAbsoluteAdaptability(Architecture architecture) {
@@ -67,6 +69,7 @@ public final class AdaptabilityMetrics {
      * The mean of relative adaptability of services (MRAS) represents the mean of RAS.
      *
      * @param architecture the architecture to be analyzed.
+     *
      * @return the mean of RAS.
      * @see ServicesMetrics#RelativeAdaptability(Architecture, AbstractService)
      */

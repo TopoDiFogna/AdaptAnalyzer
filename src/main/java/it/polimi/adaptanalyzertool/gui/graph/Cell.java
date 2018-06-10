@@ -57,7 +57,8 @@ public class Cell extends Pane {
      * <p>Using the luminescence formula, determines if a cell is dark or bright.</p>
      *
      * @param fillColor the color of the cell.
-     * @return <code>true</code> if the cell is fille dwitha dark color, <code>false</code> otherwise.
+     *
+     * @return {@code true} if the cell is filled with a dark color, {@code false} otherwise.
      */
     protected boolean isColorDark(Color fillColor) {
         double darkness = 1 - (0.299 * fillColor.getRed() * 255 + 0.587 * fillColor.getGreen() * 255 + 0.114 * fillColor.getBlue() * 255) / 255;

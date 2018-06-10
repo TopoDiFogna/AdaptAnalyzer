@@ -1,7 +1,7 @@
 package it.polimi.adaptanalyzertool.gui.utility;
 
 /**
- * <p>This enum must contain all the scrrens that can be placed in the main window.</p>
+ * <p>This enum must contain all the screens that can be placed in the main window.</p>
  * <p>It is created like this in order to improve performance and load times.</p>
  *
  * @author Paolo Paterna
@@ -37,7 +37,7 @@ public enum CenterScreens {
     }
 
     /**
-     * <p>Use this to retrieve the fxml file that compose the screeen.</p>
+     * <p>Use this to retrieve the fxml file that compose the screen.</p>
      *
      * @return the layout associated to the screen.
      */
@@ -47,7 +47,7 @@ public enum CenterScreens {
 
     /**
      * <p>Use this to retrieve the controller associated to the screen.</p>
-     * <p>Note that by default the controller is <code>null</code> unless set with
+     * <p>Note that by default the controller is {@code null} unless set with
      * {@link #setController(ChildScreenController)}.</p>
      * <p>Note that the controller associated is not for sure the one that is controlling the screen.</p>
      *
