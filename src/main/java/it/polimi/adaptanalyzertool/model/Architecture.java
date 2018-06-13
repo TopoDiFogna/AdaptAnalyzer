@@ -1,6 +1,8 @@
 package it.polimi.adaptanalyzertool.model;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Base class for the architecture object which defines the components used by the architecture.

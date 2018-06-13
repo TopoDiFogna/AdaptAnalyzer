@@ -18,13 +18,16 @@ import java.io.IOException;
  */
 public class ErrorWindow {
 
+    private GenericErrorController controller;
+
     /**
      * <p>Shows an error message.</p>
      *
+     * @param title        the title of the window.
      * @param errorMessage the error message.
      * @param parent       the parent window.
      */
-    public void showErrorMessage(String errorMessage, Window parent) {
+    public void showErrorMessage(String title, String errorMessage, Window parent) {
         Stage stage = new Stage();
         stage.setTitle("Error");
         FXMLLoader loader = new FXMLLoader();
@@ -33,7 +36,7 @@ public class ErrorWindow {
         Parent root;
         try {
             root = loader.load();
-            GenericErrorController controller = loader.getController();
+            controller = loader.getController();
             controller.setErrorMessage(errorMessage);
             controller.setStage(stage);
 
@@ -46,6 +49,16 @@ public class ErrorWindow {
         } catch (IOException e) {
             System.err.println("Error loading resource file");
         }
+    }
+
+    /**
+     * <p>Shows an error message.</p>
+     *
+     * @param errorMessage the error message.
+     * @param parent       the parent window.
+     */
+    public void showErrorMessage(String errorMessage, Window parent) {
+        showErrorMessage("Error", errorMessage, parent);
     }
 
 }

@@ -1,12 +1,14 @@
 package it.polimi.adaptanalyzertool.gui;
 
 import it.polimi.adaptanalyzertool.gui.error.ErrorWindow;
+import it.polimi.adaptanalyzertool.gui.progress.ProgressWindow;
 import it.polimi.adaptanalyzertool.gui.utility.ChildScreenController;
 import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
 import it.polimi.adaptanalyzertool.metrics.*;
 import it.polimi.adaptanalyzertool.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -932,9 +934,25 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void calculateAdaptability() {
-        adaptabilityQualityHashMap = ArchitectureMetrics.CheckAllArchitectures(architecture);
-        updateAdaptabilityList();
-        drawChart();
+        ProgressWindow pw = new ProgressWindow();
+        pw.showProgressWindow("Calculating all architectures", parent.getScene().getWindow());
+        Task<HashMap<Double, QualityHolder>> task = new Task<>() {
+            @Override
+            protected HashMap<Double, QualityHolder> call() throws Exception {
+                return ArchitectureMetrics.CheckAllArchitectures(architecture);
+            }
+        };
+        task.setOnSucceeded(event -> {
+            adaptabilityQualityHashMap = task.getValue();
+            pw.enableOkButton();
+            pw.setProgress(1);
+            pw.setMessage("");
+            updateAdaptabilityList();
+            drawChart();
+        });
+
+        Thread taskThread = new Thread(task);
+        taskThread.start();
     }
 
     private void updateAdaptabilityList() {

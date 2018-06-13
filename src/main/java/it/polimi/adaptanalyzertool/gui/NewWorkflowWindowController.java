@@ -12,6 +12,7 @@ import javafx.scene.input.KeyEvent;
  * This class represents the controller for the new component window, thus contains all the functions required to
  * handle the creation of the new component.
  * </p>
+ *
  * @author Paolo Paterna
  * @version 0.1
  */

@@ -1,6 +1,9 @@
 package it.polimi.adaptanalyzertool.metrics;
 
-import it.polimi.adaptanalyzertool.model.*;
+import it.polimi.adaptanalyzertool.model.AbstractService;
+import it.polimi.adaptanalyzertool.model.Architecture;
+import it.polimi.adaptanalyzertool.model.Component;
+import it.polimi.adaptanalyzertool.model.ComponentGroup;
 
 import java.util.*;
 
@@ -273,19 +276,19 @@ public final class ArchitectureMetrics {
 
             updateQualityHolder(qualityHolderHashMap, ar);
             boolean found = false;
-            for (Set<String> s : componentsTreatedSet){
-                if (s.equals(usedComponentsNames)){
+            for (Set<String> s : componentsTreatedSet) {
+                if (s.equals(usedComponentsNames)) {
                     found = true;
                 }
             }
-            if(!found) {
+            if (!found) {
                 componentsTreatedSet.add(usedComponentsNames);
                 recursiveCalculator(qualityHolderHashMap, fullArchitecture, currentListClone, componentsTreatedSet, testList);
             }
         }
     }
 
-    private static void updateQualityHolder(HashMap<Double, QualityHolder> qualityHolderHashMap, Architecture architecture){
+    private static void updateQualityHolder(HashMap<Double, QualityHolder> qualityHolderHashMap, Architecture architecture) {
         //Perform the calculation on the new architecture
         double adaptability = AdaptabilityMetrics.LevelSystemAdaptability(architecture);
         double cost = 0;
