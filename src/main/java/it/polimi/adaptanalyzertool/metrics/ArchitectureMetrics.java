@@ -271,25 +271,27 @@ public final class ArchitectureMetrics {
                 }
             }
 
-            //Perform the calculation on the new architecture
-            double adaptability = AdaptabilityMetrics.LevelSystemAdaptability(ar);
-            double cost = 0;
-            for (Component component : ar.getComponents()) {
-                if (component.isUsed()) {
-                    cost += component.getCost();
-                }
-            }
-
-            //Add the new results to the main hashmap
-            if (qualityHolderHashMap.get(adaptability) != null) {
-                qualityHolderHashMap.get(adaptability).modifyCostIfNecessary(ar, cost);
-            } else {
-                QualityHolder qh = new QualityHolder();
-                qh.modifyCostIfNecessary(ar, cost);
-                qualityHolderHashMap.put(adaptability, qh);
-            }
-
             recursiveCalculator(qualityHolderHashMap, fullArchitecture, currentListClone, componentsTreated, testList);
+        }
+    }
+
+    private static void updateQualityHolder(HashMap<Double, QualityHolder> qualityHolderHashMap, Architecture architecture){
+        //Perform the calculation on the new architecture
+        double adaptability = AdaptabilityMetrics.LevelSystemAdaptability(architecture);
+        double cost = 0;
+        for (Component component : architecture.getComponents()) {
+            if (component.isUsed()) {
+                cost += component.getCost();
+            }
+        }
+
+        //Add the new results to the main hashmap
+        if (qualityHolderHashMap.get(adaptability) != null) {
+            qualityHolderHashMap.get(adaptability).modifyCostIfNecessary(architecture, cost);
+        } else {
+            QualityHolder qh = new QualityHolder();
+            qh.modifyCostIfNecessary(architecture, cost);
+            qualityHolderHashMap.put(adaptability, qh);
         }
     }
 

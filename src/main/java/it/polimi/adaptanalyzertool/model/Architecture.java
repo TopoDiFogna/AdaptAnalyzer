@@ -1,8 +1,6 @@
 package it.polimi.adaptanalyzertool.model;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Base class for the architecture object which defines the components used by the architecture.
@@ -107,6 +105,16 @@ public class Architecture {
      */
     public Set<String> getComponentsNames() {
         return components.keySet();
+    }
+
+    public Set<String> getUsedComponentsNames(){
+        Set<String> names = new HashSet<>();
+        for (Map.Entry<String, Component> e : components.entrySet()){
+            if (e.getValue().isUsed()){
+                names.add(e.getKey());
+            }
+        }
+        return names;
     }
 
     /**
