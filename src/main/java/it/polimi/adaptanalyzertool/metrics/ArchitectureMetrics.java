@@ -280,7 +280,6 @@ public final class ArchitectureMetrics {
             }
             if(!found) {
                 componentsTreatedSet.add(usedComponentsNames);
-                System.out.println(ar.toString());
                 recursiveCalculator(qualityHolderHashMap, fullArchitecture, currentListClone, componentsTreatedSet, testList);
             }
         }
