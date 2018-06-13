@@ -271,6 +271,7 @@ public final class ArchitectureMetrics {
                 }
             }
 
+            updateQualityHolder(qualityHolderHashMap, ar);
             recursiveCalculator(qualityHolderHashMap, fullArchitecture, currentListClone, componentsTreated, testList);
         }
     }
