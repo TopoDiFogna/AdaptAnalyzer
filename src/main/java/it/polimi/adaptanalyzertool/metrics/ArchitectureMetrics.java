@@ -1,9 +1,6 @@
 package it.polimi.adaptanalyzertool.metrics;
 
-import it.polimi.adaptanalyzertool.model.AbstractService;
-import it.polimi.adaptanalyzertool.model.Architecture;
-import it.polimi.adaptanalyzertool.model.Component;
-import it.polimi.adaptanalyzertool.model.ComponentGroup;
+import it.polimi.adaptanalyzertool.model.*;
 
 import java.util.*;
 
@@ -215,7 +212,7 @@ public final class ArchitectureMetrics {
         HashMap<String, ComponentGroup> architectureComponentGroups = getComponentGroups(architecture);
         ComponentGroup mainFunctionalityGroup = findMainFunctionality(architectureComponentGroups);
         List<Component> currentList = new ArrayList<>();
-        Set<Component> componentsTreated = new HashSet<>();
+        Set<Set<String>> componentsTreatedSet = new HashSet<>();
         List<Component> candidatesToInclude = new ArrayList<>(mainFunctionalityGroup.getComponents());
 
         recursiveCallCounts = 0;
@@ -225,17 +222,17 @@ public final class ArchitectureMetrics {
             component.setUsed(false);
         }
 
-        recursiveCalculator(adaptabilityQualityHashMap, newArch, currentList, componentsTreated, candidatesToInclude);
+        recursiveCalculator2(adaptabilityQualityHashMap, newArch, currentList, componentsTreatedSet, candidatesToInclude);
 
         return adaptabilityQualityHashMap;
     }
 
-    private static void recursiveCalculator(HashMap<Double, QualityHolder> qualityHolderHashMap,
-                                            Architecture fullArchitecture,
-                                            List<Component> currentList,
-                                            Set<Component> componentsTreated,
-                                            List<Component> candidatesToInclude) {
-        recursiveCallCounts++;
+    private static void recursiveCalculator2(HashMap<Double, QualityHolder> qualityHolderHashMap,
+                                             Architecture fullArchitecture,
+                                             List<Component> currentList,
+                                             Set<Set<String>> componentsTreatedSet,
+                                             List<Component> candidatesToInclude) {
+
 
         if (candidatesToInclude.isEmpty()) {
             return;
@@ -244,52 +241,69 @@ public final class ArchitectureMetrics {
         List<Component> candidatesToIncludeClone = new ArrayList<>(candidatesToInclude);
         for (Component addedComponent : candidatesToInclude) {
 
-            List<Component> testList = new ArrayList<>(candidatesToIncludeClone);
             List<Component> currentListClone = new ArrayList<>(currentList);
-
             currentListClone.add(addedComponent);
-            componentsTreated.add(addedComponent);
+
+            //Set-up the new architecture to be saved if necessary
+            recursiveCallCounts++;
+            Architecture ar = fullArchitecture.clone(String.valueOf(recursiveCallCounts));
+
+            Set<String> usedComponentsNames = new HashSet<>();
+            for (Component component : ar.getComponents()) {
+                for (Component currentComponent : currentListClone) {
+                    if (component.getName().equals(currentComponent.getName())) {
+                        component.setUsed(true);
+                        usedComponentsNames.add(component.getName());
+                        break;
+                    }
+                }
+            }
+
+            updateQualityHolder(qualityHolderHashMap, ar);
             candidatesToIncludeClone.remove(addedComponent);
-            testList.remove(addedComponent);
-            for (AbstractService requiredService : addedComponent.getRequiredServices()) {
-                for (Component c : fullArchitecture.getComponents()) {
-                    for (AbstractService s : c.getProvidedServices()) {
-                        if (s.getName().equals(requiredService.getName()) && !componentsTreated.contains(c)) {
-                            testList.add(0, c);
+
+            for (RequiredService requiredService : addedComponent.getRequiredServices()) {
+                for (Component component : fullArchitecture.getComponents()) {
+                    for (ProvidedService providedService : component.getProvidedServices()) {
+                        if (providedService.getName().equals(requiredService.getName()) && !currentList.contains(component)) {
+                            candidatesToIncludeClone.add(0, component);
                         }
                     }
                 }
             }
 
-            //Set-up the new architecture to be saved if necessary
-            Architecture ar = fullArchitecture.clone(String.valueOf(recursiveCallCounts));
-            for (Component component : ar.getComponents()) {
-                for (Component currentComponent : currentListClone) {
-                    if (component.getName().equals(currentComponent.getName())) {
-                        component.setUsed(true);
-                    }
+            boolean found = false;
+            for (Set<String> s : componentsTreatedSet){
+                if (s.equals(usedComponentsNames)){
+                    found = true;
                 }
             }
-
-            //Perform the calculation on the new architecture
-            double adaptability = AdaptabilityMetrics.LevelSystemAdaptability(ar);
-            double cost = 0;
-            for (Component component : ar.getComponents()) {
-                if (component.isUsed()) {
-                    cost += component.getCost();
-                }
+            if(!found) {
+                componentsTreatedSet.add(usedComponentsNames);
+                System.out.println(ar.toString());
+                recursiveCalculator2(qualityHolderHashMap, fullArchitecture, currentListClone, componentsTreatedSet, candidatesToIncludeClone);
             }
 
-            //Add the new results to the main hashmap
-            if (qualityHolderHashMap.get(adaptability) != null) {
-                qualityHolderHashMap.get(adaptability).modifyCostIfNecessary(ar, cost);
-            } else {
-                QualityHolder qh = new QualityHolder();
-                qh.modifyCostIfNecessary(ar, cost);
-                qualityHolderHashMap.put(adaptability, qh);
-            }
+        }
+    }
 
-            recursiveCalculator(qualityHolderHashMap, fullArchitecture, currentListClone, componentsTreated, testList);
+    private static void updateQualityHolder(HashMap<Double, QualityHolder> qualityHolderHashMap, Architecture architecture){
+        //Perform the calculation on the new architecture
+        double adaptability = AdaptabilityMetrics.LevelSystemAdaptability(architecture);
+        double cost = 0;
+        for (Component component : architecture.getComponents()) {
+            if (component.isUsed()) {
+                cost += component.getCost();
+            }
+        }
+
+        //Add the new results to the main hashmap
+        if (qualityHolderHashMap.get(adaptability) != null) {
+            qualityHolderHashMap.get(adaptability).modifyCostIfNecessary(architecture, cost);
+        } else {
+            QualityHolder qh = new QualityHolder();
+            qh.modifyCostIfNecessary(architecture, cost);
+            qualityHolderHashMap.put(adaptability, qh);
         }
     }
 
