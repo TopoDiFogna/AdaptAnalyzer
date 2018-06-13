@@ -224,6 +224,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 selectedComponent = architecture.getSingleComponent(newValue);
                 updateServicesList();
                 clearServiceDetails();
+                serviceAddButton.setDisable(false);
             }
         });
 
@@ -300,20 +301,24 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             if (newValue != null) {
                 selectedComponent = architecture.getSingleComponent(newValue);
                 tabPane.getSelectionModel().select(componentsTab);
-                for (Node node : componentsVBox.getChildren()) {
-                    for (Node hBoxChildren : ((HBox) node).getChildren()) {
-                        if (hBoxChildren instanceof Label && ((Label) hBoxChildren).getText().equals(selectedComponent.getName())) {
-                            if (componentSelectedHBox != null) {
-                                resetHBoxBackgroung(componentSelectedHBox);
-                            }
-                            componentSelectedHBox = (HBox) node;
-                            setHBoxBackground(componentSelectedHBox);
-                        }
-                    }
-                }
+                hightlightComponentHBox(selectedComponent);
                 showComponentDetail(selectedComponent);
             }
         });
+    }
+
+    private void hightlightComponentHBox(Component component) {
+        for (Node node : componentsVBox.getChildren()) {
+            for (Node hBoxChildren : ((HBox) node).getChildren()) {
+                if (hBoxChildren instanceof Label && ((Label) hBoxChildren).getText().equals(component.getName())) {
+                    if (componentSelectedHBox != null) {
+                        resetHBoxBackgroung(componentSelectedHBox);
+                    }
+                    componentSelectedHBox = (HBox) node;
+                    setHBoxBackground(componentSelectedHBox);
+                }
+            }
+        }
     }
 
     void setUpScreen() {
@@ -386,6 +391,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             updateComponentList();
             showComponentDetail(selectedComponent);
         }
+        hightlightComponentHBox(selectedComponent);
     }
 
     private void updateComponentList() {
