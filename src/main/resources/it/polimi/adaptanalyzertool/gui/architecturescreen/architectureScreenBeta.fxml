@@ -247,6 +247,7 @@
                                     minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
                             <VBox fx:id="pathsVBox"/>
                         </ScrollPane>
+                        <Label fx:id="pathTotalProbabilityLabel" text="Total Probability: 0" textFill="RED"/>
                         <Button fx:id="addPathButton" disable="true" mnemonicParsing="false"
                                 onMouseClicked="#createNewPath" text="Add Path"/>
                     </VBox>
@@ -332,8 +333,8 @@
                             <ComboBox fx:id="architectureMaxCostComboBox" prefWidth="175.0" promptText="Components"
                                       GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
                         </GridPane>
-                        <LineChart fx:id="adaptabilityChart" maxHeight="275.0" maxWidth="500.0"
-                                   title="Cost w.r.t. Adaptability" legendVisible="false">
+                        <LineChart fx:id="adaptabilityChart" legendVisible="false" maxHeight="275.0" maxWidth="500.0"
+                                   title="Cost w.r.t. Adaptability">
                             <xAxis>
                                 <NumberAxis label="Adaptability" side="BOTTOM"/>
                             </xAxis>

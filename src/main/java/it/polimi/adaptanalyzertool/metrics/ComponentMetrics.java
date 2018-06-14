@@ -141,7 +141,7 @@ public final class ComponentMetrics {
             int selectedComponentExes = 0;
             double selectedComponentExecTime = 0;
             for (Message message : path.getMessagesList()) {
-                Component currComponent = architecture.getSingleComponent(message.getStartingComponentName());
+                Component currComponent = architecture.getSingleComponent(message.getStartingGroupName());
                 double maxExecTime = 0;
                 for (ProvidedService service : currComponent.getProvidedServices()) {
                     if (service.getExecutionTime() > maxExecTime) {

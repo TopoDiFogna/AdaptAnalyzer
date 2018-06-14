@@ -159,6 +159,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private Button addMessageButton;
     private HBox pathSelectedHBox;
+    @FXML
+    private Label pathTotalProbabilityLabel;
     /*
         Messages Scheme
      */
@@ -392,8 +394,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             architecture.addComponent(newComponent);
             updateComponentList();
             showComponentDetail(selectedComponent);
+            hightlightComponentHBox(selectedComponent);
         }
-        hightlightComponentHBox(selectedComponent);
     }
 
     private void updateComponentList() {
@@ -774,8 +776,22 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         }
     }
 
+    private void updateTotalPathProbability() {
+        double totalProbability = 0;
+        for (Path path : selectedWorkflow.getPaths()) {
+            totalProbability += path.getExecutionProbability();
+        }
+        pathTotalProbabilityLabel.setText("Total Probability: " + totalProbability);
+        if (totalProbability < 1 || totalProbability > 1) {
+            pathTotalProbabilityLabel.setTextFill(Color.RED);
+        } else {
+            pathTotalProbabilityLabel.setTextFill(Color.BLACK);
+        }
+    }
+
     private void updatePathList() {
         if (selectedWorkflow != null) {
+            updateTotalPathProbability();
             pathsVBox.getChildren().clear();
             List<Path> workflowPaths = new ArrayList<>(selectedWorkflow.getPaths());
             workflowPaths.sort(Comparator.comparing(Path::getName));
@@ -818,9 +834,9 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         int gridPaneRows = 0;
         int gridPaneCols = 0;
         for (Message message : selectedPath.getMessagesList()) {
-            Label startingComponentLabel = new Label(message.getStartingComponentName());
+            Label startingComponentLabel = new Label(message.getStartingGroupName());
             startingComponentLabel.setFont(Font.font(null, FontWeight.BOLD, 18));
-            Label endingComponentLabel = new Label(message.getEndingComponentName());
+            Label endingComponentLabel = new Label(message.getEndingGroupName());
             endingComponentLabel.setFont(Font.font(null, FontWeight.BOLD, 18));
             Label backArrowLabel = new Label("<--");
             backArrowLabel.setTooltip(removeTooltip);
@@ -914,21 +930,34 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
             Message newMessage = controller.getMessage();
             if (newMessage != null) {
-                Message lastMessage = selectedPath.getLastMessage();
-                if (lastMessage != null) {
-                    if (lastMessage.getEndingComponentName().equals(newMessage.getStartingComponentName())) {
-                        selectedPath.addMessage(newMessage);
-                    } else {
-                        System.err.print("Error adding message " + newMessage.getStartingComponentName() + " ->" + newMessage.getEndingComponentName());
-                    }
-
-                } else {
-                    selectedPath.addMessage(newMessage);
-                }
+                checkForMessageCorrectness(newMessage);
                 showPathDetails(selectedPath);
             }
         } catch (IOException e) {
             System.err.println("Error loading internal resource: newmessagewindow/newMessageWindow.fxml");
+        }
+    }
+
+    private void checkForMessageCorrectness(Message newMessage) {
+        Message lastMessage = selectedPath.getLastMessage();
+        if (lastMessage != null) {
+            if (lastMessage.getEndingGroupName().equals(newMessage.getStartingGroupName())) {
+                if (!newMessage.isReturning()) {
+                    selectedPath.addMessage(newMessage);
+                } else {
+                    if (newMessage.getEndingGroupName().equals(lastMessage.getStartingGroupName())) {
+                        selectedPath.addMessage(newMessage);
+                    } else {
+                        ErrorWindow ew = new ErrorWindow();
+                        ew.showErrorMessage("Error adding return message " + newMessage.getStartingGroupName() + " ->" + newMessage.getEndingGroupName(), parent.getScene().getWindow());
+                    }
+                }
+            } else {
+                ErrorWindow ew = new ErrorWindow();
+                ew.showErrorMessage("Error adding message " + newMessage.getStartingGroupName() + " ->" + newMessage.getEndingGroupName(), parent.getScene().getWindow());
+            }
+        } else {
+            selectedPath.addMessage(newMessage);
         }
     }
 
@@ -938,7 +967,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         pw.showProgressWindow("Calculating all architectures", parent.getScene().getWindow());
         Task<HashMap<Double, QualityHolder>> task = new Task<>() {
             @Override
-            protected HashMap<Double, QualityHolder> call() throws Exception {
+            protected HashMap<Double, QualityHolder> call() {
                 return ArchitectureMetrics.CheckAllArchitectures(architecture);
             }
         };

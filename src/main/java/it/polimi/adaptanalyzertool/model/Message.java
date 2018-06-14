@@ -6,23 +6,23 @@ package it.polimi.adaptanalyzertool.model;
  */
 public class Message {
 
-    private String startingComponentName;
-    private String endingComponentName;
+    private String startingGroupName;
+    private String endingGroupName;
     private boolean isReturning;
 
     public Message(String startingComponent, String endingComponent, boolean isReturning) {
-        this.startingComponentName = startingComponent;
-        this.endingComponentName = endingComponent;
+        this.startingGroupName = startingComponent;
+        this.endingGroupName = endingComponent;
         this.isReturning = isReturning;
     }
 
-    public String getStartingComponentName() {
+    public String getStartingGroupName() {
 
-        return startingComponentName;
+        return startingGroupName;
     }
 
-    public String getEndingComponentName() {
-        return endingComponentName;
+    public String getEndingGroupName() {
+        return endingGroupName;
     }
 
     public boolean isReturning() {
