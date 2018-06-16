@@ -86,7 +86,6 @@ public final class ArchitectureMetrics {
      *
      * @return the total availability of the architecture without considering any workflow.
      */
-    @Deprecated
     public static double TotalStaticAvailability(HashMap<String, ComponentGroup> architectureComponentGroups) {
         double totalAvailability = -1f;
         HashMap<String, Double> availabilityHashMap = new HashMap<>();
@@ -150,14 +149,6 @@ public final class ArchitectureMetrics {
         }
         return true;
     }
-
-//    public static double TotalDynamicAvailability(HashMap<String, ComponentGroup> architectureComponentGroups,
-//                                                  Workflow workflow) {
-//        Set<Path> paths = workflow.getPaths();
-//
-//        //TODO
-//        return 0;
-//    }
 
     /**
      * <p>

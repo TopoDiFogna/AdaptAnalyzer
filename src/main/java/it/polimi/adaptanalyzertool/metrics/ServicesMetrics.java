@@ -68,7 +68,7 @@ public final class ServicesMetrics {
         for (AbstractService abstractService : collectServicesFromArchitecture(architecture)) {
             totalExecutionTimes += NumberOfExecutions(architecture, abstractService);
         }
-        return NumberOfExecutions(architecture, service) / totalExecutionTimes;
+        return NumberOfExecutions(architecture, service) * 100 / totalExecutionTimes;
     }
 
     /**

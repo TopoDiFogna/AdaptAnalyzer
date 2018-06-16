@@ -11,12 +11,14 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -183,6 +185,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private ComboBox<String> architectureMaxCostComboBox;
     @FXML
     private LineChart<Number, Number> adaptabilityChart;
+    private DropShadow ds = new DropShadow();
 
     private HBox adaptabilitySelectedHBox;
     /*
@@ -597,7 +600,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             serviceUsedProbabilityLabel.setDisable(true);
         } else if (service instanceof RequiredService) {
             serviceTypeLabel.setText("Required");
-            serviceUsedProbabilityLabel.setText(String.valueOf(((RequiredService) service).getUsedProbability()));
+            serviceUsedProbabilityLabel.setText(String.valueOf(((RequiredService) service).getUsedProbability() * 100) + "%");
             serviceNumberOfExecutionsLabel.setText(String.valueOf(((RequiredService) service).getNumberOfExecutionsPerCall()));
             serviceExecutionTimeLabel.setText("");
             executionTimeDetailLabel.setDisable(true);
@@ -627,7 +630,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             double aas = ServicesMetrics.AbsoluteAdaptability(architecture, selectedService);
             double ras = ServicesMetrics.RelativeAdaptability(architecture, selectedService);
             numberOfExecutionsLabel.setText(df.format(noe));
-            probabilityToBeRunningLabel.setText(df.format(ptbr));
+            probabilityToBeRunningLabel.setText(df.format(ptbr) + "%");
             absoluteAdaptabilityLabel.setText(df.format(aas));
             relativeAdaptabilityLabel.setText(df.format(ras));
         } else {
@@ -667,7 +670,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             architectureMetricsErrorLabel.setText("Check input for mistakes");
         }
         double totalCost = ArchitectureMetrics.TotalCost(architecture);
-        double totalAvailability = ArchitectureMetrics.TotalStaticAvailability(componentsGroups);//TODO
+        double totalAvailability = ArchitectureMetrics.TotalStaticAvailability(componentsGroups);
         double maas = AdaptabilityMetrics.MeanAbsoluteAdaptability(architecture);
         double raas = AdaptabilityMetrics.MeanRelativeAdaptability(architecture);
         double lsa = AdaptabilityMetrics.LevelSystemAdaptability(architecture);
@@ -781,7 +784,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         for (Path path : selectedWorkflow.getPaths()) {
             totalProbability += path.getExecutionProbability();
         }
-        pathTotalProbabilityLabel.setText("Total Probability: " + totalProbability);
+        pathTotalProbabilityLabel.setText("Total Probability: " + totalProbability * 100 + "%");
         if (totalProbability < 1 || totalProbability > 1) {
             pathTotalProbabilityLabel.setTextFill(Color.RED);
         } else {
@@ -798,7 +801,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             for (Path path : workflowPaths) {
                 HBox pathHBox = new HBox(3);
                 Label pathLabel = new Label(path.getName());
-                Label pathProbabilityLabel = new Label("(Probability: " + String.valueOf(path.getExecutionProbability()) + ")");
+                Label pathProbabilityLabel = new Label("(Probability: " + String.valueOf(path.getExecutionProbability() * 100) + "%)");
                 pathHBox.setSpacing(5);
                 pathHBox.getChildren().addAll(pathLabel, pathProbabilityLabel);
                 pathsVBox.getChildren().add(pathHBox);
@@ -829,7 +832,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void showPathDetails(Path path) {
         Tooltip removeTooltip = new Tooltip("Click to remove this message");
-        pathExecutionProbabilityLabel.setText(String.valueOf(path.getExecutionProbability()));
+        pathExecutionProbabilityLabel.setText(String.valueOf(path.getExecutionProbability() * 100) + "%");
         messagesGridPane.getChildren().clear();
         int gridPaneRows = 0;
         int gridPaneCols = 0;
@@ -1003,7 +1006,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                     setHBoxBackground(adaptabilitySelectedHBox);
                     switch (mb) {
                         case PRIMARY:
-                            systemAdaptabilityLabel.setText("System Adaptability: " + String.valueOf(d));
                             showAdaptabilityDetails(d);
                             break;
                     }
@@ -1015,7 +1017,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         }
     }
 
-    private void showAdaptabilityDetails(Double adaptability) {
+    private void showAdaptabilityDetails(double adaptability) {
+        systemAdaptabilityLabel.setText("System Adaptability: " + String.valueOf(adaptability));
         architectureMinCostComboBox.getItems().clear();
         architectureMaxCostComboBox.getItems().clear();
 
@@ -1050,19 +1053,59 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             XYChart.Series<Number, Number> minAdaptabilitySeries = new XYChart.Series<>();
             XYChart.Series<Number, Number> maxAdaptabilitySeries = new XYChart.Series<>();
 
+            adaptabilityChart.getData().add(minAdaptabilitySeries);
+            adaptabilityChart.getData().add(maxAdaptabilitySeries);
+
             minAdaptabilitySeries.getData().add(new XYChart.Data<>(0, 0));
             maxAdaptabilitySeries.getData().add(new XYChart.Data<>(0, 0));
 
             for (Map.Entry<Double, QualityHolder> entry : adaptabilityQualityHashMap.entrySet()) {
-                minAdaptabilitySeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue().getMinCost()));
-                maxAdaptabilitySeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue().getMaxCost()));
+                XYChart.Data<Number, Number> minPoint = new XYChart.Data<>(entry.getKey(), entry.getValue().getMinCost());
+                minAdaptabilitySeries.getData().add(minPoint);
+                applyMouseEvents(minPoint);
+
+                XYChart.Data<Number, Number> maxPoint = new XYChart.Data<>(entry.getKey(), entry.getValue().getMaxCost());
+                maxAdaptabilitySeries.getData().add(maxPoint);
+                applyMouseEvents(maxPoint);
             }
 
-            adaptabilityChart.getData().add(minAdaptabilitySeries);
-            adaptabilityChart.getData().add(maxAdaptabilitySeries);
         } else {
             adaptabilityChart.getData().clear();
         }
+    }
+
+    private void applyMouseEvents(final XYChart.Data<Number, Number> point) {
+
+        final Node pointNode = point.getNode();
+
+        pointNode.setOnMouseEntered(mouseEvent -> {
+            pointNode.setEffect(ds);
+            pointNode.setCursor(Cursor.HAND);
+        });
+
+        pointNode.setOnMouseExited(mouseEvent -> {
+            pointNode.setEffect(null);
+            pointNode.setCursor(Cursor.DEFAULT);
+        });
+
+        pointNode.setOnMouseReleased(mouseEvent -> {
+            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                double adaptability = (double) point.getXValue();
+                String adaptabilityString = df.format(adaptability);
+                for (Node node : adaptabilityVBox.getChildren()) {
+                    for (Node hBoxChildren : ((HBox) node).getChildren()) {
+                        if (hBoxChildren instanceof Label && ((Label) hBoxChildren).getText().equals(String.valueOf(adaptabilityString))) {
+                            if (adaptabilitySelectedHBox != null) {
+                                resetHBoxBackgroung(adaptabilitySelectedHBox);
+                            }
+                            adaptabilitySelectedHBox = (HBox) node;
+                            setHBoxBackground(adaptabilitySelectedHBox);
+                            showAdaptabilityDetails(adaptability);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void setHBoxBackground(HBox hBox) {
