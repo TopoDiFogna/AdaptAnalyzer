@@ -36,7 +36,7 @@ public abstract class AbstractService {
 
 
     /**
-     * Since every service is identified by its name equals has to be overridden to honour this.
+     * Since every service is identified by its name equals has to be overridden to honour this. //TODO remove this?
      *
      * @param obj the other object to compare.
      *

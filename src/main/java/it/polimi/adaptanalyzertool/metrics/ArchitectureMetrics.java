@@ -1,9 +1,6 @@
 package it.polimi.adaptanalyzertool.metrics;
 
-import it.polimi.adaptanalyzertool.model.AbstractService;
-import it.polimi.adaptanalyzertool.model.Architecture;
-import it.polimi.adaptanalyzertool.model.Component;
-import it.polimi.adaptanalyzertool.model.ComponentGroup;
+import it.polimi.adaptanalyzertool.model.*;
 
 import java.util.*;
 
@@ -87,7 +84,7 @@ public final class ArchitectureMetrics {
      * @return the total availability of the architecture without considering any workflow.
      */
     public static double TotalStaticAvailability(HashMap<String, ComponentGroup> architectureComponentGroups) {
-        double totalAvailability = -1f;
+        double totalAvailability = 1d;
         HashMap<String, Double> availabilityHashMap = new HashMap<>();
         for (String groupName : architectureComponentGroups.keySet()) {
             availabilityHashMap.put(groupName, null);
@@ -99,24 +96,27 @@ public final class ArchitectureMetrics {
                 if (availabilityHashMap.get(key) == null) {
                     if (value.getRequiredServices().isEmpty()) {
                         //Terminal Group
-                        double availability = calculateGroupAvailability(value);
+                        double availability = calculateTerminalGroupAvailability(value);
                         availabilityHashMap.put(key, availability);
-                        totalAvailability = availability;
                     } else {
                         //Non terminal group, so we calculate availability recursively
                         if (canBeCalculated(value, availabilityHashMap)) {
-                            double groupAvailability = calculateGroupAvailability(value);
-                            for (ComponentGroup cg : value.getRequiredGroups()) {
-                                groupAvailability *= availabilityHashMap.get(cg.getName());
-                            }
+                            double groupAvailability = calculateNonTerminalGroupAvailability(value, availabilityHashMap);
                             availabilityHashMap.put(value.getName(), groupAvailability);
-                            totalAvailability = groupAvailability;
                         }
                     }
                 }
             }
         }
-        return totalAvailability;
+        for (ComponentGroup cg : architectureComponentGroups.values()) {
+            for (Component c : findMainFunctionality(architectureComponentGroups)) {
+                if (cg.getComponents().contains(c)) {
+                    totalAvailability *= 1 - availabilityHashMap.get(cg.getName());
+                }
+
+            }
+        }
+        return 1 - totalAvailability; //TODO test for correctness
     }
 
     private static boolean canBeCalculated(ComponentGroup componentGroup, HashMap<String, Double> availabilityHashMap) {
@@ -128,7 +128,34 @@ public final class ArchitectureMetrics {
         return true;
     }
 
-    private static double calculateGroupAvailability(ComponentGroup componentGroup) {
+    //This works only if every component has only one provided service
+    private static double calculateNonTerminalGroupAvailability(ComponentGroup componentGroup, HashMap<String, Double> availabilityHashMap) {
+        double availability = 1d;
+        for (Component c : componentGroup.getComponents()) {
+            double componentAvailability = c.getAvailability();
+            for (RequiredService rs : c.getRequiredServices()) {
+                ComponentGroup requiredComponentGroup = null;
+                outerloop:
+                for (ComponentGroup cg : componentGroup.getRequiredGroups()) {
+                    for (ProvidedService ps : cg.getProvidedServices()) {
+                        if (ps.getName().equals(rs.getName())) {
+                            requiredComponentGroup = cg;
+                            break outerloop;
+                        }
+                    }
+                }
+                if (requiredComponentGroup != null) {
+                    componentAvailability *= (1 - rs.getUsedProbability()) +
+                            rs.getUsedProbability() * Math.pow(availabilityHashMap.get(requiredComponentGroup.getName()), rs.getNumberOfExecutionsPerCall());
+                }
+            }
+            availability *= 1 - componentAvailability;
+
+        }
+        return 1 - availability;
+    }
+
+    private static double calculateTerminalGroupAvailability(ComponentGroup componentGroup) {
         Set<Component> components = componentGroup.getComponents();
         if (components.size() == 1) {
             return components.iterator().next().getAvailability();
@@ -137,7 +164,7 @@ public final class ArchitectureMetrics {
             for (Component component : components) {
                 availabilityMul *= 1 - component.getAvailability();
             }
-            return 1 - availabilityMul;
+            return 1.0 - availabilityMul;
         }
     }
 
@@ -204,10 +231,9 @@ public final class ArchitectureMetrics {
      */
     public static HashMap<Double, QualityHolder> CheckAllArchitectures(Architecture architecture) {
         HashMap<String, ComponentGroup> architectureComponentGroups = getComponentGroups(architecture);
-        ComponentGroup mainFunctionalityGroup = findMainFunctionality(architectureComponentGroups);
         List<Component> currentList = new ArrayList<>();
         Set<Set<String>> componentsTreatedSet = new HashSet<>();
-        List<Component> candidatesToInclude = new ArrayList<>(mainFunctionalityGroup.getComponents());
+        List<Component> candidatesToInclude = new ArrayList<>(findMainFunctionality(architectureComponentGroups));
 
         recursiveCallCounts = 0;
         HashMap<Double, QualityHolder> adaptabilityQualityHashMap = new HashMap<>();
@@ -299,10 +325,10 @@ public final class ArchitectureMetrics {
         }
     }
 
-    private static ComponentGroup findMainFunctionality(HashMap<String, ComponentGroup> architectureComponentGroups) {
-        ComponentGroup testedGroup = null;
+    private static Set<Component> findMainFunctionality(HashMap<String, ComponentGroup> architectureComponentGroups) {
+        Set<ComponentGroup> mainGroups = new HashSet<>();
         for (ComponentGroup group1 : architectureComponentGroups.values()) {
-            testedGroup = group1;
+            ComponentGroup testedGroup = group1;
             for (ComponentGroup group2 : architectureComponentGroups.values()) {
                 if (group2.getRequiredGroups().contains(group1)) {
                     testedGroup = null;
@@ -310,10 +336,14 @@ public final class ArchitectureMetrics {
                 }
             }
             if (testedGroup != null) {
-                break;
+                mainGroups.add(testedGroup);
             }
         }
-        return testedGroup;
+        Set<Component> mainComponents = new HashSet<>();
+        for (ComponentGroup cg : mainGroups) {
+            mainComponents.addAll(cg.getComponents());
+        }
+        return mainComponents;
     }
 
     /**
@@ -357,45 +387,5 @@ public final class ArchitectureMetrics {
             }
         }
         return componentsGroups;
-    }
-
-    /**
-     * Defines which architectures are suitable for the specified availability.
-     *
-     * @param architectures            the architectures that need to be tested.
-     * @param systemTargetAvailability the target availability.
-     *
-     * @return an {@code ArrayList} containing a possible subset, even empty, of architectures that are suitable
-     * with the target availability.
-     */
-    public static ArrayList<Architecture> SpacePossibilitySystemAvailability(ArrayList<Architecture> architectures,
-                                                                             double systemTargetAvailability) {
-        ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
-        for (Architecture architecture : architectures) {
-            if (SuitableForAvailability(architecture, systemTargetAvailability)) {
-                eligibleArchitectures.add(architecture);
-            }
-        }
-        return eligibleArchitectures;
-    }
-
-    /**
-     * Defines which architectures are suitable for the specified cost.
-     *
-     * @param architectures    the architectures that need to be tested.
-     * @param systemTargetCost the target cost.
-     *
-     * @return an {@code ArrayList} containing a possible subset, even empty, of architectures that are suitable
-     * with the target cost.
-     */
-    public static ArrayList<Architecture> SpacePossibilitySystemCost(ArrayList<Architecture> architectures,
-                                                                     double systemTargetCost) {
-        ArrayList<Architecture> eligibleArchitectures = new ArrayList<>();
-        for (Architecture architecture : architectures) {
-            if (SuitableForCost(architecture, systemTargetCost)) {
-                eligibleArchitectures.add(architecture);
-            }
-        }
-        return eligibleArchitectures;
     }
 }
