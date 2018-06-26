@@ -136,7 +136,7 @@ public final class ServicesMetrics {
 
 
     /**
-     * This metrics calculates the probability to find a given component active considering the dynamic analysis
+     * This metrics calculates the probability to find a given service active considering the dynamic analysis
      * of the architecture.
      * <p>
      * It considers all the possible paths available in the architecture workflow. Note that the workflow are
