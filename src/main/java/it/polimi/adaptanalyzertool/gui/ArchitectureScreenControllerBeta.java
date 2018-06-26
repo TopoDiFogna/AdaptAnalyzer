@@ -96,8 +96,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     @FXML
     private Label weightResidenceTimeLabel;
     @FXML
-    private Label inActionLabel;
-    @FXML
     private TextField systemTargetAvailabilityTextField;
     @FXML
     private TextField systemTargetCostTextField;
@@ -141,6 +139,14 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private Label relativeAdaptabilityLabel;
     @FXML
     private Label serviceMetricsErrorLabel;
+    @FXML
+    private Label inActionLabel;
+    @FXML
+    private ComboBox<String> workflowComboBox;
+    @FXML
+    private Label serviceInActionErrorLabel;
+    @FXML
+    private Label serviceAvailabilityLabel;
     /*
         Workflow List
      */
@@ -238,6 +244,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.getText().equals("Services")) {
                 componentComboBox.setItems(FXCollections.observableArrayList(architecture.getComponentsNames()).sorted());
+                workflowComboBox.setItems(FXCollections.observableArrayList(architecture.getWorkflowsNames()).sorted());
                 if (!architecture.getComponents().isEmpty() && selectedComponent != null) {
                     componentComboBox.setValue(selectedComponent.getName());
                     this.serviceAddButton.setDisable(false);
@@ -529,12 +536,6 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 }
                 double wrt = ComponentMetrics.WeightResidenceTime(architecture, selectedComponent);
                 weightResidenceTimeLabel.setText(df.format(wrt));
-                if (selectedWorkflow != null) {
-                    double ia = ServicesMetrics.InAction(componentsGroups, selectedWorkflow, (ProvidedService) selectedService);
-                    inActionLabel.setText(df.format(ia));
-                } else {
-                    componentMetricsErrorLabel.setText("No workflow selected");
-                }
             } else {
                 componentMetricsErrorLabel.setText("Check input for mistakes");
             }
@@ -638,11 +639,42 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         }
     }
 
+    @FXML
+    private void calculateServiceInAction() {
+        String inActionSelectedWorkflow = workflowComboBox.getSelectionModel().getSelectedItem();
+        if (inActionSelectedWorkflow != null) {
+            if (selectedService instanceof ProvidedService) {
+                double ia = ServicesMetrics.InAction(componentsGroups, architecture.getSingleWorkflow(inActionSelectedWorkflow), (ProvidedService) selectedService);
+                inActionLabel.setText(df.format(ia));
+                serviceInActionErrorLabel.setText("");
+                for (ComponentGroup cg : componentsGroups.values()) {
+                    if (cg.getProvidedServicesNames().contains(selectedService.getName())) {
+                        double groupAvailability = ArchitectureMetrics.calculateTerminalGroupAvailability(cg);
+                        double serviceAvailability = groupAvailability * ia;
+                        serviceAvailabilityLabel.setText(df.format(serviceAvailability));
+                        break;
+                    }
+                }
+            } else {
+                inActionLabel.setText("NaN");
+                serviceAvailabilityLabel.setText("NaN");
+                serviceInActionErrorLabel.setText("The selected service is not a provided service");
+            }
+        } else {
+            inActionLabel.setText("NaN");
+            serviceAvailabilityLabel.setText("NaN");
+            serviceInActionErrorLabel.setText("No workflow selected");
+        }
+    }
+
+
     private void clearServiceMetrics() {
         numberOfExecutionsLabel.setText("NaN");
         probabilityToBeRunningLabel.setText("NaN");
         absoluteAdaptabilityLabel.setText("NaN");
         relativeAdaptabilityLabel.setText("NaN");
+        inActionLabel.setText("NaN");
+        serviceAvailabilityLabel.setText("NaN");
     }
 
     @FXML

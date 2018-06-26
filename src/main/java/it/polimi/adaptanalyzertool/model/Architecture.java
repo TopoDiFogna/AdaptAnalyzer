@@ -167,6 +167,26 @@ public class Architecture {
     }
 
     /**
+     * Returns a set of names that corresponds to all the workflows names.
+     *
+     * @return a set of string that corresponds to all the workflows names.
+     */
+    public Set<String> getWorkflowsNames() {
+        return workflows.keySet();
+    }
+
+    /**
+     * Searches for a workflow associated with this architecture. It returns null if the workflow is not found.
+     *
+     * @param name the name of the workflow that has to be searched for.
+     *
+     * @return the workflow object if found, {@code null} otherwise.
+     */
+    public Workflow getSingleWorkflow(String name) {
+        return workflows.get(name);
+    }
+
+    /**
      * Adds a workflows to the list of workflows associated with this architecture.
      *
      * @param workflow the workflows to be added.

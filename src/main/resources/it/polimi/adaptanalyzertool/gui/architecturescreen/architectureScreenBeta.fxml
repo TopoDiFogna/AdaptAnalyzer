@@ -93,7 +93,6 @@
                                         <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                                         <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                                         <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
-                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
                                     </rowConstraints>
                                     <Label text="Fitness Ratio w.r.t. Availability:" GridPane.halignment="CENTER"/>
                                     <Label fx:id="fitnessRatioAvailabilityLabel" text="NaN" GridPane.columnIndex="1"
@@ -111,17 +110,13 @@
                                     <Label fx:id="weightResidenceTimeLabel" text="NaN" GridPane.columnIndex="1"
                                            GridPane.columnSpan="2147483647" GridPane.halignment="CENTER"
                                            GridPane.rowIndex="2"/>
-                                    <Label text="In Action:" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
-                                    <Label fx:id="inActionLabel" layoutX="288.0" layoutY="77.0" text="NaN"
-                                           GridPane.columnIndex="1" GridPane.columnSpan="2147483647"
-                                           GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
                                 </GridPane>
                                 <Button mnemonicParsing="false" onMouseClicked="#calculateComponentMetrics"
                                         text="Calculate!"/>
-                                <Label fx:id="componentMetricsErrorLabel"/>
+                                <Label fx:id="componentMetricsErrorLabel" textFill="RED"/>
                             </VBox>
                             <VBox.margin>
-                                <Insets bottom="20.0" left="20.0" right="20.0"/>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                             </VBox.margin>
                         </TitledPane>
                         <HBox.margin>
@@ -190,43 +185,81 @@
                                    GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4"/>
                         </GridPane>
                         <TitledPane alignment="TOP_CENTER" animated="false" collapsible="false" text="Service Metrics">
+                            <HBox alignment="TOP_CENTER" spacing="5.0">
+                                <VBox alignment="TOP_CENTER" spacing="5.0">
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <GridPane>
+                                        <columnConstraints>
+                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0"
+                                                               prefWidth="150.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="10.0"
+                                                               prefWidth="90.0"/>
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                        </rowConstraints>
+                                        <Label text="Number of Executions:" GridPane.halignment="CENTER"/>
+                                        <Label fx:id="numberOfExecutionsLabel" text="NaN" GridPane.columnIndex="1"
+                                               GridPane.halignment="CENTER"/>
+                                        <Label layoutX="25.0" layoutY="17.0" text="Probability to be Running:"
+                                               GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                                        <Label fx:id="probabilityToBeRunningLabel" layoutX="205.0" layoutY="17.0"
+                                               text="NaN" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                                               GridPane.rowIndex="1"/>
+                                        <Label layoutX="25.0" layoutY="17.0" text="Absolute adaptability:"
+                                               GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+                                        <Label fx:id="absoluteAdaptabilityLabel" layoutX="193.0" layoutY="17.0"
+                                               text="NaN" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                                               GridPane.rowIndex="2"/>
+                                        <Label layoutX="16.0" layoutY="47.0" text="Relative adaptability:"
+                                               GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
+                                        <Label fx:id="relativeAdaptabilityLabel" layoutX="193.0" layoutY="47.0"
+                                               text="NaN" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                                               GridPane.rowIndex="3"/>
+
+                                    </GridPane>
+                                    <Button mnemonicParsing="false" onMouseClicked="#calculateServiceMetrics"
+                                            text="Calculate!"/>
+                                    <Label fx:id="serviceMetricsErrorLabel" textFill="RED"/>
+                                </VBox>
+                                <Separator orientation="VERTICAL"/>
+                                <VBox alignment="TOP_CENTER" spacing="5.0">
+                                    <GridPane>
+                                        <columnConstraints>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0"/>
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                            <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
+                                            <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="NEVER"/>
+                                        </rowConstraints>
+                                        <Label text="In Action:" GridPane.halignment="CENTER"/>
+                                        <Label fx:id="inActionLabel" text="NaN" GridPane.columnIndex="1"
+                                               GridPane.halignment="CENTER"/>
+                                        <Label text="Service Availability:" GridPane.halignment="CENTER"
+                                               GridPane.rowIndex="1"/>
+                                        <Label fx:id="serviceAvailabilityLabel" layoutX="10.0" layoutY="14.0" text="NaN"
+                                               GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                                               GridPane.rowIndex="1"/>
+                                        <Label text="Workflow:" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
+                                        <ComboBox fx:id="workflowComboBox" prefWidth="150.0" GridPane.columnIndex="1"
+                                                  GridPane.rowIndex="3"/>
+                                    </GridPane>
+                                    <Button mnemonicParsing="false" onMouseClicked="#calculateServiceInAction"
+                                            text="Calculate!"/>
+                                    <Label fx:id="serviceInActionErrorLabel" textFill="RED"/>
+                                </VBox>
+                            </HBox>
                             <VBox.margin>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                             </VBox.margin>
-                            <VBox alignment="TOP_CENTER" fillWidth="false" spacing="5.0">
-                                <GridPane>
-                                    <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0"
-                                                           prefWidth="150.0"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="10.0"
-                                                           prefWidth="90.0"/>
-                                    </columnConstraints>
-                                    <rowConstraints>
-                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
-                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
-                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
-                                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="NEVER"/>
-                                    </rowConstraints>
-                                    <Label text="Number of Executions:" GridPane.halignment="CENTER"/>
-                                    <Label fx:id="numberOfExecutionsLabel" text="NaN" GridPane.columnIndex="1"
-                                           GridPane.halignment="CENTER"/>
-                                    <Label layoutX="25.0" layoutY="17.0" text="Probability to be Running:"
-                                           GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                                    <Label fx:id="probabilityToBeRunningLabel" layoutX="205.0" layoutY="17.0" text="NaN"
-                                           GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                                    <Label layoutX="25.0" layoutY="17.0" text="Absolute adaptability"
-                                           GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
-                                    <Label fx:id="absoluteAdaptabilityLabel" layoutX="193.0" layoutY="17.0" text="NaN"
-                                           GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
-                                    <Label layoutX="16.0" layoutY="47.0" text="Relative adaptability"
-                                           GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
-                                    <Label fx:id="relativeAdaptabilityLabel" layoutX="193.0" layoutY="47.0" text="NaN"
-                                           GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
-                                </GridPane>
-                                <Button mnemonicParsing="false" onMouseClicked="#calculateServiceMetrics"
-                                        text="Calculate!"/>
-                                <Label fx:id="serviceMetricsErrorLabel"/>
-                            </VBox>
                         </TitledPane>
                     </VBox>
                 </HBox>

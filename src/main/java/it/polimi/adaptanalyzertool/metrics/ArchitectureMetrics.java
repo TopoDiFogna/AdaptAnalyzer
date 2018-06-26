@@ -155,7 +155,7 @@ public final class ArchitectureMetrics {
         return 1 - availability;
     }
 
-    private static double calculateTerminalGroupAvailability(ComponentGroup componentGroup) {
+    public static double calculateTerminalGroupAvailability(ComponentGroup componentGroup) {
         Set<Component> components = componentGroup.getComponents();
         if (components.size() == 1) {
             return components.iterator().next().getAvailability();
