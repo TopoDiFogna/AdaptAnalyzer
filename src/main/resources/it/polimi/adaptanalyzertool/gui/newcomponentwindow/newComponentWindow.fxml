@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.121"
+      fx:controller="it.polimi.adaptanalyzertool.gui.NewComponentWindowController">
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
+            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
+            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
+            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
+            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
+        </rowConstraints>
+        <Label minWidth="100.0" prefWidth="100.0" text="Name:"/>
+        <TextField fx:id="componentTextField" prefWidth="100.0" promptText="Name" GridPane.columnIndex="1"/>
+        <Label minWidth="100.0" prefWidth="150.0" text="Cost:" GridPane.rowIndex="1"/>
+        <TextField fx:id="componentCostTextField" prefWidth="50.0" promptText="Cost" GridPane.columnIndex="1"
+                   GridPane.rowIndex="1"/>
+        <Label minWidth="100.0" prefWidth="150.0" text="Availability:" GridPane.rowIndex="2"/>
+        <TextField fx:id="componentAvailabilityTextField" prefWidth="50.0" promptText="Availability"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Used:" GridPane.rowIndex="3"/>
+        <CheckBox fx:id="usedCheckBox" mnemonicParsing="false" selected="true" GridPane.columnIndex="1"
+                  GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
+        <Label minWidth="100.0" text="Color:" GridPane.rowIndex="4"/>
+        <ColorPicker fx:id="componentColorPicker" minHeight="25.0" prefWidth="100.0" GridPane.columnIndex="1"
+                     GridPane.rowIndex="4"/>
+        <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </VBox.margin>
+    </GridPane>
+    <Button mnemonicParsing="false" onMouseClicked="#saveComponent" text="Save"/>
+    <Label fx:id="componentErrorLabel"/>
+
+</VBox>
