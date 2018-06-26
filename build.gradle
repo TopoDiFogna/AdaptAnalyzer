@@ -21,6 +21,18 @@ jar {
     }
 }
 
+javadoc {
+    options.addBooleanOption('html5', true)
+}
+
+task copyJavadoc(type: Copy) {
+    from"${buildDir}/docs/javadoc"
+    include "**/*.*"
+    into "${projectDir}/docs"
+}
+
+copyJavadoc.dependsOn(javadoc)
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
