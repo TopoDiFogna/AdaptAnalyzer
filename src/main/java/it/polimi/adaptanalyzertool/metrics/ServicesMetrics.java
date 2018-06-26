@@ -157,12 +157,22 @@ public final class ServicesMetrics {
         for (Path path : workflow.getPaths()) {
             double pathProbability = path.getExecutionProbability();
             for (Message message : path.getMessagesList()) {
-                ComponentGroup startingGroup = architectureGroups.get(message.getStartingGroupName());//TODO imported archis may throw errors
+                ComponentGroup startingGroup = architectureGroups.get(message.getStartingGroupName());
                 if (startingGroup.getProvidedServices().contains(service)) {
-                    serviceExecutionTime += service.getExecutionTime();
+                    double avgExecutionTime = 0;
+                    for (Component c : startingGroup.getComponents()) {
+                        avgExecutionTime += c.getSingleProvidedService(service.getName()).getExecutionTime();
+                    }
+                    avgExecutionTime /= startingGroup.getComponents().size();
+                    serviceExecutionTime += avgExecutionTime;
                 }
                 for (ProvidedService ps : startingGroup.getProvidedServices()) {
-                    totalExecutionTime += ps.getExecutionTime();
+                    double avgExecutionTime = 0;
+                    for (Component c : startingGroup.getComponents()) {
+                        avgExecutionTime += c.getSingleProvidedService(ps.getName()).getExecutionTime();
+                    }
+                    avgExecutionTime /= startingGroup.getComponents().size();
+                    totalExecutionTime += avgExecutionTime;
                 }
             }
 
