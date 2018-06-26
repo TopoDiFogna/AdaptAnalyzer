@@ -2,6 +2,7 @@ package it.polimi.adaptanalyzertool.metrics;
 
 import it.polimi.adaptanalyzertool.model.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -131,5 +132,43 @@ public final class ServicesMetrics {
             servicesHashSet.addAll(component.getProvidedServices());
         }
         return servicesHashSet;
+    }
+
+
+    /**
+     * This metrics calculates the probability to find a given component active considering the dynamic analysis
+     * of the architecture.
+     * <p>
+     * It considers all the possible paths available in the architecture workflow. Note that the workflow are
+     * specified per architecture and must be inputted by the user.
+     * </p>
+     *
+     * @param architectureGroups the groups that the components form when they are replicated.
+     * @param workflow           the workflow associated with this architecture.
+     * @param service            the service to be analyzed.
+     *
+     * @return the probability to find a component active given a workflow for the architecture.
+     * @see Workflow
+     */
+    public static double InAction(HashMap<String, ComponentGroup> architectureGroups, Workflow workflow, ProvidedService service) {
+        double inActionService = 0;
+        double serviceExecutionTime = 0;
+        double totalExecutionTime = 0;
+        for (Path path : workflow.getPaths()) {
+            double pathProbability = path.getExecutionProbability();
+            for (Message message : path.getMessagesList()) {
+                ComponentGroup startingGroup = architectureGroups.get(message.getStartingGroupName());//TODO imported archis may throw errors
+                if (startingGroup.getProvidedServices().contains(service)) {
+                    serviceExecutionTime += service.getExecutionTime();
+                }
+                for (ProvidedService ps : startingGroup.getProvidedServices()) {
+                    totalExecutionTime += ps.getExecutionTime();
+                }
+            }
+
+            inActionService += serviceExecutionTime * pathProbability;
+
+        }
+        return inActionService / totalExecutionTime;
     }
 }

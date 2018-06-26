@@ -304,7 +304,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     }
 
     private void initializeCombobox(ComboBox<String> architectureCostComboBox) {
-        architectureCostComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {//TODO fire even if not changed
+        architectureCostComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 selectedComponent = architecture.getSingleComponent(newValue);
                 tabPane.getSelectionModel().select(componentsTab);
@@ -530,7 +530,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 double wrt = ComponentMetrics.WeightResidenceTime(architecture, selectedComponent);
                 weightResidenceTimeLabel.setText(df.format(wrt));
                 if (selectedWorkflow != null) {
-                    double ia = ComponentMetrics.InAction(architecture, selectedWorkflow, selectedComponent);
+                    double ia = ServicesMetrics.InAction(componentsGroups, selectedWorkflow, (ProvidedService) selectedService);
                     inActionLabel.setText(df.format(ia));
                 } else {
                     componentMetricsErrorLabel.setText("No workflow selected");
@@ -933,7 +933,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
             Message newMessage = controller.getMessage();
             if (newMessage != null) {
-                checkForMessageCorrectness(newMessage);
+                //checkForMessageCorrectness(newMessage); //TODO review this (maybe use stack?)
+                selectedPath.addMessage(newMessage);
                 showPathDetails(selectedPath);
             }
         } catch (IOException e) {

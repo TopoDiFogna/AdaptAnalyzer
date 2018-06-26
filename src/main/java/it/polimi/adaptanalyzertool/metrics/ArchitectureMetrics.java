@@ -371,9 +371,11 @@ public final class ArchitectureMetrics {
                 }
             }
             if (!found) {
-                ComponentGroup componentGroup = new ComponentGroup(component.getName());
+                String providedserviceName = component.getProvidedServicesNames().iterator().next();
+
+                ComponentGroup componentGroup = new ComponentGroup(providedserviceName);
                 componentGroup.addComponent(component);
-                componentsGroups.put(component.getName(), componentGroup);
+                componentsGroups.put(providedserviceName, componentGroup);
             }
         }
         for (ComponentGroup cg1 : componentsGroups.values()) {

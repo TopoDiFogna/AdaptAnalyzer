@@ -10,7 +10,7 @@
             <HBox spacing="5.0">
                 <VBox alignment="TOP_CENTER">
                     <Label text="Starting Component"/>
-                    <ChoiceBox fx:id="startingComponentChoiceBox" prefWidth="100.0"/>
+                    <ChoiceBox fx:id="startingServiceChoiceBox" prefWidth="100.0"/>
                 </VBox>
                 <Label text="--&gt;">
                     <HBox.margin>
@@ -19,7 +19,7 @@
                 </Label>
                 <VBox alignment="TOP_CENTER">
                     <Label text="Ending Component"/>
-                    <ChoiceBox fx:id="endingComponentChoiceBox" prefWidth="100.0"/>
+                    <ChoiceBox fx:id="endingServiceChoiceBox" prefWidth="100.0"/>
                 </VBox>
             </HBox>
             <CheckBox fx:id="isReturningCheckBox" mnemonicParsing="false" text="Is a return message?"/>

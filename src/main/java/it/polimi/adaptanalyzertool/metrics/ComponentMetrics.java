@@ -1,6 +1,8 @@
 package it.polimi.adaptanalyzertool.metrics;
 
-import it.polimi.adaptanalyzertool.model.*;
+import it.polimi.adaptanalyzertool.model.Architecture;
+import it.polimi.adaptanalyzertool.model.Component;
+import it.polimi.adaptanalyzertool.model.ProvidedService;
 
 import static it.polimi.adaptanalyzertool.metrics.ServicesMetrics.NumberOfExecutions;
 
@@ -116,48 +118,5 @@ public final class ComponentMetrics {
             componentTime += NumberOfExecutions(architecture, providedService) * providedService.getExecutionTime();
         }
         return componentTime / totalTime;
-    }
-
-    /**
-     * This metrics calculates the probability to find a given component active considering the dynamic analysis
-     * of the architecture.
-     * <p>
-     * It considers all the possible paths available in the architecture workflow. Note that the workflow are
-     * specified per architecture and must be inputted by the user.
-     * </p>
-     *
-     * @param architecture the architecture where the component resides.
-     * @param workflow     the workflow associated with this architecture.
-     * @param component    the selected component to calculate the probability on.
-     *
-     * @return the probability to find a component active given a workflow for the architecture.
-     * @see Workflow
-     */
-    public static double InAction(Architecture architecture, Workflow workflow, Component component) {
-        double inAction = 0;
-        for (Path path : workflow.getPaths()) {
-            double pathProb = path.getExecutionProbability();
-            double totExecTime = 0;
-            int selectedComponentExes = 0;
-            double selectedComponentExecTime = 0;
-            for (Message message : path.getMessagesList()) {
-                Component currComponent = architecture.getSingleComponent(message.getStartingGroupName());
-                double maxExecTime = 0;
-                for (ProvidedService service : currComponent.getProvidedServices()) {
-                    if (service.getExecutionTime() > maxExecTime) {
-                        maxExecTime = service.getExecutionTime();
-                        if (currComponent == component) {
-                            selectedComponentExecTime = maxExecTime;
-                        }
-                    }
-                }
-                totExecTime += maxExecTime;
-                if (currComponent == component) {
-                    selectedComponentExes++;
-                }
-            }
-            inAction += pathProb * selectedComponentExes * selectedComponentExecTime / totExecTime;
-        }
-        return inAction;
     }
 }

@@ -26,18 +26,18 @@ public class NewMessageWindowController extends NewModalWindowController {
     private Label errorLabel;
 
     @FXML
-    private ChoiceBox<String> startingComponentChoiceBox;
+    private ChoiceBox<String> startingServiceChoiceBox;
 
     @FXML
-    private ChoiceBox<String> endingComponentChoiceBox;
+    private ChoiceBox<String> endingServiceChoiceBox;
 
     @FXML
     private CheckBox isReturningCheckBox;
 
     @FXML
     private void saveMessage() {
-        if (startingComponentChoiceBox.getValue() != null && endingComponentChoiceBox.getValue() != null) {
-            message = new Message(startingComponentChoiceBox.getValue(), endingComponentChoiceBox.getValue(), isReturningCheckBox.isSelected());
+        if (startingServiceChoiceBox.getValue() != null && endingServiceChoiceBox.getValue() != null) {
+            message = new Message(startingServiceChoiceBox.getValue(), endingServiceChoiceBox.getValue(), isReturningCheckBox.isSelected());
             stage.close();
         } else {
             errorLabel.setText("Check if components have been selected");
@@ -49,7 +49,7 @@ public class NewMessageWindowController extends NewModalWindowController {
     }
 
     void setAvailableComponents(Set<String> components) {
-        startingComponentChoiceBox.setItems(FXCollections.observableArrayList(components));
-        endingComponentChoiceBox.setItems(FXCollections.observableArrayList(components));
+        startingServiceChoiceBox.setItems(FXCollections.observableArrayList(components).sorted());
+        endingServiceChoiceBox.setItems(FXCollections.observableArrayList(components).sorted());
     }
 }
