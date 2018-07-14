@@ -256,7 +256,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         });
 
         //Sets the rounding mode of the DecimalFormat used in metrics
-        df.setRoundingMode(RoundingMode.DOWN);
+        df.setRoundingMode(RoundingMode.HALF_EVEN);
 
         //Creates the context menu used to manipulate component, services, workflows and paths
         componentContextMenu = new ContextMenu();
