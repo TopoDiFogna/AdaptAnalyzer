@@ -152,9 +152,9 @@ public final class ServicesMetrics {
      */
     public static double InAction(HashMap<String, ComponentGroup> architectureGroups, Workflow workflow, ProvidedService service) {
         double inActionService = 0;
-        double serviceExecutionTime = 0;
         double totalExecutionTime = 0;
         for (Path path : workflow.getPaths()) {
+            double serviceExecutionTime = 0;
             double pathProbability = path.getExecutionProbability();
             for (Message message : path.getMessagesList()) {
                 ComponentGroup startingGroup = architectureGroups.get(message.getStartingGroupName());
