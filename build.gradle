@@ -19,19 +19,32 @@ jar {
     manifest {
         attributes 'Main-Class': 'it.polimi.adaptanalyzertool.gui.Main'
     }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task customFatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'it.polimi.adaptanalyzertool.gui.Main'
+    }
+    baseName = 'AdaptAnalyzer'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 javadoc {
     options.addBooleanOption('html5', true)
 }
 
-task copyJavadoc(type: Copy) {
+task publishJavadoc(type: Copy) {
     from"${buildDir}/docs/javadoc"
     include "**/*.*"
     into "${projectDir}/docs"
 }
 
-copyJavadoc.dependsOn(javadoc)
+publishJavadoc.dependsOn(javadoc)
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
