@@ -116,7 +116,7 @@ public final class ArchitectureMetrics {
 
             }
         }
-        return 1 - totalAvailability; //TODO test for correctness
+        return 1 - totalAvailability;
     }
 
     private static boolean canBeCalculated(ComponentGroup componentGroup, HashMap<String, Double> availabilityHashMap) {

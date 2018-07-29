@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -55,6 +56,7 @@ public class MainController {
     private void createNewArchitecture() {
         Stage stage = new Stage();
         stage.setTitle("New Architecture");
+        stage.getIcons().add(new Image("images/polimi_icon.png"));
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newarchitecturewindow/newArchitectureWindow.fxml"));
@@ -82,6 +84,7 @@ public class MainController {
     private void generateNewArchitecture() {
         Stage stage = new Stage();
         stage.setTitle("Generate Architecture");
+        stage.getIcons().add(new Image("images/polimi_icon.png"));
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newarchitecturewindow/generatedArchitectureWindow.fxml"));
@@ -161,6 +164,7 @@ public class MainController {
         if (childScreenController != null && !graphIsShowing) {
             Stage stage = new Stage();
             stage.setTitle("Graph");
+            stage.getIcons().add(new Image("images/polimi_icon.png"));
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("graph/graph.fxml"));
             try {

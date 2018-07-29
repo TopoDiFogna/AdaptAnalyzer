@@ -19,6 +19,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -377,6 +378,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private void showNewModifyComponent(boolean modify) throws IOException {
         Stage newComponentStage = new Stage();
         newComponentStage.setTitle("New Component");
+        newComponentStage.getIcons().add(new Image("images/polimi_icon.png"));
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newcomponentwindow/newComponentWindow.fxml"));
@@ -446,8 +448,8 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     private void showComponentDetail(Component component) {
         componentNameLabel.setText(component.getName());
-        componentCostLabel.setText(String.valueOf(component.getCost()));
-        componentAvailabilityLabel.setText(String.valueOf(component.getAvailability()));
+        componentCostLabel.setText(String.valueOf(df.format(component.getCost())));
+        componentAvailabilityLabel.setText(String.valueOf(df.format(component.getAvailability())));
         componentUsedCheckBox.setSelected(component.isUsed());
         componentColorRectangle.setFill(component.getColor());
         componentColorRectangle.setVisible(true);
@@ -481,6 +483,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private void createNewService() {
         Stage newServiceStage = new Stage();
         newServiceStage.setTitle("New Service");
+        newServiceStage.getIcons().add(new Image("images/polimi_icon.png"));
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newservicewindow/newServiceWindow.fxml"));
@@ -590,7 +593,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         serviceNameLabel.setText(service.getName());
         if (service instanceof ProvidedService) {
             serviceTypeLabel.setText("Provided");
-            serviceExecutionTimeLabel.setText(String.valueOf(((ProvidedService) service).getExecutionTime()));
+            serviceExecutionTimeLabel.setText(String.valueOf(df.format(((ProvidedService) service).getExecutionTime())));
             serviceUsedProbabilityLabel.setText("");
             serviceNumberOfExecutionsLabel.setText("");
             serviceExecutionTimeLabel.setDisable(false);
@@ -601,7 +604,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             serviceUsedProbabilityLabel.setDisable(true);
         } else if (service instanceof RequiredService) {
             serviceTypeLabel.setText("Required");
-            serviceUsedProbabilityLabel.setText(String.valueOf(((RequiredService) service).getUsedProbability() * 100) + "%");
+            serviceUsedProbabilityLabel.setText(String.valueOf(df.format(((RequiredService) service).getUsedProbability())));
             serviceNumberOfExecutionsLabel.setText(String.valueOf(((RequiredService) service).getNumberOfExecutionsPerCall()));
             serviceExecutionTimeLabel.setText("");
             executionTimeDetailLabel.setDisable(true);
@@ -631,7 +634,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             double aas = ServicesMetrics.AbsoluteAdaptability(architecture, selectedService);
             double ras = ServicesMetrics.RelativeAdaptability(architecture, selectedService);
             numberOfExecutionsLabel.setText(df.format(noe));
-            probabilityToBeRunningLabel.setText(df.format(ptbr) + "%");
+            probabilityToBeRunningLabel.setText(df.format(ptbr));
             absoluteAdaptabilityLabel.setText(df.format(aas));
             relativeAdaptabilityLabel.setText(df.format(ras));
         } else {
@@ -717,6 +720,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private void createNewWorkflow() {
         Stage stage = new Stage();
         stage.setTitle("New Workflow");
+        stage.getIcons().add(new Image("images/polimi_icon.png"));
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newworkflowwindow/newWorkflowWindow.fxml"));
@@ -783,6 +787,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private void createNewPath() {
         Stage stage = new Stage();
         stage.setTitle("New Path");
+        stage.getIcons().add(new Image("images/polimi_icon.png"));
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newpathwindow/newPathWindow.fxml"));
@@ -946,6 +951,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
     private void createAndAddNewMessage() {
         Stage stage = new Stage();
         stage.setTitle("New Message");
+        stage.getIcons().add(new Image("images/polimi_icon.png"));
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("newmessagewindow/newMessageWindow.fxml"));
@@ -1056,7 +1062,7 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         architectureMaxCostComboBox.getItems().clear();
 
         QualityHolder qh = adaptabilityQualityHashMap.get(adaptability);
-        minCostLabel.setText(String.valueOf(qh.getMinCost()));
+        minCostLabel.setText(String.valueOf(df.format(qh.getMinCost())));
 
         ObservableList<String> architectureMinCostComponents = FXCollections.observableArrayList();
         for (Component c : qh.getMinCostArchitecture().getComponents()) {
@@ -1065,9 +1071,10 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             }
         }
         architectureMinCostComponents.sort(null);
+        architectureMinCostComboBox.setVisibleRowCount(architectureMinCostComponents.size());
         architectureMinCostComboBox.getItems().addAll(architectureMinCostComponents);
 
-        maxCostLabel.setText(String.valueOf(qh.getMaxCost()));
+        maxCostLabel.setText(String.valueOf(df.format(qh.getMaxCost())));
 
         ObservableList<String> architectureMaxCostComponents = FXCollections.observableArrayList();
         for (Component c : qh.getMaxCostArchitecture().getComponents()) {

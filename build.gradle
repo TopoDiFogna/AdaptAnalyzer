@@ -1,4 +1,4 @@
-version = 0.1
+version = 1.0
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
