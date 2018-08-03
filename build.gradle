@@ -39,12 +39,19 @@ javadoc {
 }
 
 task publishJavadoc(type: Copy) {
-    from"${buildDir}/docs/javadoc"
+    from "${buildDir}/docs/javadoc"
     include "**/*.*"
     into "${projectDir}/docs"
 }
 
+task createStandaloneJar(type: Copy){
+    from "${buildDir}/libs"
+    include "*-${version}.jar"
+    into "${projectDir}/distribution"
+}
+
 publishJavadoc.dependsOn(javadoc)
+createStandaloneJar.dependsOn(customFatJar, publishJavadoc)
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
