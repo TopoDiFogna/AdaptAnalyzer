@@ -32,20 +32,26 @@ public final class ServicesMetrics {
      * @return the number of execution of the given service.
      */
     public static double NumberOfExecutions(Architecture architecture, AbstractService service) {
+        HashMap<String, ComponentGroup> componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
         String serviceName = service.getName();
         double result = 0;
         boolean found = false;
-        for (Component component : architecture.getComponents()) {
-            if (component.getRequiredServicesNames().contains(serviceName)) {
+        for (ComponentGroup cg : componentsGroups.values()) {
+            if (cg.getRequiredServicesNames().contains(serviceName)) {
+                double groupMeanExecutions = 0;
                 found = true;
-                RequiredService requiredService = component.getSingleRequiredService(serviceName);
-                double execProbability = requiredService.getUsedProbability();
-                double executions = requiredService.getNumberOfExecutionsPerCall();
-                double noOfExecs = 1;
-                for (ProvidedService ps : component.getProvidedServices()) {
-                    noOfExecs = NumberOfExecutions(architecture, ps);
+                for (Component c : cg.getComponents()) {
+                    RequiredService requiredService = c.getSingleRequiredService(serviceName);
+                    double execProbability = requiredService.getUsedProbability();
+                    double executions = requiredService.getNumberOfExecutionsPerCall();
+                    double noOfExecs = 1;
+                    for (ProvidedService ps : c.getProvidedServices()) {
+                        noOfExecs = NumberOfExecutions(architecture, ps);
+                    }
+                    groupMeanExecutions += execProbability * executions * noOfExecs;
                 }
-                result += execProbability * executions * noOfExecs;
+                groupMeanExecutions = groupMeanExecutions / cg.getComponents().size();
+                result += groupMeanExecutions;
             }
         }
         if (found) {
