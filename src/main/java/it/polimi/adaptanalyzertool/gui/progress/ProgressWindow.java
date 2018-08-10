@@ -56,4 +56,8 @@ public class ProgressWindow {
     public void setMessage(String message) {
         controller.setProgressMessage(message);
     }
+
+    public void closeProgressWindow() {
+        controller.okClicked();
+    }
 }

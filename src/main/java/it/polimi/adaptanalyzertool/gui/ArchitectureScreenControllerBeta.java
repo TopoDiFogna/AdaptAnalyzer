@@ -252,7 +252,11 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
                 }
             }
             if (newValue.getText().equals("Workflows")) {
-                componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
+                try {
+                    componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
+                } catch (NoSuchElementException e) {
+                    System.err.println("None or bad component services");
+                }
             }
         });
 
@@ -352,7 +356,12 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
         updateServicesList();
         updateWorkflowList();
         updatePathList();
-        componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
+        try {
+            componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
+        } catch (NoSuchElementException e) {
+            System.err.println("None or bad component services");
+        }
+
         updateAdaptabilityList();
         drawChart();
     }
@@ -682,11 +691,18 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void calculateArchitectureMetrics() {
-        componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
+        architectureMetricsErrorLabel.setText("");
+        try {
+            componentsGroups = ArchitectureMetrics.getComponentGroups(architecture);
+            double totalAvailability = ArchitectureMetrics.TotalStaticAvailability(componentsGroups);
+            totalAvailabilityLabel.setText(df.format(totalAvailability));
+        } catch (Exception e) {
+            architectureMetricsErrorLabel.setText("Cannot calculate total availability, check component services");
+        }
+
         String sta = systemTargetAvailabilityTextField.getText().trim();
         String stc = systemTargetCostTextField.getText().trim();
         if (!sta.equals("") && sta.matches(NINETYNINE_REGEX) && !stc.equals("") && stc.matches(DOUBLE_REGEX)) {
-            architectureMetricsErrorLabel.setText("");
             double gas = ArchitectureMetrics.GlobalAvailabilitySystem(architecture, Double.valueOf(sta));
             double gcs = ArchitectureMetrics.GlobalCostSystem(architecture, Double.valueOf(stc));
             globalAvailabilityLabel.setText(df.format(gas));
@@ -705,14 +721,13 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             architectureMetricsErrorLabel.setText("Check input for mistakes");
         }
         double totalCost = ArchitectureMetrics.TotalCost(architecture);
-        double totalAvailability = ArchitectureMetrics.TotalStaticAvailability(componentsGroups);
+
         double maas = AdaptabilityMetrics.MeanAbsoluteAdaptability(architecture);
         double raas = AdaptabilityMetrics.MeanRelativeAdaptability(architecture);
         double lsa = AdaptabilityMetrics.LevelSystemAdaptability(architecture);
         meanAbsoluteAdaptabilityLabel.setText(df.format(maas));
         meanRelativeAdaptabilityLabel.setText(df.format(raas));
         levelSystemAdaptabilityLabel.setText(df.format(lsa));
-        totalAvailabilityLabel.setText(df.format(totalAvailability));
         totalCostLabel.setText(df.format(totalCost));
     }
 
@@ -949,57 +964,38 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
 
     @FXML
     private void createAndAddNewMessage() {
-        Stage stage = new Stage();
-        stage.setTitle("New Message");
-        stage.getIcons().add(new Image("images/polimi_icon.png"));
+        if (componentsGroups != null) {
+            Stage stage = new Stage();
+            stage.setTitle("New Message");
+            stage.getIcons().add(new Image("images/polimi_icon.png"));
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("newmessagewindow/newMessageWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("newmessagewindow/newMessageWindow.fxml"));
 
-        try {
-            Parent root = loader.load();
-            NewMessageWindowController controller = loader.getController();
-            controller.setStage(stage);
+            try {
+                Parent root = loader.load();
+                NewMessageWindowController controller = loader.getController();
+                controller.setStage(stage);
 
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.initOwner(parent.getScene().getWindow());
-            stage.setResizable(false);
-            stage.initModality(Modality.WINDOW_MODAL);
-            controller.setAvailableComponents(componentsGroups.keySet());
-            stage.showAndWait();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.initOwner(parent.getScene().getWindow());
+                stage.setResizable(false);
+                stage.initModality(Modality.WINDOW_MODAL);
+                controller.setAvailableComponents(componentsGroups.keySet());
+                stage.showAndWait();
 
-            Message newMessage = controller.getMessage();
-            if (newMessage != null) {
-                //checkForMessageCorrectness(newMessage); //TODO review this (maybe use stack?)
-                selectedPath.addMessage(newMessage);
-                showPathDetails(selectedPath);
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading internal resource: newmessagewindow/newMessageWindow.fxml");
-        }
-    }
-
-    private void checkForMessageCorrectness(Message newMessage) {
-        Message lastMessage = selectedPath.getLastMessage();
-        if (lastMessage != null) {
-            if (lastMessage.getEndingGroupName().equals(newMessage.getStartingGroupName())) {
-                if (!newMessage.isReturning()) {
+                Message newMessage = controller.getMessage();
+                if (newMessage != null) {
                     selectedPath.addMessage(newMessage);
-                } else {
-                    if (newMessage.getEndingGroupName().equals(lastMessage.getStartingGroupName())) {
-                        selectedPath.addMessage(newMessage);
-                    } else {
-                        ErrorWindow ew = new ErrorWindow();
-                        ew.showErrorMessage("Error adding return message " + newMessage.getStartingGroupName() + " ->" + newMessage.getEndingGroupName(), parent.getScene().getWindow());
-                    }
+                    showPathDetails(selectedPath);
                 }
-            } else {
-                ErrorWindow ew = new ErrorWindow();
-                ew.showErrorMessage("Error adding message " + newMessage.getStartingGroupName() + " ->" + newMessage.getEndingGroupName(), parent.getScene().getWindow());
+            } catch (IOException e) {
+                System.err.println("Error loading internal resource: newmessagewindow/newMessageWindow.fxml");
             }
         } else {
-            selectedPath.addMessage(newMessage);
+            ErrorWindow errorWindow = new ErrorWindow();
+            errorWindow.showErrorMessage("Check component services", parent.getScene().getWindow());
         }
     }
 
@@ -1020,6 +1016,12 @@ public class ArchitectureScreenControllerBeta implements ChildScreenController {
             pw.setMessage("");
             updateAdaptabilityList();
             drawChart();
+        });
+
+        task.setOnFailed(event -> {
+            pw.closeProgressWindow();
+            ErrorWindow errorWindow = new ErrorWindow();
+            errorWindow.showErrorMessage("Check component services", parent.getScene().getWindow());
         });
 
         Thread taskThread = new Thread(task);
