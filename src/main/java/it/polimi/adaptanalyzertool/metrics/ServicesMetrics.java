@@ -72,7 +72,7 @@ public final class ServicesMetrics {
      */
     public static double ProbabilityToBeRunning(Architecture architecture, AbstractService service) {
         double totalExecutionTimes = 0;
-        for (AbstractService abstractService : collectServicesFromArchitecture(architecture)) {
+        for (AbstractService abstractService : collectProvidedServices(architecture)) {
             totalExecutionTimes += NumberOfExecutions(architecture, abstractService);
         }
         return NumberOfExecutions(architecture, service) / totalExecutionTimes;
