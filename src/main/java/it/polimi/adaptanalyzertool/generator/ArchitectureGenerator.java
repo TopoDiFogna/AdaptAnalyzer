@@ -79,7 +79,6 @@ public class ArchitectureGenerator {
      * </p>
      *
      * @param name the architecture name.
-     *
      * @return the newly generated architecture.
      */
     public Architecture generateArchitecture(String name) {

@@ -38,7 +38,6 @@ public final class ArchitectureMetrics {
      *
      * @param architecture             the architecture to be analyzed.
      * @param systemTargetAvailability the system target availability required.
-     *
      * @return the Global Availability of the System.
      * @see ComponentMetrics#FitnessRatioAvailability(double, double) FitnessRatioAvailability(double, double)
      */
@@ -58,7 +57,6 @@ public final class ArchitectureMetrics {
      *
      * @param architecture     the architecture to be analyzed.
      * @param systemTargetCost the system target cost.
-     *
      * @return the global Cost of the system.
      * @see ComponentMetrics#FitnessRatioCost(double, double) FitnessRatioCost(double, double)
      */
@@ -80,7 +78,6 @@ public final class ArchitectureMetrics {
      * </p>
      *
      * @param architectureComponentGroups the groups that the components form when they are replicated.
-     *
      * @return the total availability of the architecture without considering any workflow.
      */
     public static double TotalStaticAvailability(HashMap<String, ComponentGroup> architectureComponentGroups) {
@@ -155,6 +152,14 @@ public final class ArchitectureMetrics {
         return 1 - availability;
     }
 
+    /**
+     * <p>
+     * Calculates the availability of a terminal group aof components.
+     * </p>
+     *
+     * @param componentGroup the group used to perform the calculations.
+     * @return the avaialbility in ninentynine notation.
+     */
     public static double calculateTerminalGroupAvailability(ComponentGroup componentGroup) {
         Set<Component> components = componentGroup.getComponents();
         if (components.size() == 1) {
@@ -186,7 +191,6 @@ public final class ArchitectureMetrics {
      * </p>
      *
      * @param architecture the architecture to be analyzed.
-     *
      * @return the total cost for the specified architecture.
      */
     public static double TotalCost(Architecture architecture) {
@@ -202,7 +206,6 @@ public final class ArchitectureMetrics {
      *
      * @param architecture     the architecture to be analyzed.
      * @param systemTargetCost the target cost.
-     *
      * @return {@code true} if the architecture is suitable, {@code false} otherwise.
      */
     public static boolean SuitableForCost(Architecture architecture, double systemTargetCost) {
@@ -214,7 +217,6 @@ public final class ArchitectureMetrics {
      *
      * @param architecture             the architecture to be analyzed.
      * @param systemTargetAvailability the target cost.
-     *
      * @return {@code true} if the architecture is suitable, {@code false} otherwise.
      */
     public static boolean SuitableForAvailability(Architecture architecture, double systemTargetAvailability) {
@@ -225,7 +227,6 @@ public final class ArchitectureMetrics {
      * Creates all possible Architecture with the specified components.
      *
      * @param architecture the base architecture containing all components.
-     *
      * @return a {@link QualityHolder} object containing all the min/max value for every quality and the respective
      * architecture.
      */
@@ -355,7 +356,6 @@ public final class ArchitectureMetrics {
      * </p>
      *
      * @param architecture the architecture that needs to be analyzed.
-     *
      * @return a {@code HashMap} containing all the groups whose keys are the name of the main component.
      */
     public static HashMap<String, ComponentGroup> getComponentGroups(Architecture architecture) {
