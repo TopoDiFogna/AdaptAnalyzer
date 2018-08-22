@@ -93,7 +93,6 @@ public class Architecture {
      * Searches for a component in this architecture. It returns null if the component is not found.
      *
      * @param name the name of the component that has to be searched for.
-     *
      * @return the component object if found, {@code null} otherwise.
      */
     public Component getSingleComponent(String name) {
@@ -179,7 +178,6 @@ public class Architecture {
      * Searches for a workflow associated with this architecture. It returns null if the workflow is not found.
      *
      * @param name the name of the workflow that has to be searched for.
-     *
      * @return the workflow object if found, {@code null} otherwise.
      */
     public Workflow getSingleWorkflow(String name) {
@@ -228,7 +226,6 @@ public class Architecture {
      * </p>
      *
      * @param name the name of the cloned component.
-     *
      * @return a copy of this object without workflows.
      */
     public Architecture clone(String name) {

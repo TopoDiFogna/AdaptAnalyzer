@@ -1,4 +1,4 @@
-version = 0.1
+version = 1.0
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
@@ -19,19 +19,39 @@ jar {
     manifest {
         attributes 'Main-Class': 'it.polimi.adaptanalyzertool.gui.Main'
     }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task customFatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'it.polimi.adaptanalyzertool.gui.Main'
+    }
+    baseName = 'AdaptAnalyzer'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 javadoc {
     options.addBooleanOption('html5', true)
 }
 
-task copyJavadoc(type: Copy) {
-    from"${buildDir}/docs/javadoc"
+task publishJavadoc(type: Copy) {
+    from "${buildDir}/docs/javadoc"
     include "**/*.*"
     into "${projectDir}/docs"
 }
 
-copyJavadoc.dependsOn(javadoc)
+task createStandaloneJar(type: Copy){
+    from "${buildDir}/libs"
+    include "*-${version}.jar"
+    into "${projectDir}/distribution"
+}
+
+publishJavadoc.dependsOn(javadoc)
+createStandaloneJar.dependsOn(customFatJar, publishJavadoc)
 
 // In this section you declare the dependencies for your production and test code
 dependencies {

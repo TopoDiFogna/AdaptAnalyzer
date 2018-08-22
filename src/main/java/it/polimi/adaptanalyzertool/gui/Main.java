@@ -6,6 +6,7 @@ import it.polimi.adaptanalyzertool.gui.utility.ScreenController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -38,6 +39,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Adaptability Analyzer Tool");
+        primaryStage.getIcons().add(new Image("images/polimi_icon.png"));
         primaryStage.setMinWidth(1020);
         primaryStage.setMinHeight(766);
 

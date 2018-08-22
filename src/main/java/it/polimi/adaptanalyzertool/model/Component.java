@@ -45,7 +45,6 @@ public class Component {
      * @param name         the name of the component.
      * @param cost         the cost of the component.
      * @param availability availability expressed in 0-1 range.
-     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -66,7 +65,6 @@ public class Component {
      * @param cost         the cost of the component.
      * @param availability availability expressed in 0-1 range.
      * @param used         if this component is used or not.
-     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -111,7 +109,6 @@ public class Component {
      * @param colorBlue    blue component color for the component in the UI.
      * @param colorGreen   green component color for the component in the UI.
      * @param colorOpacity opacity component color for the component in the UI.
-     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -135,7 +132,6 @@ public class Component {
      * @param colorGreen       green component color for the component in the UI.
      * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
-     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -158,7 +154,6 @@ public class Component {
      * @param colorOpacity     opacity component color for the component in the UI.
      * @param providedServices the services provided by this component.
      * @param requiredServices the services required by this component.
-     *
      * @see RequiredService
      * @see ProvidedService
      */
@@ -250,7 +245,6 @@ public class Component {
      * Searches for a provided service in this component. It returns null if the provided service is not found.
      *
      * @param name the name of the provided service that has to be searched for.
-     *
      * @return the provided service object if found, {@code null} otherwise.
      */
     public ProvidedService getSingleProvidedService(String name) {
@@ -306,7 +300,6 @@ public class Component {
      * Searches for a required service in this component. It returns null if the required service is not found.
      *
      * @param name the name of the required service that has to be searched for.
-     *
      * @return the required service object if found, {@code null} otherwise.
      */
     public RequiredService getSingleRequiredService(String name) {
@@ -346,7 +339,6 @@ public class Component {
      * Removes a generic service from a component.
      *
      * @param service the service to be removed, the type of service must extend {@link AbstractService}
-     *
      * @throws IllegalArgumentException if the service does not extend {@link AbstractService}
      */
     public void removeService(AbstractService service) {
